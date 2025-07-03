@@ -2,24 +2,155 @@
   {% for content in entry.contents %}
     <li class="list-group-item">
       <div class="row">
-        {% if content.year %}
-          <div class="col-xs-2 cl-sm-2 col-md-2 text-center" style="width: 75px">
+        {%- comment -%} Mobile-First Header Section {%- endcomment -%}
+        <div class="d-md-none col-12 cv-mobile-header">
+          {% if content.title %}
+            <h6 class="cv-mobile-title font-weight-bold">{{ content.title }}</h6>
+          {% endif %}
+          
+          <div class="cv-mobile-meta">
+            {% if content.institution or content.department %}
+              <div class="cv-mobile-institution">
+                {% if content.institution %}{{ content.institution }}{% endif %}{% if content.institution and content.department %} • {% endif %}{% if content.department %}{{ content.department }}{% endif %}
+              </div>
+            {% endif %}
+            
+            <div class="cv-mobile-date-location">
+              {% if content.year or content.start_date or content.end_date %}
+                <i class="fa-solid fa-calendar cv-mobile-icon"></i>
+                {% if content.year %}
+                  <span class="cv-mobile-date">{{ content.year }}</span>
+                {% elsif content.start_date or content.end_date %}
+                  <span class="cv-mobile-date">
+                    {% if content.start_date %}{{ content.start_date }}{% endif %}{% if content.start_date and content.end_date %} - {% endif %}{% if content.end_date %}{{ content.end_date }}{% elsif content.start_date %} - Present{% endif %}
+                  </span>
+                {% endif %}
+              {% endif %}
+              {% if content.location %}
+                {% if content.year or content.start_date or content.end_date %}
+                  <i class="fa-solid fa-location-dot cv-mobile-icon cv-mobile-separator"></i>
+                {% else %}
+                  <i class="fa-solid fa-location-dot cv-mobile-icon"></i>
+                {% endif %}
+                <span class="cv-mobile-location">{{ content.location }}</span>
+              {% endif %}
+            </div>
+            
+            {% if content.key_people %}
+              <div class="cv-mobile-people">
+                <i class="fa-solid fa-users cv-mobile-icon"></i>
+                <span class="cv-mobile-people-label">With:</span> {{ content.key_people }}
+              </div>
+            {% endif %}
+            
+            {% if content.skills %}
+              <div class="cv-mobile-skills">
+                <div class="cv-mobile-skills-header">
+                  <i class="fa-solid fa-wrench cv-mobile-icon"></i>
+                  <span class="cv-mobile-skills-label">Skills:</span>
+                </div>
+                <div class="cv-mobile-skills-container">
+                  {% for skill in content.skills %}
+                    {% if skill.name %}
+                      <span class="cv-skill-box cv-mobile-skill-box{% if skill.description %} skill-tooltip{% endif %}" 
+                            {% if skill.description %}data-tooltip="{{ skill.description | escape }}"{% endif %}>
+                        {% if skill.icon %}
+                          <i class="{{ skill.icon }} skill-icon"></i>
+                        {% endif %}
+                        <span class="skill-text">{{ skill.name }}</span>
+                        {% if skill.description %}
+                          <div class="skill-tooltip-content">{{ skill.description }}</div>
+                        {% endif %}
+                      </span>
+                    {% else %}
+                      <span class="cv-skill-box cv-mobile-skill-box">
+                        <span class="skill-text">{{ skill }}</span>
+                      </span>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        
+        {%- comment -%} Desktop Left Column (Hidden on Mobile) {%- endcomment -%}
+        {% if content.year or content.start_date or content.end_date %}
+          <div class="d-none d-md-block col-md-2 text-center" style="width: 75px">
             <table class="table-cv">
               <tbody>
                 <tr>
                   <td>
-                    <span class="badge font-weight-bold danger-color-dark text-uppercase align-middle" style="min-width: 75px">
-                      {{- content.year -}}
-                    </span>
+                    {% if content.start_date or content.end_date %}
+                      <div class="text-center" style="min-width: 75px; line-height: 1.2; color: var(--global-text-color);">
+                        {% if content.start_date %}
+                          {% assign start_parts = content.start_date | split: ' ' %}
+                          <div style="margin-bottom: 2px;">
+                            <span class="font-weight-semibold">{{ start_parts[0] }}</span>
+                            <span class="font-weight-bold">{{ start_parts[1] }}</span>
+                          </div>
+                        {% endif %}
+                        {% if content.start_date and (content.end_date or content.start_date) %}
+                          <div class="font-weight-light text-muted" style="font-size: 0.85em; margin: 1px 0;">to</div>
+                        {% endif %}
+                        {% if content.end_date %}
+                          {% assign end_parts = content.end_date | split: ' ' %}
+                          <div style="margin-top: 2px;">
+                            <span class="font-weight-semibold">{{ end_parts[0] }}</span>
+                            <span class="font-weight-bold">{{ end_parts[1] }}</span>
+                          </div>
+                        {% elsif content.start_date %}
+                          <div class="text-primary" style="margin-top: 2px;">
+                            <span class="font-weight-semibold">Present</span>
+                          </div>
+                        {% endif %}
+                      </div>
+                    {% else %}
+                      <div class="text-center font-weight-bold" style="font-size: 1.1em; min-width: 75px; color: var(--global-text-color);">
+                        {{- content.year -}}
+                      </div>
+                    {% endif %}
                   </td>
                 </tr>
                 {% if content.location %}
                   <tr>
                     <td>
-                      <p class="location">
-                        <i class="fa-solid fa-location-dot iconlocation"></i>
-                        {{ content.location }}
-                      </p>
+                      <div class="text-center text-muted" style="margin-top: 16px; font-size: 0.85em; line-height: 1.4; padding: 0.25rem;">
+                        <i class="fa-solid fa-location-dot" style="margin-bottom: 4px; opacity: 0.7;"></i>
+                        <div style="font-size: 0.9em;">{{ content.location }}</div>
+                      </div>
+                    </td>
+                  </tr>
+                {% endif %}
+                {% if content.skills %}
+                  <tr>
+                    <td>
+                      <div class="cv-skills-section" style="margin-top: 24px; padding: 0.5rem 0.25rem;">
+                        <div class="cv-section-header text-center">
+                          <i class="fa-solid fa-wrench text-muted" style="margin-bottom: 6px; opacity: 0.8; font-size: 0.7rem;"></i>
+                          <div class="cv-section-title text-muted font-weight-semibold" style="font-size: 0.65rem;">Skills</div>
+                        </div>
+                        <div class="cv-skills-container" style="margin-top: 12px;">
+                          {% for skill in content.skills %}
+                            {% if skill.name %}
+                              <span class="cv-skill-box{% if skill.description %} skill-tooltip{% endif %}" 
+                                    {% if skill.description %}data-tooltip="{{ skill.description | escape }}"{% endif %}>
+                                {% if skill.icon %}
+                                  <i class="{{ skill.icon }} skill-icon"></i>
+                                {% endif %}
+                                <span class="skill-text">{{ skill.name }}</span>
+                                {% if skill.description %}
+                                  <div class="skill-tooltip-content">{{ skill.description }}</div>
+                                {% endif %}
+                              </span>
+                            {% else %}
+                              <span class="cv-skill-box">
+                                <span class="skill-text">{{ skill }}</span>
+                              </span>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 {% endif %}
@@ -27,90 +158,241 @@
             </table>
           </div>
         {% endif %}
-        <div class="col-xs-10 cl-sm-10 col-md-10 mt-2 mt-md-0">
-          {% if content.title %}
-            <h6 class="title font-weight-bold ml-1 ml-md-4">{{ content.title }}</h6>
-          {% endif %}
-          {% if content.department or content.institution %}
-            <table class="table-cv ml-1 ml-md-4 institution">
-              <tbody>
-                {% if content.institution %}
-                  <tr>
-                    <td style="vertical-align: top; text-align: center" class="institution">
-                      <i class="fa-solid fa-building-columns iconinstitution"></i>
-                    </td>
-                    <td class="institution">{{ content.institution }}</td>
-                  </tr>
-                {% endif %}
-                {% if content.department %}
-                  <tr>
-                    <td style="vertical-align: top; text-align: center" class="department">
-                      <i class="fa-regular fa-circle-dot icondepartment"></i>
-                    </td>
-                    <td class="department">{{ content.department }}</td>
-                  </tr>
-                {% endif %}
-              </tbody>
-            </table>
-          {% endif %}
-          {% if content.maindescription %}
-            <div class="ml-1 ml-md-4">{{ content.maindescription }}</div>
-          {% endif %}
-          {% if content.description %}
-            <ul class="items">
-              {% for item in content.description %}
-                <li>
-                  {% if item.contents %}
-                    <span class="item-title">{{ item.title }}</span>
-                    <ul class="subitems">
-                      {% for subitem in item.contents %}
-                        <li>
-                          <span class="subitem">{{ subitem }}</span>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  {% else %}
-                    <span class="item">{{ item }}</span>
+        <div class="col-12 col-md-10 mt-2 mt-md-0">
+          {%- comment -%} Desktop Title and Institution Section (Hidden on Mobile) {%- endcomment -%}
+          <div class="d-none d-md-block">
+            {% if content.title %}
+              <h6 class="title font-weight-bold ml-1 ml-md-4" style="margin-bottom: 0.75rem;">{{ content.title }}</h6>
+            {% endif %}
+            {% if content.department or content.institution %}
+              <table class="table-cv ml-1 ml-md-4 institution">
+                <tbody>
+                  {% if content.institution %}
+                    <tr>
+                      <td class="institution-icon">
+                        <i class="fa-solid fa-building-columns iconinstitution"></i>
+                      </td>
+                      <td class="institution">{{ content.institution }}</td>
+                    </tr>
                   {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          {% if content.items %}
-            <ul class="items">
-              {% for item in content.items %}
-                <li>
-                  {% if item.contents %}
-                    <span class="item-title">{{ item.title }}</span>
-                    <ul class="subitems">
-                      {% for subitem in item.contents %}
-                        <li>
-                          <span class="subitem">{{ subitem }}</span>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  {% else %}
-                    <span class="item">{{ item }}</span>
+                  {% if content.department %}
+                    <tr>
+                      <td class="department-icon">
+                        <i class="fa-regular fa-circle-dot icondepartment"></i>
+                      </td>
+                      <td class="department">{{ content.department }}</td>
+                    </tr>
                   {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          {% if content.linkitems %}
-            <div class="container-links ml-1 ml-md-4">
-              {% for item in content.linkitems %}
-                {% if item.link %}
-                  <div class="container-link-button">
-                    {% if item.linkname %}
-                      <a href="{{ item.link }}" target="_blank" class="btncv z-depth-0">{{ item.linkname }}</a>
-                    {% else %}
-                      <a href="{{ item.link }}" target="_blank" class="btncv z-depth-0">doc</a>
-                    {% endif %}
+                  {% if content.key_people %}
+                    <tr>
+                      <td class="key-people-icon">
+                        <i class="fa-solid fa-users iconkeypeople"></i>
+                      </td>
+                      <td class="key-people">{{ content.key_people }}</td>
+                    </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+          
+          {%- comment -%} Main Content and Media Section {%- endcomment -%}
+          <div class="row">
+            <!-- Content Column -->
+            <div class="{% if content.image or content.video %}col-12 col-md-8{% else %}col-12{% endif %}">
+              <div class="cv-content-wrapper cv-responsive-margin">
+                {% if content.maindescription %}
+                  <div class="ml-1 ml-md-4 maindescription">{{ content.maindescription }}</div>
+                {% endif %}
+                {% if content.description %}
+                  <ul class="items">
+                    {% for item in content.description %}
+                      <li>
+                        {% if item.contents %}
+                          <span class="item-title">{{ item.title }}</span>
+                          <ul class="subitems">
+                            {% for subitem in item.contents %}
+                              <li>
+                                <span class="subitem">{{ subitem }}</span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% else %}
+                          <span class="item">{{ item }}</span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+                {% if content.items %}
+                  <ul class="items">
+                    {% for item in content.items %}
+                      <li>
+                        {% if item.contents %}
+                          <span class="item-title">{{ item.title }}</span>
+                          <ul class="subitems">
+                            {% for subitem in item.contents %}
+                              <li>
+                                <span class="subitem">{{ subitem }}</span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% else %}
+                          <span class="item">{{ item }}</span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+                
+                {%- comment -%} Domains Section - Single Line Below Description {%- endcomment -%}
+                {% if content.domains %}
+                  <div class="cv-domains-section ml-1 ml-md-4" style="margin-top: 20px; padding: 0.5rem 0;">
+                    <div class="cv-section-header">
+                      <i class="fa-solid fa-layer-group text-muted" style="margin-right: 8px; opacity: 0.8;"></i>
+                      <span class="cv-section-title text-muted font-weight-semibold">Domains</span>
+                    </div>
+                    <div class="cv-domains-container">
+                      {% for domain in content.domains %}
+                        {% if domain.name %}
+                          <span class="cv-domain-box{% if domain.description %} domain-tooltip{% endif %}" 
+                                {% if domain.description %}data-tooltip="{{ domain.description | escape }}"{% endif %}>
+                            {% if domain.icon %}
+                              <i class="{{ domain.icon }} domain-icon"></i>
+                            {% endif %}
+                            <span class="domain-text">{{ domain.name }}</span>
+                            {% if domain.description %}
+                              <div class="domain-tooltip-content">{{ domain.description }}</div>
+                            {% endif %}
+                          </span>
+                        {% else %}
+                          <span class="cv-domain-box">
+                            <span class="domain-text">{{ domain }}</span>
+                          </span>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
                   </div>
                 {% endif %}
-              {% endfor %}
-            </div>
-          {% endif %}
+                {% if content.linkitems %}
+                  <div class="container-links ml-1 ml-md-4">
+                    {% for item in content.linkitems %}
+                      {% if item.link %}
+                        <div class="container-link-button">
+                          {% if item.linkname %}
+                            <a href="{{ item.link }}" target="_blank" class="btncv z-depth-0">{{ item.linkname }}</a>
+                          {% else %}
+                            <a href="{{ item.link }}" target="_blank" class="btncv z-depth-0">doc</a>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div> <!-- end cv-content-wrapper -->
+            </div> <!-- end content column -->
+            
+            <!-- Media Column -->
+            {% if content.image or content.video %}
+              <div class="col-12 col-md-4">
+                <div class="cv-media-wrapper">
+                  {% if content.media_caption %}
+                    <div class="media-caption text-muted mb-2" style="font-size: 0.8rem;">{{ content.media_caption }}</div>
+                  {% endif %}
+                  
+                  {% if content.image %}
+                    {% if content.image.first %}
+                      <!-- Multiple images array -->
+                      {% for image in content.image %}
+                        <div class="cv-media-item mb-2">
+                          <img src="{{ image | relative_url }}" alt="{{ content.title | default: 'CV image' }}" class="cv-image-side img-fluid rounded">
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <!-- Single image -->
+                      <div class="cv-media-item mb-2">
+                        <img src="{{ content.image | relative_url }}" alt="{{ content.title | default: 'CV image' }}" class="cv-image-side img-fluid rounded">
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                  
+                  {% if content.video %}
+                    {% if content.video.first %}
+                      <!-- Multiple videos array -->
+                      {% for video in content.video %}
+                        <div class="cv-media-item mb-2">
+                          {% if video contains 'youtube.com' or video contains 'youtu.be' %}
+                            {% if video contains 'youtu.be' %}
+                              {% assign video_id = video | split: '/' | last %}
+                            {% else %}
+                              {% assign video_id = video | split: 'v=' | last | split: '&' | first %}
+                            {% endif %}
+                            <div class="cv-video-container-side">
+                              <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+                                      class="cv-video-side" 
+                                      frameborder="0" 
+                                      allowfullscreen>
+                              </iframe>
+                            </div>
+                          {% elsif video contains 'vimeo.com' %}
+                            {% assign video_id = video | split: '/' | last %}
+                            <div class="cv-video-container-side">
+                              <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
+                                      class="cv-video-side" 
+                                      frameborder="0" 
+                                      allowfullscreen>
+                              </iframe>
+                            </div>
+                          {% else %}
+                            <video class="cv-video-side" controls>
+                              <source src="{{ video | relative_url }}" type="video/mp4">
+                              <source src="{{ video | replace: '.mp4', '.webm' | relative_url }}" type="video/webm">
+                              <source src="{{ video | replace: '.mp4', '.ogg' | relative_url }}" type="video/ogg">
+                              Your browser does not support the video tag.
+                            </video>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    {% else %}
+                      <!-- Single video -->
+                      <div class="cv-media-item">
+                        {% if content.video contains 'youtube.com' or content.video contains 'youtu.be' %}
+                          {% if content.video contains 'youtu.be' %}
+                            {% assign video_id = content.video | split: '/' | last %}
+                          {% else %}
+                            {% assign video_id = content.video | split: 'v=' | last | split: '&' | first %}
+                          {% endif %}
+                          <div class="cv-video-container-side">
+                            <iframe src="https://www.youtube.com/embed/{{ video_id }}" 
+                                    class="cv-video-side" 
+                                    frameborder="0" 
+                                    allowfullscreen>
+                            </iframe>
+                          </div>
+                        {% elsif content.video contains 'vimeo.com' %}
+                          {% assign video_id = content.video | split: '/' | last %}
+                          <div class="cv-video-container-side">
+                            <iframe src="https://player.vimeo.com/video/{{ video_id }}" 
+                                    class="cv-video-side" 
+                                    frameborder="0" 
+                                    allowfullscreen>
+                            </iframe>
+                          </div>
+                        {% else %}
+                          <video class="cv-video-side" controls>
+                            <source src="{{ content.video | relative_url }}" type="video/mp4">
+                            <source src="{{ content.video | replace: '.mp4', '.webm' | relative_url }}" type="video/webm">
+                            <source src="{{ content.video | replace: '.mp4', '.ogg' | relative_url }}" type="video/ogg">
+                            Your browser does not support the video tag.
+                          </video>
+                        {% endif %}
+                      </div>
+                    {% endif %}
+                  {% endif %}
+                </div> <!-- end cv-media-wrapper -->
+              </div> <!-- end media column -->
+            {% endif %}
+          </div> <!-- end row -->
         </div>
       </div>
     </li>
