@@ -1,1 +1,71 @@
-// Atmospheric Clarity — motion design (populated in Task 6)
+// Atmospheric Clarity — motion design
+// Scroll fade-ins, hover refinements, page-load animations
+
+// Scroll reveal — elements start invisible and animate in
+.atmo-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+
+  &.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Stagger delays for sequential sections
+@for $i from 1 through 6 {
+  .atmo-reveal:nth-child(#{$i}) {
+    transition-delay: #{$i * 0.1}s;
+  }
+}
+
+// Page-load fade for hero content
+.atmo-hero-entrance {
+  opacity: 0;
+  animation: heroFadeIn 0.6s ease-out 0.4s forwards;
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Link underline animation
+.about article a:not(.news-title):not([class*="btn"]) {
+  text-decoration: none;
+  background-image: linear-gradient(var(--global-theme-color), var(--global-theme-color));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% 1px;
+    text-decoration: none;
+  }
+}
+
+// Respect reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .atmo-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .atmo-hero-entrance {
+    opacity: 1;
+    animation: none;
+  }
+
+  .about article a {
+    transition: none;
+  }
+}
