@@ -32,6 +32,26 @@ $grey-900: #212529;
 $white-color: #ffffff !default;
 $black-color: #000000 !default;
 
+// Atmospheric Clarity palette
+$atmo-canvas-light: #FAFAF8;
+$atmo-canvas-dark-start: #0c0c14;
+$atmo-canvas-dark-mid: #0e1520;
+$atmo-canvas-dark-end: #0a0e18;
+$atmo-text-primary-light: #1a1a1a;
+$atmo-text-secondary-light: #777;
+$atmo-text-primary-dark: rgba(255, 255, 255, 0.9);
+$atmo-text-secondary-dark: rgba(255, 255, 255, 0.4);
+$atmo-accent-light: #5a7a9a;
+$atmo-accent-dark: rgba(140, 180, 220, 0.9);
+$atmo-ui-text-light: #999;
+$atmo-ui-text-dark: rgba(255, 255, 255, 0.25);
+$atmo-divider-light: rgba(0, 0, 0, 0.06);
+$atmo-divider-dark: rgba(255, 255, 255, 0.04);
+$atmo-card-bg-light: rgba(255, 255, 255, 0.7);
+$atmo-card-border-light: #eee;
+$atmo-card-bg-dark: rgba(255, 255, 255, 0.03);
+$atmo-card-border-dark: rgba(255, 255, 255, 0.06);
+
 // Theme colors
 
 $code-bg-color-light: rgba($purple-color, 0.05);
