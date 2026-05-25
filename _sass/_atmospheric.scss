@@ -1,1 +1,135 @@
-// Atmospheric Clarity — ambient visual details (populated in Task 5)
+// Atmospheric Clarity — ambient visual details
+// Radial glows, concentric rings, gradient separators, dark-mode body gradient
+
+// Dark mode body gradient
+html[data-theme="dark"] body {
+  background: var(--global-bg-gradient, var(--global-bg-color));
+}
+
+// Ambient radial glows behind main content
+.about {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 400px 300px at 75% 15%, var(--atmo-glow-1) 0%, transparent 70%),
+      radial-gradient(ellipse 300px 300px at 15% 65%, var(--atmo-glow-2) 0%, transparent 70%);
+    transform: translateY(var(--atmo-parallax-y, 0));
+    transition: transform 0.1s linear;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+:root {
+  --atmo-glow-1: rgba(100, 130, 180, 0.07);
+  --atmo-glow-2: rgba(140, 100, 160, 0.05);
+  --atmo-ring-color: rgba(100, 130, 180, 0.12);
+  --atmo-separator-color: rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme="dark"] {
+  --atmo-glow-1: rgba(60, 120, 180, 0.10);
+  --atmo-glow-2: rgba(100, 65, 145, 0.07);
+  --atmo-ring-color: rgba(100, 140, 200, 0.08);
+  --atmo-separator-color: rgba(255, 255, 255, 0.04);
+}
+
+// Concentric ambient rings
+.ambient-rings {
+  position: absolute;
+  bottom: -40px;
+  right: -20px;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--atmo-ring-color);
+
+    &:nth-child(1) { inset: 0; }
+    &:nth-child(2) { inset: 25px; opacity: 0.7; }
+    &:nth-child(3) { inset: 50px; opacity: 0.4; }
+    &:nth-child(4) { inset: 75px; opacity: 0.2; }
+  }
+}
+
+// Gradient separators between homepage sections
+.atmo-separator {
+  height: 1px;
+  margin: 2rem 0;
+  background: linear-gradient(90deg, transparent, var(--atmo-separator-color), transparent);
+  border: none;
+}
+
+// Homepage section titles
+.atmo-section-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--global-text-color-light);
+  margin-bottom: 1rem;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+// Publication cards on homepage
+.about .publications {
+  .bib-entry {
+    background: var(--global-card-bg-color);
+    border: 1px solid var(--global-card-border-color, var(--global-divider-color));
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Latest posts on homepage
+.about .news {
+  .news-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: var(--global-text-color);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--global-theme-color);
+    }
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
+  }
+}
