@@ -7,10 +7,13 @@
 $max-content-width: {{ site.max_width }};
 
 @import
+  "fonts",
   "variables",
   "themes",
   "layout",
   "base",
+  "atmospheric",
+  "animations",
   "distill",
   "cv",
   "tabs",
