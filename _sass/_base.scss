@@ -2,6 +2,54 @@
  * Styles for the base elements of the theme.
  ******************************************************************************/
 
+// Atmospheric Clarity typography
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Newsreader', Georgia, serif;
+  font-weight: 300;
+}
+
+code, pre, kbd, samp {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.post-header {
+  .post-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 300;
+    font-size: 1.8rem;
+    line-height: 1.45;
+  }
+
+  .desc {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--global-text-color-light);
+  }
+}
+
+.about .clearfix {
+  p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--global-text-color-light);
+    max-width: 560px;
+  }
+
+  em {
+    color: var(--global-accent-color);
+    font-style: italic;
+  }
+}
+
 // Typography
 
 p,
@@ -248,6 +296,7 @@ ul.task-list input[type="checkbox"] {
   border-bottom: 1px solid var(--global-divider-color);
   background-color: var(--global-bg-color);
   opacity: 0.95;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 
 .navbar .dropdown-menu {
@@ -285,10 +334,16 @@ ul.task-list input[type="checkbox"] {
 
   .navbar-brand {
     color: var(--global-text-color);
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 400;
   }
 
   .navbar-nav .nav-item .nav-link {
     color: var(--global-text-color);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease;
 
     &:hover {
       color: var(--global-hover-color);
