@@ -381,6 +381,115 @@ skills:
 - **Color Contrast**: WCAG AA compliant color combinations
 - **Touch Targets**: Minimum 44px touch targets on mobile
 
+## Mobile CV Styling Enhancements
+
+### CSS Custom Properties System
+The CV system now uses consistent CSS custom properties for maintainable design:
+
+```css
+:root {
+  --cv-mobile-base-spacing: 0.75rem;
+  --cv-mobile-small-spacing: 0.4rem;
+  --cv-mobile-micro-spacing: 0.25rem;
+  --cv-mobile-icon-size: 0.75rem;
+  --cv-mobile-base-font: 0.8rem;
+  --cv-mobile-small-font: 0.75rem;
+  --cv-mobile-title-font: 1.05rem;
+}
+```
+
+### Responsive Typography Hierarchy
+- **Mobile Title**: 1.05rem with 600 weight for clear hierarchy
+- **Institution**: 0.8rem with 500 weight for secondary information
+- **Metadata**: 0.75rem for date, location, and collaborative information
+- **Skills**: 0.65rem with auto-adjusting height for multi-line text
+
+### Visual Organization Improvements
+- **Gradient Separators**: Subtle borders between mobile sections for better organization
+- **Icon Consistency**: Standardized 0.75rem icons with proper spacing and alignment
+- **Touch Optimization**: Enhanced skill boxes with proper touch targets and hover states
+- **Content Flow**: Logical information hierarchy (title → institution → date/location → people → skills)
+
+### Advanced Skill Box System
+The skill boxes now feature an advanced responsive design:
+
+#### Desktop Skills Layout
+- **Container Width**: Min 85px, max 120px for expandable content
+- **Box Height**: Min 1.6rem, max 3rem for multi-line text
+- **Text Handling**: Word wrapping with optimized line height (1.2)
+- **Icon Integration**: Consistent FontAwesome icons with proper spacing
+
+#### Mobile Skills Optimization
+- **Horizontal Layout**: Skills flow horizontally with content-adaptive width
+- **Responsive Scaling**: Different sizing for mobile (100px max) and tablet (varied)
+- **Touch Interaction**: Proper touch targets with tap-friendly tooltips
+- **Text Wrapping**: Handles longer skill names like "Environment Modules", "Performance Tuning"
+
+#### Skill Box Features
+- **Dynamic Height**: Auto-adjusts from 1.6rem to 3rem based on content
+- **Icon Support**: Full FontAwesome integration with consistent sizing
+- **Hover Effects**: Theme color backgrounds with smooth transitions
+- **Dark Mode**: Automatic adaptation for light/dark themes
+- **Overflow Handling**: Graceful text wrapping for long skill names
+
+### Mobile Responsive Breakpoints
+- **Mobile (≤576px)**: Compact spacing with tighter gaps
+- **Tablet (577px-767px)**: Balanced layout for touch interaction
+- **Desktop (≥768px)**: Full two-column layout with expanded skill boxes
+
+## CV Data Structure Best Practices
+
+### Skills Field Structure
+Skills can be defined as simple strings or detailed objects:
+
+```yaml
+skills:
+  # Simple format
+  - Teaching
+  - Debugging
+  
+  # Enhanced format with icons and descriptions
+  - name: "Python"
+    icon: "fa-brands fa-python"
+    description: "Advanced Python development with data science libraries"
+  
+  # Mixed format (both supported)
+  - name: "Linux Administration"
+    icon: "fa-brands fa-linux"
+  - "Performance Tuning"
+```
+
+### Domains Integration
+Domains provide research/work area context:
+
+```yaml
+domains:
+  # Simple format
+  - Education
+  - Data Science
+  
+  # Enhanced format with descriptions
+  - name: "Computational Biology"
+    description: "Protein folding and molecular dynamics research"
+  - "High-Performance Computing"
+```
+
+### Recommended Icon Mappings
+Common skills and their suggested FontAwesome icons:
+
+- **Programming**: `fa-brands fa-python`, `fa-brands fa-js`, `fa-solid fa-code`
+- **Systems**: `fa-brands fa-linux`, `fa-solid fa-server`, `fa-solid fa-database`
+- **Analysis**: `fa-solid fa-chart-line`, `fa-solid fa-project-diagram`, `fa-solid fa-microscope`
+- **Education**: `fa-solid fa-chalkboard-teacher`, `fa-solid fa-user-graduate`, `fa-solid fa-bug`
+- **Research**: `fa-solid fa-dna`, `fa-solid fa-atom`, `fa-solid fa-brain`
+
+### Content Consistency Guidelines
+1. **Use present tense** for current positions, past tense for completed roles
+2. **Include quantified metrics** where possible (dataset sizes, performance improvements)
+3. **Maintain technical depth** appropriate to the audience
+4. **Ensure skill-description alignment** - only describe skills actually used in the role
+5. **Add department fields** for better institutional context
+
 ## Common Workflows
 
 ### Adding New Content

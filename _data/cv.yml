@@ -40,17 +40,61 @@
         - name: Statistics
           icon: fa-solid fa-chart-line
           description: "Delivered comprehensive applied statistics curriculum covering hypothesis testing, regression analysis, and statistical modeling. Created interactive tutorials and practical assignments for hands-on learning."
-        - Teaching
-        - Debugging
-        - Mentoring
+        - name: Teaching
+          icon: fa-solid fa-chalkboard-teacher
+          description: "Specialized in disarming intimidation students face when learning complex technical skills, adapting teaching methods to meet each student at their level and nurturing curiosity."
+        - name: Debugging
+          icon: fa-solid fa-bug
+          description: "Developed custom debugging methodologies for live code troubleshooting in classroom settings, helping students grow confident through hands-on problem-solving support."
+        - name: Mentoring
+          icon: fa-solid fa-user-graduate
+          description: "Provided reliable support to students across varying expertise levels, helping them explore technical concepts without fear and build confidence in their abilities."
+      domains:
+        - name: Education
+          description: "Comprehensive teaching experience in technical subjects with focus on adaptive pedagogical approaches and student confidence building."
+        - name: Data Science
+          description: "Delivered courses on Python for Data Science covering pandas, numpy, matplotlib, and scikit-learn with hands-on practical assignments."
+        - name: Applied Statistics
+          description: "Taught hypothesis testing, regression analysis, and statistical modeling through interactive tutorials and practical applications."
       maindescription: I worked closely with students across varying levels of expertise, assisting in courses on Applied Statistics and Python for Data Science. I designed and graded assignments and exams, in addition to delivering tutorials and lecture materials. I specialized in disarming the intimidation students often face when learning complex technical skills, and I adapted my teaching to meet each student at their level. My ability to debug code live, explain concepts intuitively, and nurture curiosity became one of the most appreciated aspects of my teaching. I saw students who initially doubted their abilities grow confident and capable when offered space to explore without fear, knowing that they have a reliable support backing them.
 
     - title: HPC Cluster Linux Sysadmin
       institution: Krea University
+      department: Centre for Structure and Dynamics Research Lab
       key_people: Dr. Sudip Roy and Dr. Brijesh Mishra
       location: Sri City, AP, India.
       start_date: Jul 2024
       end_date: Aug 2025
+      skills:
+        - name: Linux Administration
+          icon: fa-brands fa-linux
+        - name: Rocky Linux
+          icon: fa-solid fa-server
+          description: "Migrated and upgraded HPC cluster from EOL CentOS 7 to Rocky Linux 8.9, ensuring system stability and security compliance."
+        - name: PBS Scheduler
+          icon: fa-solid fa-tasks
+          description: "Configured PBS job scheduler across login and compute nodes for efficient resource allocation and workload management."
+        - name: CUDA
+          icon: fa-solid fa-microchip
+          description: "Setup CUDA libraries and drivers for NVIDIA GPU-accelerated workloads, optimizing performance for computational tasks."
+        - name: ZFS
+          icon: fa-solid fa-database
+          description: "Implemented ZFS pools for network attached home and scratch directories, optimized for read/write performance and data resiliency."
+        - name: Environment Modules
+          icon: fa-solid fa-cube
+          description: "Created user-accessible environment modules for quantum chemistry, data analysis, deep learning, molecular dynamics and finance software packages."
+        - name: Performance Tuning
+          icon: fa-solid fa-tachometer-alt
+          description: "Compiled software and tuned Linux kernel for optimal performance, diagnosed bottlenecks and resolved zombie processes."
+      domains:
+        - name: High-Performance Computing
+          description: "Comprehensive HPC cluster management including job scheduling, resource optimization, and multi-user environment configuration."
+        - name: Linux System Administration
+          description: "Full-stack Linux administration from kernel tuning to user account management, with focus on performance optimization and troubleshooting."
+        - name: GPU Computing
+          description: "NVIDIA GPU acceleration setup and optimization for computational workloads across scientific computing applications."
+        - name: Storage Systems
+          description: "Advanced storage system design and implementation using ZFS for high-performance, resilient data storage solutions."
       maindescription: Diagnosed performance bottlenecks and zombie processes. Migrated and upgraded the cluster to Rocky Linux 8.9 from EOL CentOS 7. Setup user accounts and PBS job scheduler across the login and compute nodes. Configured CUDA, libraries and drivers for NVIDIA GPU-accelerated workloads. Setup ZFS pools for network attached home and scratch directories, optimized for read/write performance and resiliency. Wrote user-accessible environment modules across quantum chemistry, data analysis, deep learning, molecular dynamics and finance software packages, in addition to diagnosing and resolving issues faced by users across the software stack. Software was compiled and the Linux kernel was tuned for best performance.
 
     - title: Computational Structural Biology Researcher
@@ -63,22 +107,33 @@
       skills:
         - name: AlphaFold
           icon: fa-solid fa-dna
-          description: "Developed custom AlphaFold framework for generating biophysically meaningful protein folding trajectories, extending beyond static structure prediction to dynamic conformational sampling."
+          description: "Developed a novel AlphaFold framework for generating biophysically meaningful protein folding trajectories, extending beyond static structure prediction to dynamic conformational ensemble generation."
         - name: HPC
           icon: fa-solid fa-server
-          description: "Built and optimized high-performance computing pipelines for large-scale protein folding simulations, handling terabyte-scale datasets with efficient parallelization strategies."
+          description: "Built and optimized high-performance computing pipelines for large-scale distributed protein folding trajectories from AlphaFold, handling terabyte-scale datasets with efficient parallelization strategies. Focused on maximizing GPU utilization by splitting CUDA streams."
         - name: Python
           icon: fa-brands fa-python
-          description: "Implemented core algorithms for protein analysis, data processing pipelines, and visualization tools. Extensive use of NumPy, SciPy, and MDAnalysis for computational biology workflows."
+          description: "Designed and implemented core algorithms for protein analysis, data processing pipelines, and visualization tools. Extensive use of NumPy, SciPy, MDAnalysis, PyRosetta and OpenMM for workflows and pipelines."
         - name: MD Simulations
           icon: fa-solid fa-atom
           description: "Validated AlphaFold-derived datasets against 11 milliseconds of DE Shaw molecular dynamics simulations, ensuring biophysical accuracy of generated conformations."
         - name: Biophysics
           icon: fa-solid fa-microscope
-          description: "Applied first-principles biophysical analysis to validate protein energy landscapes, conformational distributions, and dynamic properties from AI-generated trajectories."
+          description: "Applied first-principles biophysical analysis to validate protein energy landscapes, conformational distributions, and dynamic properties from AF-generated trajectories."
         - name: Deep Learning
           icon: fa-solid fa-brain
           description: "Developed transformer interpretability techniques and perturbation-based analysis methods to extract mechanistic insights from AlphaFold's neural network architecture."
+      domains:
+        - name: Computational Biology
+          description: "Advanced computational approaches to biological systems with focus on protein structure, dynamics, and mechanistic understanding."
+        - name: Protein Folding
+          description: "Novel AlphaFold framework development for generating biophysically meaningful protein folding trajectories beyond static structure prediction."
+        - name: Biophysics
+          description: "First-principles biophysical analysis of protein energy landscapes, conformational distributions, and dynamic properties validation."
+        - name: Deep Learning
+          description: "Transformer interpretability techniques and perturbation-based analysis for extracting mechanistic insights from neural network architectures."
+        - name: Molecular Dynamics
+          description: "Validation of AI-derived datasets against millisecond-scale MD simulations ensuring biophysical accuracy of generated conformations."
       description:
         - Co-created the Centre for Structure and Dynamics (CSD) Research Lab at Krea University with Dr. Kalyan Chakrabarti and Dr. Sudip Roy.
         - Developed multiple high-performance computing (HPC) pipelines for generating and analyzing large datasets of protein folding trajectories using my custom AlphaFold framework.
@@ -97,13 +152,34 @@
       end_date: Jan 2025
       skills:
         - name: NetworkX
+          icon: fa-solid fa-network-wired
+          description: "Developed novel algorithms for recursive disease clustering using graph theory measures, specifically betweenness centrality analysis."
         - name: Pandas
+          icon: fa-solid fa-table
+          description: "Built robust data processing pipeline for large-scale medical datasets (50,000+ rows, 1000+ columns) with structured comorbidity extraction."
         - name: Matplotlib
-        - name: Reproducibility
+          icon: fa-solid fa-chart-bar
+          description: "Created comprehensive data visualizations for disease network analysis and comorbidity pattern discovery in medical research."
+        - name: Python
+          icon: fa-brands fa-python
+          description: "Architected complete data processing pipeline leveraging statistical methods and graph algorithms for medical data analysis."
+        - name: Graph Theory
+          icon: fa-solid fa-project-diagram
+          description: "Applied advanced graph theory concepts to discover previously unknown disease networks through betweenness centrality clustering."
+        - name: Statistical Methods
+          icon: fa-solid fa-chart-line
+          description: "Implemented statistical approaches for extracting structured comorbidity data and validating disease network discoveries."
       domains:
-        - Graph Theory
-        - Statistics
-        - Traumatic Brain Injury
+        - name: Graph Theory
+          description: "Applied graph-based approaches to medical data analysis, developing novel clustering algorithms for disease network discovery."
+        - name: Computational Neuroscience
+          description: "Neurological data analysis focused on traumatic brain injury patient records and comorbidity pattern identification."
+        - name: Medical Data Analysis
+          description: "Large-scale hospital record processing and analysis with structured extraction of complex medical relationships and patterns."
+        - name: Statistics
+          description: "Statistical modeling and analysis for medical research with focus on comorbidity relationships and disease clustering validation."
+        - name: Traumatic Brain Injury
+          description: "Specialized research in TBI patient data analysis leading to discovery of novel disease comorbidity networks and clinical insights."
       maindescription: As part of an undergraduate capstone thesis, developed a Python-based data processing pipeline leveraging Pandas for data manipulation and cleaning, NetworkX for graph representation and analysis, and matplotlib for data visualization. The pipeline was designed to process a large dataset of traumatic brain injury (TBI) patient hospital records (50,000+ rows, 1000+ columns), extracting structured comorbidity data using statistical methods. Developed a novel algorithm to recursively cluster diseases based on betweenness centrality, a graph theory measure, leading to the discovery of previously unknown disease networks. Papers published with Dr. Shyam Kumar Sudhakar in <i>Frontiers in human neuroscience</i> (2023), <i>Brain Organoid and Systems Neuroscience Journal</i> (2024) and <i>BMC Neurology</i> (2025).
 
     - title: Computational Neuroscience Research Associate
@@ -123,16 +199,129 @@
         - name: Linux
           icon: fa-brands fa-linux
           description: "Designed and built custom Linux kernels using Clear Linux patches with optimized schedulers for compute workloads, achieving 20-30% higher throughput on multithreaded operations."
-        - BTRFS
-        - Performance Optimization
+        - name: BTRFS
+          icon: fa-solid fa-hdd
+          description: "Implemented BTRFS storage subsystems with patched ZSTD compression achieving 50-70% storage footprint reduction with equal or better read performance."
+        - name: Performance Optimization
+          icon: fa-solid fa-tachometer-alt
+          description: "Achieved 20-30% higher throughput on multithreaded workloads through custom kernel compilation and scheduler optimization."
       domains:
-        - Computational Neuroscience
-        - Signal Processing
-        - Linux System Administration
+        - name: Computational Neuroscience
+          description: "Advanced neural signal analysis for epilepsy research with focus on pathological vs physiological signal classification."
+        - name: Signal Processing
+          description: "Multi-channel time series analysis of non-stationary EEG/ECoG signals for epileptic biomarker signature extraction."
+        - name: Epilepsy Research
+          description: "Seizure prediction research using high-frequency oscillations and machine learning models for interictal EEG signal analysis."
+        - name: EEG/ECoG Analysis
+          description: "Sophisticated feature engineering algorithms for multi-channel neural signals to generate unique epileptic biomarker signatures."
+        - name: Linux System Administration
+          description: "Custom Linux kernel development with Clear Linux patches and optimized schedulers for high-performance computing workloads."
       maindescription: Developed highly efficient feature engineering algorithms on large-scale non-stationary multi-channel time signals from ECoG/EEG data to generate unique epileptic biomarker signatures using high-frequency oscillations (HFOs). Derivative datasets were generated to train machine learning models to classify physiological and pathological signals to predict epileptic seizure onset using interictal EEG signals.
       description:
         - Designed and built custom Linux kernels using Clear Linux patches and tuned schedulers optimized for compute and memory workloads. (20-30% higher throughput on multithreaded workloads with lower memory usage per thread)
         - Benchmarked and implemented BTRFS storage subsystems that used a patched version of ZSTD to enable robust multi-terabyte scale data storage and analysis on a consumer laptop using transparent disk compression. (50-70% smaller storage footprint with equal or better read performance)
+
+    - title: Summer Research Internship — ESyt Protein Evolution and Dynamics
+      institution: Krea University
+      department: Biological Sciences
+      key_people: Dr. Kalyan Chakrabarti and Dr. Vaishali Sharma
+      location: Sri City, AP, India.
+      start_date: Mar 2021
+      end_date: Aug 2021
+      skills:
+        - name: Bioinformatics
+          icon: fa-solid fa-dna
+          description: "Comparative sequence analysis using BLAST and Multiple Sequence Alignment to investigate evolutionary correlates across species."
+        - name: Evolutionary Biology
+          icon: fa-solid fa-tree
+          description: "Analyzed DNA and RNA sequences across plant and animal species to measure sequence divergence and structural changes."
+        - name: Literature Review
+          icon: fa-solid fa-book
+          description: "Comprehensive literature surveys on ESyt protein mechanisms and Ubiquitin systems for comparative evolutionary analysis."
+      domains:
+        - name: Protein Evolution
+          description: "Comparative analysis of Extended Synaptotagmin evolution across species using sequence and structural approaches."
+        - name: Structural Biology
+          description: "Investigation of protein structure changes and evolutionary relationships through bioinformatics approaches."
+      maindescription: Surveyed literature to determine the state of research on the utility and mechanisms of Extended Synaptotagmin (ESyt) and used another literature survey of Ubiquitin as an analogous point of comparison. DNA and RNA sequences across plant and animal species were analyzed using BLAST and Multiple Sequence Alignment to investigate possible evolutionary correlates by measuring sequence divergence and changes in protein structures (where obtainable).
+      
+    - title: Research Collaborator — Amyloid Beta Protein Aggregation Simulation
+      institution: Krea University
+      department: Biological Sciences
+      key_people: Dr. Kalyan Chakrabarti and Dr. Nasrollah Rezaei-Ghaleh
+      location: Sri City, AP, India.
+      start_date: Nov 2021
+      end_date: Mar 2022
+      skills:
+        - name: COPASI
+          icon: fa-solid fa-flask
+          description: "Modeled Amyloid beta accumulation and degradation through deterministic systems of hundreds of differential equations."
+        - name: STEPS
+          icon: fa-solid fa-cube
+          description: "Adapted deterministic models into stochastic diffusion systems with reaction-mixture properties for microscopic analysis."
+        - name: Parameter Optimization
+          icon: fa-solid fa-sliders-h
+          description: "Developed parallelized parameter scanning scripts exponentially reducing computation time for model exploration."
+        - name: Systems Biology
+          icon: fa-solid fa-project-diagram
+          description: "Designed first-principles models leveraging literature data to capture biochemical and biophysical dynamics."
+      domains:
+        - name: Alzheimer's Disease
+          description: "Computational modeling of Amyloid beta aggregation and neuroinflammation dynamics in Alzheimer's disease pathogenesis."
+        - name: Mathematical Modeling
+          description: "Complex systems modeling using deterministic and stochastic approaches for biochemical pathway analysis."
+        - name: Neuroinflammation
+          description: "Investigation of neuroinflammatory processes and their impact on Amyloid beta accumulation through computational simulation."
+      maindescription: Modeled the accumulation and degradation of Amyloid beta in Alzheimer's disease as a function of neuroinflammation, initially by simulating an existing deterministic system of hundreds of differential equations (COPASI). Developed scripts to parallelize parameter scans, exponentially reducing computation time and enabling in-depth exploration of model behavior. Adapted the model using STEPS into a stochastic diffusion system with reaction-mixture properties to investigate the impact of microscopic stochasticity on global system states. Worked on designing a de-novo, first-principles model that leverages literature data to more accurately capture the biochemical and biophysical dynamics underlying Amyloid beta aggregation. Analyzed and interpreted high-dimensional simulation data to gain insights into disease mechanisms.
+      description:
+        - My contributions towards the initial understanding of the complex system and reverse engineering the COPASI model into its constituting coupled differential equations significantly laid the groundwork for multiple student capstone projects in the Biological Sciences, and ultimately culminated in a <i>Nature npj Systems Biology and Applications</i> (2024) paper titled "Bifurcations in coupled amyloid-β aggregation-inflammation systems".
+
+    - title: Strategic Consultant and Research Mentor
+      institution: Jinso/OpenBook
+      department: San Francisco-based Startup
+      key_people: Jay Gopalan
+      location: Remote
+      start_date: Jul 2021
+      end_date: Apr 2022
+      skills:
+        - name: UI/UX Testing
+          icon: fa-solid fa-user-check
+          description: "Beta testing and user experience evaluation for research platform optimization and interface improvement."
+        - name: Research Mentoring
+          icon: fa-solid fa-graduation-cap
+          description: "Guided high school students through research methodology and project development processes."
+        - name: Strategic Consulting
+          icon: fa-solid fa-lightbulb
+          description: "Provided strategic guidance on platform development and user experience enhancement for research tools."
+      domains:
+        - name: EdTech
+          description: "Educational technology platform development and optimization for research-focused learning environments."
+        - name: Research Methodology
+          description: "Mentorship and guidance in research process development and project implementation for student researchers."
+      maindescription: Consulted on improving the UI/UX experience through beta testing the flagship research platform. As a part of the program, I was also a research mentor to selected high school students to assist them with the process of research and help develop their own research project.
+
+    - title: IT Consultant
+      institution: Krea University
+      department: School of Interwoven Arts and Sciences Student Admission Team
+      location: Remote
+      start_date: Apr 2020
+      end_date: Mar 2023
+      skills:
+        - name: Technical Support
+          icon: fa-solid fa-headset
+          description: "Provided comprehensive IT support to professors and prospective students for technology-related issues."
+        - name: Documentation
+          icon: fa-solid fa-file-alt
+          description: "Created organizational knowledge documentation for recurring technical issues and solutions."
+        - name: Educational Technology
+          icon: fa-solid fa-chalkboard
+          description: "Designed technical and pedagogical aspects of Online Krea Immersive Case for university admissions process."
+      domains:
+        - name: Educational Administration
+          description: "Technical support and process design for university admissions and educational technology implementation."
+        - name: Knowledge Management
+          description: "Systematic documentation and organization of technical solutions for institutional knowledge building."
+      maindescription: Worked closely with the university Admissions team on the technical and pedagogical design of the previously-used Online Krea Immersive Case part of the admissions process. Have been a regular IT buddy to help professors and prospective students with technology-related issues and its later documentation for organisational knowledge production.
 
 - title: Honors and Awards
   type: time_table
