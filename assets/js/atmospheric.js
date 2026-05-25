@@ -1,21 +1,24 @@
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var reveals = document.querySelectorAll('.atmo-reveal');
-  if (reveals.length > 0) {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    reveals.forEach(function (el) { observer.observe(el); });
-  }
+  // Delay observer setup until after hero entrance animation (0.4s delay + 0.6s duration)
+  setTimeout(function () {
+    var reveals = document.querySelectorAll('.atmo-reveal');
+    if (reveals.length > 0) {
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      reveals.forEach(function (el) { observer.observe(el); });
+    }
+  }, 1000);
 
   var about = document.querySelector('.about');
   if (about) {

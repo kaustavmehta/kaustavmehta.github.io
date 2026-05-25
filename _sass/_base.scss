@@ -21,8 +21,8 @@ code, pre, kbd, samp {
   .post-title {
     font-family: 'Newsreader', Georgia, serif;
     font-weight: 300;
-    font-size: 1.8rem;
-    line-height: 1.45;
+    font-size: 2.4rem;
+    line-height: 1.35;
   }
 
   .desc {
@@ -257,6 +257,10 @@ ul.task-list input[type="checkbox"] {
 
 .profile.float-right {
   margin-left: 1rem;
+}
+
+.about .profile.float-right {
+  margin-top: -0.5rem;
 }
 
 .profile.float-left {
