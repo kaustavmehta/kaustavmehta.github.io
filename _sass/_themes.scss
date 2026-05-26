@@ -11,6 +11,7 @@
   --global-text-color: #{$atmo-text-primary-light};
   --global-text-color-light: #{$atmo-text-secondary-light};
   --global-text-color-dim: #{$atmo-ui-text-light};
+  --atmo-sticky-bg: rgba(250, 250, 248, 0.92);
   --global-theme-color: #{$atmo-accent-light};
   --global-hover-color: #{$atmo-accent-light};
   --global-hover-text-color: #{$white-color};
@@ -82,6 +83,7 @@ html[data-theme="dark"] {
   --global-text-color: #{$atmo-text-primary-dark};
   --global-text-color-light: #{$atmo-text-secondary-dark};
   --global-text-color-dim: #{$atmo-ui-text-dark};
+  --atmo-sticky-bg: rgba(11, 14, 14, 0.88);
   --global-theme-color: #{$atmo-accent-dark};
   --global-hover-color: #{$atmo-accent-dark};
   --global-hover-text-color: #{$white-color};

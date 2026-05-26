@@ -2,55 +2,79 @@
   {% for content in entry.contents %}
     <article class="atmo-cv-entry">
 
-      {%- comment -%} Horizontal metadata strip: dates · location · collaborators {%- endcomment -%}
-      <div class="atmo-cv-meta-row">
-        {% if content.start_date or content.end_date or content.year %}
-          <span class="atmo-cv-dates">
-            {% if content.year %}
-              {{ content.year }}
-            {% else %}
-              {% if content.start_date %}{{ content.start_date }}{% endif %}
-              {% if content.start_date and (content.end_date or content.start_date) %}
-                <span class="atmo-cv-date-arrow">→</span>
+      {%- comment -%}
+        Sticky entry header: meta strip + title + institution + domains.
+        Stays pinned while the description scrolls beneath.
+      {%- endcomment -%}
+      <header class="atmo-cv-header">
+        <div class="atmo-cv-meta-row">
+          {% if content.start_date or content.end_date or content.year %}
+            <span class="atmo-cv-dates">
+              {% if content.year %}
+                {{ content.year }}
+              {% else %}
+                {% if content.start_date %}{{ content.start_date }}{% endif %}
+                {% if content.start_date and (content.end_date or content.start_date) %}
+                  <span class="atmo-cv-date-arrow">→</span>
+                {% endif %}
+                {% if content.end_date %}{{ content.end_date }}{% else %}{% if content.start_date %}Present{% endif %}{% endif %}
               {% endif %}
-              {% if content.end_date %}{{ content.end_date }}{% else %}{% if content.start_date %}Present{% endif %}{% endif %}
-            {% endif %}
-          </span>
+            </span>
+          {% endif %}
+
+          {% if content.location %}
+            <span class="atmo-cv-meta-divider">·</span>
+            <span class="atmo-cv-meta-item">
+              <i class="fa-solid fa-location-dot atmo-cv-meta-icon"></i>
+              {{ content.location }}
+            </span>
+          {% endif %}
+
+          {% if content.key_people %}
+            <span class="atmo-cv-meta-divider">·</span>
+            <span class="atmo-cv-meta-item atmo-cv-collaborators">
+              <i class="fa-solid fa-users atmo-cv-meta-icon"></i>
+              {{ content.key_people }}
+            </span>
+          {% endif %}
+        </div>
+
+        {% if content.title %}
+          <h3 class="atmo-cv-title">{{ content.title }}</h3>
         {% endif %}
 
-        {% if content.location %}
-          <span class="atmo-cv-meta-divider">·</span>
-          <span class="atmo-cv-meta-item">
-            <i class="fa-solid fa-location-dot atmo-cv-meta-icon"></i>
-            {{ content.location }}
-          </span>
+        {% if content.institution or content.department %}
+          <div class="atmo-cv-institution">
+            {% if content.institution %}<span>{{ content.institution }}</span>{% endif %}
+            {% if content.institution and content.department %}<span class="atmo-cv-dept-sep">·</span>{% endif %}
+            {% if content.department %}<span class="atmo-cv-dept">{{ content.department }}</span>{% endif %}
+          </div>
         {% endif %}
 
-        {% if content.key_people %}
-          <span class="atmo-cv-meta-divider">·</span>
-          <span class="atmo-cv-meta-item atmo-cv-collaborators">
-            <i class="fa-solid fa-users atmo-cv-meta-icon"></i>
-            {{ content.key_people }}
-          </span>
+        {% if content.domains %}
+          <div class="atmo-cv-domains">
+            <div class="atmo-cv-pill-list">
+              {% for domain in content.domains %}
+                {% if domain.name %}
+                  <span class="atmo-cv-domain{% if domain.description %} has-tooltip{% endif %}"
+                        {% if domain.description %}data-tooltip="{{ domain.description | escape }}"{% endif %}>
+                    {% if domain.icon %}<i class="{{ domain.icon }}"></i>{% endif %}
+                    {{ domain.name }}
+                    {% if domain.description %}<span class="atmo-cv-tooltip">{{ domain.description }}</span>{% endif %}
+                  </span>
+                {% else %}
+                  <span class="atmo-cv-domain">{{ domain }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
         {% endif %}
-      </div>
+      </header>
 
       <div class="atmo-cv-grid{% unless content.skills %} atmo-cv-grid-solo{% endunless %}">
 
-        {%- comment -%} Main content column {%- endcomment -%}
+        {%- comment -%} Main content column (description + bullets + links + media) {%- endcomment -%}
         <div class="atmo-cv-main">
-          {% if content.title %}
-            <h3 class="atmo-cv-title">{{ content.title }}</h3>
-          {% endif %}
-
-          {% if content.institution or content.department %}
-            <div class="atmo-cv-institution">
-              {% if content.institution %}<span>{{ content.institution }}</span>{% endif %}
-              {% if content.institution and content.department %}<span class="atmo-cv-dept-sep">·</span>{% endif %}
-              {% if content.department %}<span class="atmo-cv-dept">{{ content.department }}</span>{% endif %}
-            </div>
-          {% endif %}
-
           {% if content.maindescription %}
             <div class="atmo-cv-description">{{ content.maindescription }}</div>
           {% endif %}
@@ -93,26 +117,6 @@
             </ul>
           {% endif %}
 
-          {% if content.domains %}
-            <div class="atmo-cv-domains">
-              <div class="atmo-cv-pill-label">Domains</div>
-              <div class="atmo-cv-pill-list">
-                {% for domain in content.domains %}
-                  {% if domain.name %}
-                    <span class="atmo-cv-domain{% if domain.description %} has-tooltip{% endif %}"
-                          {% if domain.description %}data-tooltip="{{ domain.description | escape }}"{% endif %}>
-                      {% if domain.icon %}<i class="{{ domain.icon }}"></i>{% endif %}
-                      {{ domain.name }}
-                      {% if domain.description %}<span class="atmo-cv-tooltip">{{ domain.description }}</span>{% endif %}
-                    </span>
-                  {% else %}
-                    <span class="atmo-cv-domain">{{ domain }}</span>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-          {% endif %}
-
           {% if content.linkitems %}
             <div class="atmo-cv-links">
               {% for item in content.linkitems %}
@@ -125,7 +129,6 @@
             </div>
           {% endif %}
 
-          {%- comment -%} Inline media (if present) {%- endcomment -%}
           {% if content.image or content.video %}
             <div class="atmo-cv-media">
               {% if content.media_caption %}
@@ -162,7 +165,7 @@
           {% endif %}
         </div>
 
-        {%- comment -%} Skills sidebar {%- endcomment -%}
+        {%- comment -%} Skills sidebar (no longer sticky) {%- endcomment -%}
         {% if content.skills %}
           <aside class="atmo-cv-skills">
             <div class="atmo-cv-pill-label">Skills</div>
