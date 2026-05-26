@@ -241,7 +241,10 @@ ul.task-list input[type="checkbox"] {
 // Profile
 
 .profile {
-  width: 100%;
+  width: 150px;
+  margin: 0 auto 1.5rem;
+  display: block;
+  float: none !important;
 
   .more-info {
     margin-bottom: 5px;
@@ -255,27 +258,25 @@ ul.task-list input[type="checkbox"] {
   }
 }
 
-.profile.float-right {
-  margin-left: 1rem;
-}
-
-.about .profile.float-right {
-  margin-top: -0.5rem;
-}
-
-.profile.float-left {
-  margin-right: 1rem;
-}
-
 @media (min-width: 576px) {
   .profile {
     width: 30%;
+    float: right !important;
+    margin: 0 0 0 1rem;
 
     .address {
       p {
         display: block;
       }
     }
+  }
+
+  .profile.float-right {
+    margin-left: 1rem;
+  }
+
+  .profile.float-left {
+    margin-right: 1rem;
   }
 }
 
@@ -344,9 +345,9 @@ ul.task-list input[type="checkbox"] {
 
   .navbar-nav .nav-item .nav-link {
     color: var(--global-text-color);
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     font-weight: 400;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     transition: color 0.2s ease;
 
     &:hover {
@@ -962,7 +963,7 @@ html.transition,
 html.transition *,
 html.transition *:before,
 html.transition *:after {
-  transition: all 750ms !important;
+  transition: color 800ms ease-in-out, background-color 800ms ease-in-out, border-color 800ms ease-in-out, box-shadow 800ms ease-in-out, background 800ms ease-in-out !important;
   transition-delay: 0 !important;
 }
 

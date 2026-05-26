@@ -1,5 +1,18 @@
 // Atmospheric Clarity — ambient visual details
-// Radial glows, concentric rings, gradient separators, dark-mode body gradient
+// Hero layout, radial glows, concentric rings, gradient separators, dark-mode body gradient
+
+
+// Mobile: center image and header only
+@media (max-width: 575px) {
+  .about .post-header {
+    text-align: center;
+  }
+
+  .about .profile {
+    display: flex;
+    justify-content: center;
+  }
+}
 
 // Dark mode body gradient
 html[data-theme="dark"] body {
@@ -114,6 +127,36 @@ html[data-theme="dark"] {
 
 // Latest posts on homepage
 .about .news {
+  .table-responsive {
+    margin-bottom: 0;
+  }
+
+  table {
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  td,
+  th {
+    vertical-align: baseline;
+    border: none;
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--global-text-color-light);
+    white-space: nowrap;
+    padding-left: 0;
+    width: 1%;
+    padding-right: 1rem;
+  }
+
+  td {
+    padding-right: 0;
+  }
+
   .news-title {
     font-family: 'Newsreader', Georgia, serif;
     font-weight: 400;
@@ -124,12 +167,5 @@ html[data-theme="dark"] {
     &:hover {
       color: var(--global-theme-color);
     }
-  }
-
-  th {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--global-text-color-light);
-    white-space: nowrap;
   }
 }
