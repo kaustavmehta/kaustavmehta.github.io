@@ -44,17 +44,17 @@ html[data-theme="dark"] body {
 }
 
 :root {
-  --atmo-glow-1: rgba(100, 130, 180, 0.07);
-  --atmo-glow-2: rgba(140, 100, 160, 0.05);
+  --atmo-glow-1: rgba(100, 130, 180, 0.10);
+  --atmo-glow-2: rgba(140, 100, 160, 0.06);
   --atmo-ring-color: rgba(100, 130, 180, 0.12);
   --atmo-separator-color: rgba(0, 0, 0, 0.06);
 }
 
 html[data-theme="dark"] {
-  --atmo-glow-1: rgba(60, 120, 180, 0.10);
-  --atmo-glow-2: rgba(100, 65, 145, 0.07);
-  --atmo-ring-color: rgba(100, 140, 200, 0.08);
-  --atmo-separator-color: rgba(255, 255, 255, 0.04);
+  --atmo-glow-1: rgba(60, 120, 180, 0.24);
+  --atmo-glow-2: rgba(100, 65, 145, 0.14);
+  --atmo-ring-color: rgba(100, 140, 200, 0.10);
+  --atmo-separator-color: rgba(255, 255, 255, 0.07);
 }
 
 // Concentric ambient rings
@@ -95,7 +95,7 @@ html[data-theme="dark"] {
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--global-text-color-light);
+  color: var(--global-text-color-dim);
   margin-bottom: 1rem;
 
   a {
@@ -146,7 +146,7 @@ html[data-theme="dark"] {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem;
     font-weight: 400;
-    color: var(--global-text-color-light);
+    color: var(--global-text-color-dim);
     white-space: nowrap;
     padding-left: 0;
     width: 1%;
@@ -167,5 +167,514 @@ html[data-theme="dark"] {
     &:hover {
       color: var(--global-theme-color);
     }
+  }
+}
+
+// ============ CV hero header ============
+.cv-page {
+  .cv-hero {
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+  }
+  .cv-hero-kicker {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--global-text-color-dim);
+    margin-bottom: 1.1rem;
+  }
+  .cv-hero-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 300;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin: 0 0 1.1rem;
+    color: var(--global-text-color);
+    letter-spacing: -0.015em;
+
+    strong {
+      font-weight: 500;
+    }
+  }
+  .cv-hero-lede {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--global-text-color-light);
+    max-width: 620px;
+    margin: 0 0 1.6rem;
+  }
+  .cv-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.1rem;
+  }
+  .cv-pdf-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--global-text-color);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.4px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .cv-pdf-button:hover {
+    border-color: var(--global-theme-color);
+    background: rgba(140, 180, 220, 0.08);
+    color: var(--global-theme-color);
+  }
+  .cv-pdf-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    opacity: 0.7;
+  }
+  .cv-hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--global-text-color-dim);
+    letter-spacing: 0.5px;
+  }
+
+  // Drop the old .card styling on CV sections
+  .cv {
+    .card { display: contents; }
+    .card-title { display: none; }
+  }
+
+  .cv-section {
+    margin-bottom: 3.5rem;
+  }
+  .cv-section-sep {
+    height: 1px;
+    border: none;
+    background: linear-gradient(90deg, transparent, var(--global-divider-color) 20%, var(--global-divider-color) 80%, transparent);
+    margin: 3rem 0 2.5rem;
+  }
+  .cv-section:first-of-type .cv-section-sep {
+    margin-top: 1.5rem;
+  }
+  .cv-section-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: var(--global-text-color);
+    margin: 0 0 2rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+// ============ TOC sidebar — scroll-progress visual ============
+nav#toc-sidebar {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  ul ul {
+    padding-left: 0.85rem;
+    font-size: 0.74rem;
+    display: block;  // override bootstrap-toc collapsing inactive branches
+  }
+  // Ensure all nested lists stay expanded
+  li > ul { display: block; }
+
+  a {
+    display: block;
+    padding: 0.35rem 0 0.35rem 0.75rem;
+    border-left: 1px solid var(--global-divider-color);
+    text-decoration: none;
+    color: var(--global-text-color);
+    transition: color 0.25s ease, border-color 0.25s ease, padding-left 0.2s ease;
+    line-height: 1.4;
+  }
+  a:hover {
+    color: var(--global-theme-color);
+  }
+
+  // Active item (from scrollspy)
+  li.active > a,
+  a.active {
+    color: var(--global-theme-color);
+    border-left-color: var(--global-theme-color);
+  }
+
+  // Default progress state — only applies when TOC is NOT being hovered
+  &:not(:hover) {
+    a[data-toc-state="upcoming"] {
+      color: var(--global-text-color-dim);
+    }
+    a[data-toc-state="passed"] {
+      color: var(--global-text-color);
+    }
+  }
+
+  // Hover state — brighten everything (active stays accent)
+  &:hover {
+    a {
+      color: var(--global-text-color);
+    }
+    li.active > a,
+    a.active {
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+// ============ Atmospheric CV — horizontal time table ============
+.atmo-cv-entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atmo-cv-entry {
+  margin-bottom: 3.5rem;
+
+  .atmo-cv-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--global-text-color-light);
+    margin-bottom: 1rem;
+    letter-spacing: 0.4px;
+  }
+  .atmo-cv-dates {
+    color: var(--global-text-color);
+    font-weight: 500;
+  }
+  .atmo-cv-date-arrow {
+    color: var(--global-text-color-dim);
+    margin: 0 0.15rem;
+    font-weight: 400;
+  }
+  .atmo-cv-meta-divider {
+    color: var(--global-text-color-dim);
+    opacity: 0.6;
+  }
+  .atmo-cv-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--global-text-color-dim);
+  }
+  .atmo-cv-meta-icon {
+    opacity: 0.7;
+    font-size: 0.72rem;
+  }
+  .atmo-cv-collaborators {
+    font-style: italic;
+  }
+
+  .atmo-cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  .atmo-cv-grid.atmo-cv-grid-solo {
+    grid-template-columns: 1fr;
+  }
+
+  .atmo-cv-main {
+    min-width: 0;
+  }
+
+  .atmo-cv-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.7rem;
+    line-height: 1.25;
+    margin: 0 0 0.6rem;
+    color: var(--global-text-color);
+    letter-spacing: -0.01em;
+  }
+
+  .atmo-cv-institution {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--global-text-color-light);
+    margin-bottom: 1.25rem;
+  }
+  .atmo-cv-dept-sep {
+    color: var(--global-text-color-dim);
+    margin: 0 0.4rem;
+  }
+  .atmo-cv-dept {
+    color: var(--global-text-color-dim);
+  }
+
+  .atmo-cv-description {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--global-text-color-light);
+    margin: 0 0 1rem;
+  }
+
+  .atmo-cv-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--global-text-color-light);
+
+    > li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    > li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--global-text-color-dim);
+    }
+    .item-title {
+      color: var(--global-text-color);
+      font-weight: 500;
+    }
+  }
+
+  .atmo-cv-subbullets {
+    list-style: none;
+    padding: 0;
+    margin: 0.35rem 0 0;
+
+    > li {
+      position: relative;
+      padding-left: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    > li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--global-text-color-dim);
+    }
+  }
+
+  .atmo-cv-pill-label {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--global-text-color-dim);
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--global-divider-color);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+
+    &::before {
+      content: '◆';
+      color: var(--global-theme-color);
+      opacity: 0.7;
+    }
+  }
+
+  .atmo-cv-pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .atmo-cv-domains {
+    margin-top: 1.5rem;
+  }
+
+  .atmo-cv-domain {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.38rem 0.7rem;
+    border: 1px solid rgba(135, 206, 235, 0.4);
+    border-radius: 5px;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: var(--global-text-color);
+    background: rgba(135, 206, 235, 0.03);
+    transition: all 0.2s ease;
+    cursor: default;
+    position: relative;
+
+    i { opacity: 0.7; font-size: 0.72rem; }
+
+    &.has-tooltip {
+      cursor: help;
+    }
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      background: rgba(140, 180, 220, 0.08);
+
+      .atmo-cv-tooltip {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .atmo-cv-skills {
+    position: sticky;
+    top: 1.5rem;
+    padding-top: 0.3rem;
+  }
+
+  .atmo-cv-skill-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .atmo-cv-skill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.42rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: var(--global-text-color);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s ease;
+    cursor: default;
+    position: relative;
+
+    i { opacity: 0.75; font-size: 0.72rem; }
+
+    &.has-tooltip {
+      cursor: help;
+    }
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      background: rgba(140, 180, 220, 0.08);
+
+      .atmo-cv-tooltip {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+    }
+  }
+
+  .atmo-cv-tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--global-bg-color);
+    border: 1px solid var(--global-divider-color);
+    border-radius: 6px;
+    padding: 0.55rem 0.7rem;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--global-text-color-light);
+    width: max-content;
+    max-width: 260px;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+
+    &::before { content: none; }
+  }
+
+  .atmo-cv-media {
+    margin-top: 1.5rem;
+    max-width: 480px;
+  }
+  .atmo-cv-image {
+    width: 100%;
+    border-radius: 6px;
+    display: block;
+  }
+  .atmo-cv-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 6px;
+    overflow: hidden;
+    iframe, video { width: 100%; height: 100%; border: none; display: block; }
+  }
+  .atmo-cv-media-caption {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.78rem;
+    color: var(--global-text-color-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .atmo-cv-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .atmo-cv-link {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--global-divider-color);
+    border-radius: 5px;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.78rem;
+    color: var(--global-text-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: var(--global-theme-color);
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+.atmo-cv-sep {
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg, transparent, var(--global-divider-color) 20%, var(--global-divider-color) 80%, transparent);
+  margin: 0 0 3.5rem;
+}
+
+@media (max-width: 767px) {
+  .atmo-cv-entry .atmo-cv-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .atmo-cv-entry .atmo-cv-skills {
+    position: static;
+  }
+  .atmo-cv-entry .atmo-cv-title {
+    font-size: 1.4rem;
   }
 }

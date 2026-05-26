@@ -29,6 +29,33 @@ $(document).ready(function () {
     $("body").scrollspy({
       target: navSelector,
     });
+
+    // Mark TOC items as "passed" / "upcoming" relative to current active item
+    var markTocProgress = function () {
+      var $items = $("#toc-sidebar a");
+      var activeIndex = -1;
+      $items.each(function (i) {
+        var $li = $(this).closest("li");
+        if ($li.hasClass("active") || $(this).hasClass("active")) {
+          activeIndex = i;
+        }
+      });
+      $items.each(function (i) {
+        if (activeIndex < 0) {
+          $(this).attr("data-toc-state", "upcoming");
+        } else if (i < activeIndex) {
+          $(this).attr("data-toc-state", "passed");
+        } else if (i === activeIndex) {
+          $(this).attr("data-toc-state", "active");
+        } else {
+          $(this).attr("data-toc-state", "upcoming");
+        }
+      });
+    };
+    // Run on scroll-spy activation and initial load
+    $("body").on("activate.bs.scrollspy", markTocProgress);
+    // Initial pass after the TOC builds (small delay so Toc.init() has rendered)
+    setTimeout(markTocProgress, 150);
   }
 
   // add css to jupyter notebooks

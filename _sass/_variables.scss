@@ -34,17 +34,17 @@ $black-color: #000000 !default;
 
 // Atmospheric Clarity palette
 $atmo-canvas-light: #FAFAF8;
-$atmo-canvas-dark-start: #0c0c14;
-$atmo-canvas-dark-mid: #0e1520;
-$atmo-canvas-dark-end: #0a0e18;
+$atmo-canvas-dark-start: hsl(186, 13%, 5%);
+$atmo-canvas-dark-mid: hsl(186, 13%, 8%);
+$atmo-canvas-dark-end: hsl(186, 9%, 4%);
 $atmo-text-primary-light: #1a1a1a;
-$atmo-text-secondary-light: #777;
-$atmo-text-primary-dark: rgba(255, 255, 255, 0.9);
-$atmo-text-secondary-dark: rgba(255, 255, 255, 0.4);
+$atmo-text-secondary-light: #555;
+$atmo-text-primary-dark: #ffffff;
+$atmo-text-secondary-dark: hsl(230, 5%, 95%);
 $atmo-accent-light: #5a7a9a;
-$atmo-accent-dark: rgba(140, 180, 220, 0.9);
-$atmo-ui-text-light: #999;
-$atmo-ui-text-dark: rgba(255, 255, 255, 0.25);
+$atmo-accent-dark: #a8c4e0;
+$atmo-ui-text-light: #777;
+$atmo-ui-text-dark: hsl(230, 5%, 56%);
 $atmo-divider-light: rgba(0, 0, 0, 0.06);
 $atmo-divider-dark: rgba(255, 255, 255, 0.04);
 $atmo-card-bg-light: rgba(255, 255, 255, 0.7);

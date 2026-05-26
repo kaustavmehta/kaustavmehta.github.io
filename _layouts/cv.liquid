@@ -2,10 +2,22 @@
 layout: default
 ---
 {% unless site.data.resume %}
-  <div class="post">
-    <header class="post-header">
-      <h1 class="post-title">
-        {{ page.title }}
+  <div class="post cv-page">
+    <header class="cv-hero">
+      {% if page.kicker %}
+        <div class="cv-hero-kicker">{{ page.kicker }}</div>
+      {% endif %}
+      <h1 class="cv-hero-title">
+        {% if page.hero_title_strong or page.hero_title_rest %}
+          {% if page.hero_title_strong %}<strong>{{ page.hero_title_strong }}</strong>{% endif %}{% if page.hero_title_rest %} {{ page.hero_title_rest }}{% endif %}
+        {% else %}
+          {{ page.title }}
+        {% endif %}
+      </h1>
+      {% if page.description %}
+        <p class="cv-hero-lede">{{ page.description }}</p>
+      {% endif %}
+      <div class="cv-hero-actions">
         {% if page.cv_pdf %}
           <a
             {% if page.cv_pdf contains '://' %}
@@ -15,23 +27,25 @@ layout: default
             {% endif %}
             target="_blank"
             rel="noopener noreferrer"
-            class="float-right"
+            class="cv-pdf-button"
           >
-            <i class="fa-solid fa-file-pdf"></i>
+            <span>Download CV</span>
+            <span class="cv-pdf-icon">↓ PDF</span>
           </a>
         {% endif %}
-      </h1>
-      {% if page.description %}
-        <p class="post-description">{{ page.description }}</p>
-      {% endif %}
+        {% if page.last_updated %}
+          <span class="cv-hero-meta">Updated {{ page.last_updated }}</span>
+        {% endif %}
+      </div>
     </header>
 
     <article>
       <div class="cv">
         {% for entry in site.data.cv %}
-          <a class="anchor" id="{{ entry.title }}"></a>
-          <div class="card mt-3 p-3">
-            <h3 class="card-title font-weight-medium">{{ entry.title }}</h3>
+          <section class="cv-section">
+            <hr class="cv-section-sep">
+            <a class="anchor" id="{{ entry.title | slugify }}"></a>
+            <h2 class="cv-section-title">{{ entry.title }}</h2>
             <div>
               {% if entry.type == 'list' %}
                 {% include cv/list.liquid %}
@@ -47,7 +61,7 @@ layout: default
                 {{ entry.contents }}
               {% endif %}
             </div>
-          </div>
+          </section>
         {% endfor %}
       </div>
     </article>

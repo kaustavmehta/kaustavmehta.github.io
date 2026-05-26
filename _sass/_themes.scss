@@ -10,6 +10,7 @@
   --global-code-bg-color: rgba(90, 122, 154, 0.06);
   --global-text-color: #{$atmo-text-primary-light};
   --global-text-color-light: #{$atmo-text-secondary-light};
+  --global-text-color-dim: #{$atmo-ui-text-light};
   --global-theme-color: #{$atmo-accent-light};
   --global-hover-color: #{$atmo-accent-light};
   --global-hover-text-color: #{$white-color};
@@ -80,11 +81,12 @@ html[data-theme="dark"] {
   --global-code-bg-color: rgba(140, 180, 220, 0.08);
   --global-text-color: #{$atmo-text-primary-dark};
   --global-text-color-light: #{$atmo-text-secondary-dark};
+  --global-text-color-dim: #{$atmo-ui-text-dark};
   --global-theme-color: #{$atmo-accent-dark};
   --global-hover-color: #{$atmo-accent-dark};
   --global-hover-text-color: #{$white-color};
   --global-footer-bg-color: #12121a;
-  --global-footer-text-color: #{$atmo-text-secondary-dark};
+  --global-footer-text-color: #{$atmo-ui-text-dark};
   --global-footer-link-color: #{$atmo-text-primary-dark};
   --global-distill-app-color: #{$atmo-ui-text-dark};
   --global-divider-color: #{$atmo-divider-dark};
