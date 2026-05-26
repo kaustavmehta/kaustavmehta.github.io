@@ -962,12 +962,16 @@ code {
 }
 
 // Transitioning Themes
-html.transition,
-html.transition *,
-html.transition *:before,
-html.transition *:after {
-  transition: color 800ms ease-in-out, background-color 800ms ease-in-out, border-color 800ms ease-in-out, box-shadow 800ms ease-in-out, background 800ms ease-in-out !important;
-  transition-delay: 0 !important;
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 360ms;
+  animation-timing-function: ease-in-out;
+}
+
+html.theme-view-transition *,
+html.theme-view-transition *:before,
+html.theme-view-transition *:after {
+  transition: none !important;
 }
 
 // Extra Markdown style (post Customization)

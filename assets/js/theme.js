@@ -4,26 +4,26 @@
 let toggleThemeSetting = () => {
   let theme = determineComputedTheme();
   if (theme == "dark") {
-    setThemeSetting("light");
+    setThemeSetting("light", { animate: true });
   } else {
-    setThemeSetting("dark");
+    setThemeSetting("dark", { animate: true });
   }
 };
 
 // Change the theme setting and apply the theme.
-let setThemeSetting = (themeSetting) => {
+let setThemeSetting = (themeSetting, options = {}) => {
   localStorage.setItem("theme", themeSetting);
 
   document.documentElement.setAttribute("data-theme-setting", themeSetting);
 
-  applyTheme();
+  applyTheme({ animate: options.animate === true });
 };
 
 // Apply the computed dark or light theme to the website.
-let applyTheme = () => {
+let applyTheme = (options = {}) => {
   let theme = determineComputedTheme();
 
-  transTheme();
+  let updateTheme = () => {
   setHighlight(theme);
   setGiscusTheme(theme);
   setSearchTheme(theme);
@@ -84,6 +84,30 @@ let applyTheme = () => {
       background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee", // + 'ee' for trasparency.
     });
   }
+  };
+
+  if (options.animate) {
+    animateThemeUpdate(updateTheme);
+  } else {
+    updateTheme();
+  }
+};
+
+let prefersReducedThemeMotion = () => {
+  return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
+
+let animateThemeUpdate = (updateTheme) => {
+  if (document.startViewTransition && !prefersReducedThemeMotion()) {
+    document.documentElement.classList.add("theme-view-transition");
+    const transition = document.startViewTransition(updateTheme);
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove("theme-view-transition");
+    });
+    return;
+  }
+
+  updateTheme();
 };
 
 let setHighlight = (theme) => {
@@ -240,13 +264,6 @@ let setSearchTheme = (theme) => {
   } else {
     ninjaKeys.classList.remove("dark");
   }
-};
-
-let transTheme = () => {
-  document.documentElement.classList.add("transition");
-  window.setTimeout(() => {
-    document.documentElement.classList.remove("transition");
-  }, 900);
 };
 
 // Determine the expected state of the theme toggle, which can be "dark", "light", or

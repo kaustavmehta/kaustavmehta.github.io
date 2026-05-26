@@ -26,34 +26,82 @@ $(document).ready(function () {
     var navSelector = "#toc-sidebar";
     var $myNav = $(navSelector);
     Toc.init($myNav);
-    $("body").scrollspy({
-      target: navSelector,
-    });
 
-    // Mark TOC items as "passed" / "upcoming" relative to current active item
+    var getTocTarget = function (link) {
+      var href = link.getAttribute("href");
+      if (!href || href.charAt(0) !== "#") return null;
+
+      try {
+        return document.getElementById(decodeURIComponent(href.slice(1)));
+      } catch (e) {
+        return document.getElementById(href.slice(1));
+      }
+    };
+
+    var getStaticTocTarget = function (target) {
+      if (!target) return null;
+
+      var cvEntry = target.closest(".atmo-cv-entry");
+      if (cvEntry) return cvEntry;
+
+      var cvSection = target.closest(".cv-section");
+      if (cvSection) return cvSection;
+
+      return target;
+    };
+
+    var getTocOffset = function () {
+      var navbar = document.querySelector("nav.navbar.fixed-top");
+      var navbarOffset = (navbar ? navbar.offsetHeight : 0) + 32;
+      return Math.max(navbarOffset, window.innerHeight * 0.65);
+    };
+
     var markTocProgress = function () {
-      var $items = $("#toc-sidebar a");
-      var activeIndex = -1;
-      $items.each(function (i) {
-        var $li = $(this).closest("li");
-        if ($li.hasClass("active") || $(this).hasClass("active")) {
+      var items = Array.prototype.slice.call(document.querySelectorAll("#toc-sidebar a"));
+      var targets = items.map(function (item) {
+        return getStaticTocTarget(getTocTarget(item));
+      });
+      var threshold = getTocOffset();
+      var activeIndex = 0;
+
+      targets.forEach(function (target, i) {
+        if (target && target.getBoundingClientRect().top <= threshold) {
           activeIndex = i;
         }
       });
-      $items.each(function (i) {
-        if (activeIndex < 0) {
-          $(this).attr("data-toc-state", "upcoming");
-        } else if (i < activeIndex) {
-          $(this).attr("data-toc-state", "passed");
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+        activeIndex = targets.reduce(function (lastIndex, target, i) {
+          return target ? i : lastIndex;
+        }, activeIndex);
+      }
+
+      items.forEach(function (item, i) {
+        var state = "upcoming";
+        if (i < activeIndex) {
+          state = "passed";
         } else if (i === activeIndex) {
-          $(this).attr("data-toc-state", "active");
-        } else {
-          $(this).attr("data-toc-state", "upcoming");
+          state = "active";
         }
+        item.setAttribute("data-toc-state", state);
+        item.classList.toggle("active", state === "active");
+        $(item).closest("li").toggleClass("active", state === "active");
       });
     };
-    // Run on scroll-spy activation and initial load
-    $("body").on("activate.bs.scrollspy", markTocProgress);
+
+    var tocTicking = false;
+    var requestTocProgress = function () {
+      if (tocTicking) return;
+      window.requestAnimationFrame(function () {
+        markTocProgress();
+        tocTicking = false;
+      });
+      tocTicking = true;
+    };
+
+    window.addEventListener("scroll", requestTocProgress, { passive: true });
+    window.addEventListener("resize", requestTocProgress);
+
     // Initial pass after the TOC builds (small delay so Toc.init() has rendered)
     setTimeout(markTocProgress, 150);
   }
