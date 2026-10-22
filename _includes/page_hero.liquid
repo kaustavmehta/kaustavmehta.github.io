@@ -1,0 +1,26 @@
+{%- comment -%}
+  Shared page header: small-caps kicker, split-weight serif title, lede.
+  Reads page.kicker, page.hero_title_strong, page.hero_title_rest, page.description.
+  Optional include.actions is rendered beneath the lede (e.g. the CV download row).
+{%- endcomment -%}
+<header class="atmo-page-hero">
+  {% if page.kicker %}
+    <div class="atmo-page-kicker atmo-hero-entrance">{{ page.kicker }}</div>
+  {% endif %}
+  <h1 class="atmo-page-title atmo-hero-entrance" style="--atmo-delay: 80ms">
+    {% if page.hero_title_strong or page.hero_title_rest %}
+      {% if page.hero_title_strong -%}
+        <strong>{{ page.hero_title_strong }}</strong>
+      {%- endif %}
+      {%- if page.hero_title_rest %} {{ page.hero_title_rest }}{% endif %}
+    {% else %}
+      {{ page.title }}
+    {% endif %}
+  </h1>
+  {% if page.description %}
+    <p class="atmo-page-lede atmo-hero-entrance" style="--atmo-delay: 160ms">{{ page.description }}</p>
+  {% endif %}
+  {% if include.actions %}
+    <div class="atmo-page-actions atmo-hero-entrance" style="--atmo-delay: 240ms">{{ include.actions }}</div>
+  {% endif %}
+</header>

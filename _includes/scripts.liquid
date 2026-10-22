@@ -195,7 +195,12 @@
   <script async src="https://badge.dimensions.ai/badge.js"></script>
 {% endif %}
 
-{% if site.enable_math %}
+{% comment %} MathJax (~1.2 MB) only on pages that ask for it: front matter `math: true`, posts, or pseudocode {% endcomment %}
+{% assign needs_math = false %}
+{% if page.math or page.layout == 'post' or page.pseudocode %}
+  {% assign needs_math = true %}
+{% endif %}
+{% if site.enable_math and needs_math %}
   <!-- MathJax -->
   <script
     defer
@@ -207,11 +212,6 @@
   ></script>
   {% unless page.pseudocode %}
     <script src="{{ '/assets/js/mathjax-setup.js' | relative_url | bust_file_cache }}"></script>
-    <script
-      defer
-      src="{{ site.third_party_libraries.polyfill.url.js }}"
-      crossorigin="anonymous"
-    ></script>
   {% else %}
     <script src="{{ '/assets/js/pseudocode-setup.js' | relative_url | bust_file_cache }}"></script>
     <script
@@ -335,6 +335,4 @@
   <script defer src="{{ '/assets/js/newsletter.js' | relative_url | bust_file_cache }}"></script>
 {% endif %}
 
-{% if page.layout == 'about' %}
-  <script defer src="{{ '/assets/js/atmospheric.js' | relative_url }}"></script>
-{% endif %}
+<script defer src="{{ '/assets/js/atmospheric.js' | relative_url | bust_file_cache }}"></script>

@@ -1,6 +1,17 @@
 // Atmospheric Clarity — ambient visual details
 // Hero layout, radial glows, concentric rings, gradient separators, dark-mode body gradient
 
+// Glows and rings bleed past their containers by design; never let that become sideways scroll.
+// The root needs its own overflow value, otherwise body's is handed to the viewport
+// (which still lets mobile browsers widen the layout) instead of clipping body itself.
+// `clip` (unlike `hidden`) creates no scroll container, so position: sticky keeps working.
+html {
+  overflow-x: hidden;
+}
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
 
 // Mobile: center image and header only
 @media (max-width: 575px) {
@@ -14,28 +25,52 @@
   }
 }
 
-// Dark mode body gradient
-html[data-theme="dark"] body {
+// Dark mode body gradient, painted on a fixed layer so scrolling never repaints it
+// (background-attachment: fixed repaints every frame in Chromium and is ignored on iOS)
+html[data-theme="dark"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
   background: var(--global-bg-gradient, var(--global-bg-color));
-  background-attachment: fixed;
 }
 
-// Ambient radial glows behind main content
-.about {
+:root {
+  --atmo-glow-1: rgba(54, 97, 138, 0.1);
+  --atmo-glow-2: rgba(168, 95, 23, 0.05);
+  --atmo-ring-color: rgba(54, 97, 138, 0.14);
+  --atmo-separator-color: rgba(22, 24, 29, 0.1);
+}
+
+html[data-theme="dark"] {
+  --atmo-glow-1: rgba(70, 130, 195, 0.22);
+  --atmo-glow-2: rgba(232, 176, 106, 0.07);
+  --atmo-ring-color: rgba(156, 195, 234, 0.12);
+  --atmo-separator-color: rgba(200, 220, 255, 0.1);
+}
+
+// Ambient radial glows behind hero content. The layer is larger than its host
+// so the gradients fade out instead of being cut off at the container edge.
+.about,
+.atmo-page-hero {
   position: relative;
-  overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    inset: 0;
+    top: -160px;
+    right: -18vw;
+    bottom: -80px;
+    left: -18vw;
     pointer-events: none;
     z-index: 0;
-    background:
-      radial-gradient(ellipse 400px 300px at 75% 15%, var(--atmo-glow-1) 0%, transparent 70%),
-      radial-gradient(ellipse 300px 300px at 15% 65%, var(--atmo-glow-2) 0%, transparent 70%);
-    transform: translateY(var(--atmo-parallax-y, 0));
-    transition: transform 0.1s linear;
+    // closest-side sizes each glow to fade out before the layer's edge, so it can never show a seam
+    background: radial-gradient(ellipse closest-side at 72% 24%, var(--atmo-glow-1) 0%, transparent 100%),
+      radial-gradient(ellipse closest-side at 20% 66%, var(--atmo-glow-2) 0%, transparent 100%);
+    translate: 0 var(--atmo-parallax-y);
+    animation: atmoDrift 28s ease-in-out infinite alternate;
+    will-change: transform;
   }
 
   > * {
@@ -44,18 +79,9 @@ html[data-theme="dark"] body {
   }
 }
 
-:root {
-  --atmo-glow-1: rgba(100, 130, 180, 0.10);
-  --atmo-glow-2: rgba(140, 100, 160, 0.06);
-  --atmo-ring-color: rgba(100, 130, 180, 0.12);
-  --atmo-separator-color: rgba(0, 0, 0, 0.06);
-}
-
-html[data-theme="dark"] {
-  --atmo-glow-1: rgba(60, 120, 180, 0.24);
-  --atmo-glow-2: rgba(100, 65, 145, 0.14);
-  --atmo-ring-color: rgba(100, 140, 200, 0.10);
-  --atmo-separator-color: rgba(255, 255, 255, 0.07);
+.atmo-page-hero::before {
+  bottom: -40px;
+  background: radial-gradient(ellipse closest-side at 28% 45%, var(--atmo-glow-1) 0%, transparent 100%);
 }
 
 // Concentric ambient rings
@@ -67,62 +93,203 @@ html[data-theme="dark"] {
   height: 200px;
   pointer-events: none;
   z-index: 0;
-  overflow: visible;
 
   .ring {
     position: absolute;
     border-radius: 50%;
     border: 1px solid var(--atmo-ring-color);
+    animation: atmoBreathe 9s ease-in-out infinite;
 
-    &:nth-child(1) { inset: 0; }
-    &:nth-child(2) { inset: 25px; opacity: 0.7; }
-    &:nth-child(3) { inset: 50px; opacity: 0.4; }
-    &:nth-child(4) { inset: 75px; opacity: 0.2; }
+    &:nth-child(1) {
+      inset: 0;
+    }
+    &:nth-child(2) {
+      inset: 25px;
+      opacity: 0.7;
+      animation-delay: -2.25s;
+    }
+    &:nth-child(3) {
+      inset: 50px;
+      opacity: 0.4;
+      animation-delay: -4.5s;
+    }
+    &:nth-child(4) {
+      inset: 75px;
+      opacity: 0.2;
+      animation-delay: -6.75s;
+    }
+  }
+}
+
+// Profile photo: a hairline arc that slowly orbits the portrait
+.about .profile.profile-circular figure {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 0 62%, var(--atmo-accent-line) 80%, var(--atmo-spark-color) 86%, transparent 92%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+    opacity: 0.8;
+    animation: atmoOrbit 24s linear infinite;
+  }
+
+  img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &:hover img {
+    transform: scale(1.015);
   }
 }
 
 // Gradient separators between homepage sections
 .atmo-separator {
   height: 1px;
-  margin: 2rem 0;
+  margin: 2.5rem 0 2rem;
   background: linear-gradient(90deg, transparent, var(--atmo-separator-color), transparent);
   border: none;
 }
 
-// Homepage section titles
+// Small-caps labels: homepage section titles, page kickers, pill labels
 .atmo-section-title {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 0.625rem;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 2px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--global-text-color-dim);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--atmo-separator-color), transparent);
+  }
 
   a {
     color: inherit;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0;
 
-    &:hover {
+    &::after {
+      content: "→";
+      opacity: 0;
+      transform: translateX(-4px);
+      transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    &:hover,
+    &:focus-visible {
       color: var(--global-theme-color);
+
+      &::after {
+        opacity: 1;
+        transform: none;
+      }
     }
   }
 }
 
-// Publication cards on homepage
-.about .publications {
-  .bib-entry {
-    background: var(--global-card-bg-color);
-    border: 1px solid var(--global-card-border-color, var(--global-divider-color));
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+// Publication rows: gentle lift on hover, thumbnails toned down in dark mode
+.publications ol.bibliography > li {
+  border-radius: 10px;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 
+  @media (hover: hover) {
     &:hover {
-      border-color: var(--global-theme-color);
+      background-color: var(--atmo-accent-soft);
       transform: translateY(-2px);
     }
+  }
+}
+
+.publications .preview {
+  filter: var(--atmo-thumb-filter);
+  transition: filter 0.3s ease;
+}
+
+.publications li:hover .preview {
+  filter: none;
+}
+
+video.preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--atmo-accent-soft);
+}
+
+// Publications page: year markers you can actually read, refined link buttons
+.publications {
+  h2.bibliography {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-top: none;
+    margin: 2.5rem 0 1rem;
+    padding-top: 0;
+    text-align: left;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--global-text-color-dim);
+
+    &::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--atmo-separator-color), transparent);
+    }
+  }
+
+  ol.bibliography > li {
+    margin: 0 -0.75rem 0.5rem;
+    padding: 0.75rem;
+  }
+
+  ol.bibliography li .links a.btn {
+    border-color: var(--atmo-pill-border);
+    border-radius: 999px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--atmo-accent-soft);
+    }
+  }
+
+  .preview-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    border: 1px dashed var(--atmo-pill-border);
+    color: var(--global-text-color-dim);
+    font-size: 1.6rem;
   }
 }
 
@@ -144,7 +311,7 @@ html[data-theme="dark"] {
   }
 
   th {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.7rem;
     font-weight: 400;
     color: var(--global-text-color-dim);
@@ -159,7 +326,7 @@ html[data-theme="dark"] {
   }
 
   .news-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 0.95rem;
     color: var(--global-text-color);
@@ -171,85 +338,118 @@ html[data-theme="dark"] {
   }
 }
 
-// ============ CV hero header ============
-.cv-page {
-  .cv-hero {
-    margin-bottom: 3rem;
-    padding-top: 1rem;
-  }
-  .cv-hero-kicker {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--global-text-color-dim);
-    margin-bottom: 1.1rem;
-  }
-  .cv-hero-title {
-    font-family: 'Newsreader', Georgia, serif;
-    font-weight: 300;
-    font-size: 2.6rem;
-    line-height: 1.15;
-    margin: 0 0 1.1rem;
-    color: var(--global-text-color);
-    letter-spacing: -0.015em;
+// ============ Shared page hero (CV, publications, 404) ============
+.atmo-page-hero {
+  margin-bottom: 3rem;
+  padding-top: 1rem;
+}
+.atmo-page-kicker {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--global-text-color-dim);
+  margin-bottom: 1.1rem;
+}
+.atmo-page-title {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+  line-height: 1.15;
+  margin: 0 0 1.1rem;
+  color: var(--global-text-color);
+  letter-spacing: -0.015em;
 
-    strong {
-      font-weight: 500;
-    }
+  strong {
+    font-weight: 500;
   }
-  .cv-hero-lede {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-weight: 400;
-    font-size: 0.98rem;
-    line-height: 1.7;
-    color: var(--global-text-color-light);
-    max-width: 620px;
-    margin: 0 0 1.6rem;
-  }
-  .cv-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1.1rem;
-  }
+}
+.atmo-page-lede {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--global-text-color-light);
+  max-width: 620px;
+  margin: 0 0 1.6rem;
+}
+.atmo-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.cv-page {
   .cv-pdf-button {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.55rem;
+    min-height: 44px;
     padding: 0.6rem 1.1rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--atmo-pill-border);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--atmo-pill-bg);
     color: var(--global-text-color);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.4px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
-  .cv-pdf-button:hover {
+  .cv-pdf-button:hover,
+  .cv-pdf-button:focus-visible {
     border-color: var(--global-theme-color);
-    background: rgba(140, 180, 220, 0.08);
+    background: var(--atmo-accent-soft);
     color: var(--global-theme-color);
   }
   .cv-pdf-icon {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.72rem;
     opacity: 0.7;
   }
   .cv-hero-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem;
     color: var(--global-text-color-dim);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.03em;
+  }
+
+  // Key/value table (General Information) in the same voice as the timeline
+  .table-cv {
+    td {
+      vertical-align: baseline;
+    }
+    td:first-child,
+    td:first-child b {
+      white-space: nowrap;
+      font-family: "Space Grotesk", system-ui, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--global-text-color-dim);
+    }
+    td.text {
+      font-weight: 400 !important;
+      line-height: 1.7;
+      color: var(--global-text-color-light);
+      max-width: 62ch;
+    }
   }
 
   // Drop the old .card styling on CV sections
   .cv {
-    .card { display: contents; }
-    .card-title { display: none; }
+    .card {
+      display: contents;
+    }
+    .card-title {
+      display: none;
+    }
   }
 
   .cv-section {
@@ -265,7 +465,7 @@ html[data-theme="dark"] {
     margin-top: 1.5rem;
   }
   .cv-section-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: 1.6rem;
     color: var(--global-text-color);
@@ -276,7 +476,7 @@ html[data-theme="dark"] {
 
 // ============ TOC sidebar — scroll-progress visual ============
 nav#toc-sidebar {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.2px;
 
@@ -287,10 +487,12 @@ nav#toc-sidebar {
   ul ul {
     padding-left: 0.85rem;
     font-size: 0.74rem;
-    display: block;  // override bootstrap-toc collapsing inactive branches
+    display: block; // override bootstrap-toc collapsing inactive branches
   }
   // Ensure all nested lists stay expanded
-  li > ul { display: block; }
+  li > ul {
+    display: block;
+  }
 
   a {
     display: block;
@@ -298,7 +500,10 @@ nav#toc-sidebar {
     border-left: 1px solid var(--global-divider-color);
     text-decoration: none;
     color: var(--global-text-color);
-    transition: color 0.25s ease, border-color 0.25s ease, padding-left 0.2s ease;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      padding-left 0.2s ease;
     line-height: 1.4;
   }
   a:hover {
@@ -348,15 +553,23 @@ nav#toc-sidebar {
   // entry's description scrolls beneath it. Sticks until the entry's
   // bottom hits the viewport top, then the next entry's header takes over.
   .atmo-cv-header {
-    position: sticky;
-    top: 1rem;
-    z-index: 5;
     margin-bottom: 1.5rem;
     padding: 1rem 0 1.25rem;
-    background: var(--global-bg-gradient, var(--global-bg-color));
-    background-attachment: fixed;
     border-bottom: 1px solid var(--global-divider-color);
-    transition: border-color 800ms ease-in-out;
+  }
+
+  // Desktop only: on phones the header is too tall to pin without hiding the text.
+  // Pins just below the fixed navbar; a translucent blur stands in for the old
+  // background-attachment trick, which repainted every frame and broke on iOS.
+  @media (min-width: 768px) {
+    .atmo-cv-header {
+      position: sticky;
+      top: var(--atmo-navbar-height, 57px);
+      z-index: 5;
+      background: color-mix(in srgb, var(--global-bg-color) 86%, transparent);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      backdrop-filter: blur(10px) saturate(1.2);
+    }
   }
 
   .atmo-cv-meta-row {
@@ -364,7 +577,7 @@ nav#toc-sidebar {
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.78rem;
     color: var(--global-text-color-light);
     margin-bottom: 0.9rem;
@@ -390,8 +603,36 @@ nav#toc-sidebar {
     color: var(--global-text-color-dim);
   }
   .atmo-cv-meta-icon {
-    opacity: 0.7;
-    font-size: 0.72rem;
+    opacity: 0.8;
+    font-size: 0.9rem;
+  }
+  .atmo-cv-present {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--atmo-spark-color);
+
+    &::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    // Expanding ring centred on the dot
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: calc(50% - 3px);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: atmoPulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    }
   }
   .atmo-cv-collaborators {
     font-style: italic;
@@ -412,7 +653,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 1.7rem;
     line-height: 1.25;
@@ -422,7 +663,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-institution {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.9rem;
     color: var(--global-text-color-light);
@@ -437,7 +678,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-description {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
     line-height: 1.75;
@@ -449,7 +690,7 @@ nav#toc-sidebar {
     list-style: none;
     padding: 0;
     margin: 0 0 1rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
     line-height: 1.7;
@@ -461,7 +702,7 @@ nav#toc-sidebar {
       margin-bottom: 0.5rem;
     }
     > li::before {
-      content: '—';
+      content: "—";
       position: absolute;
       left: 0;
       color: var(--global-text-color-dim);
@@ -483,7 +724,7 @@ nav#toc-sidebar {
       margin-bottom: 0.25rem;
     }
     > li::before {
-      content: '·';
+      content: "·";
       position: absolute;
       left: 0;
       color: var(--global-text-color-dim);
@@ -491,9 +732,9 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-pill-label {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 0.62rem;
-    letter-spacing: 2px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--global-text-color-dim);
     margin-bottom: 0.65rem;
@@ -505,7 +746,7 @@ nav#toc-sidebar {
     font-weight: 500;
 
     &::before {
-      content: '◆';
+      content: "◆";
       color: var(--global-theme-color);
       opacity: 0.7;
     }
@@ -530,32 +771,19 @@ nav#toc-sidebar {
     align-items: center;
     gap: 0.35rem;
     padding: 0.38rem 0.7rem;
-    border: 1px solid rgba(135, 206, 235, 0.4);
-    border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    border: 1px solid var(--atmo-accent-line);
+    border-radius: 999px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.78rem;
     color: var(--global-text-color);
-    background: rgba(135, 206, 235, 0.03);
-    transition: all 0.2s ease;
+    background: var(--atmo-accent-soft);
     cursor: default;
     position: relative;
 
-    i { opacity: 0.7; font-size: 0.72rem; }
-
-    &.has-tooltip {
-      cursor: help;
-    }
-
-    &:hover {
-      border-color: var(--global-theme-color);
-      background: rgba(140, 180, 220, 0.08);
-
-      .atmo-cv-tooltip {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-      }
+    i {
+      opacity: 0.8;
+      font-size: 0.85rem;
     }
   }
 
@@ -574,32 +802,53 @@ nav#toc-sidebar {
     align-items: center;
     gap: 0.45rem;
     padding: 0.42rem 0.7rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    border: 1px solid var(--atmo-pill-border);
+    border-radius: 6px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.78rem;
     color: var(--global-text-color);
-    background: rgba(255, 255, 255, 0.02);
-    transition: all 0.2s ease;
+    background: var(--atmo-pill-bg);
     cursor: default;
     position: relative;
 
-    i { opacity: 0.75; font-size: 0.72rem; }
+    i {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      color: var(--global-theme-color);
+    }
+  }
+
+  // Shared pill interactions. Tooltips open on hover, keyboard focus or tap.
+  .atmo-cv-domain,
+  .atmo-cv-skill {
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s ease;
 
     &.has-tooltip {
       cursor: help;
     }
 
-    &:hover {
+    &.has-tooltip:hover,
+    &.has-tooltip:focus-visible,
+    &.has-tooltip.is-open {
       border-color: var(--global-theme-color);
-      background: rgba(140, 180, 220, 0.08);
+      background: var(--atmo-accent-soft);
+      outline: none;
 
       .atmo-cv-tooltip {
+        visibility: visible;
         opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
+        transform: translateX(calc(-50% + var(--atmo-tip-shift, 0px))) translateY(0);
+        // Become visible immediately; the delay only applies when closing
+        transition-delay: 0s;
       }
+    }
+
+    &.has-tooltip:focus-visible {
+      box-shadow: 0 0 0 2px var(--atmo-accent-line);
     }
   }
 
@@ -607,28 +856,36 @@ nav#toc-sidebar {
     position: absolute;
     bottom: calc(100% + 0.5rem);
     left: 50%;
-    transform: translateX(-50%) translateY(4px);
+    transform: translateX(calc(-50% + var(--atmo-tip-shift, 0px))) translateY(4px);
     background: var(--global-bg-color);
     border: 1px solid var(--global-divider-color);
     border-radius: 6px;
     padding: 0.55rem 0.7rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.75rem;
     font-weight: 400;
     line-height: 1.45;
     color: var(--global-text-color-light);
     width: max-content;
-    max-width: 260px;
+    max-width: min(280px, calc(100vw - 2rem));
     text-align: left;
     text-transform: none;
     letter-spacing: normal;
+    // visibility (not just opacity) keeps closed tooltips out of hit-testing;
+    // body overflow-x: clip keeps them from widening the page
+    visibility: hidden;
     opacity: 0;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0s linear 0.18s;
     pointer-events: none;
     z-index: 10;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--atmo-shadow);
 
-    &::before { content: none; }
+    &::before {
+      content: none;
+    }
   }
 
   .atmo-cv-media {
@@ -637,18 +894,26 @@ nav#toc-sidebar {
   }
   .atmo-cv-image {
     width: 100%;
+    height: auto;
     border-radius: 6px;
     display: block;
+    background: var(--atmo-accent-soft);
   }
   .atmo-cv-video {
     width: 100%;
     aspect-ratio: 16 / 9;
     border-radius: 6px;
     overflow: hidden;
-    iframe, video { width: 100%; height: 100%; border: none; display: block; }
+    iframe,
+    video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
   }
   .atmo-cv-media-caption {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.78rem;
     color: var(--global-text-color-dim);
     margin-bottom: 0.5rem;
@@ -662,13 +927,15 @@ nav#toc-sidebar {
   }
   .atmo-cv-link {
     padding: 0.4rem 0.85rem;
-    border: 1px solid var(--global-divider-color);
-    border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    border: 1px solid var(--atmo-pill-border);
+    border-radius: 6px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.78rem;
     color: var(--global-text-color);
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      color 0.2s ease;
 
     &:hover {
       border-color: var(--global-theme-color);

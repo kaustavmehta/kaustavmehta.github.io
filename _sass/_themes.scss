@@ -15,19 +15,26 @@
   --global-theme-color: #{$atmo-accent-light};
   --global-hover-color: #{$atmo-accent-light};
   --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #e8e8e4;
+  --global-footer-bg-color: transparent;
   --global-footer-text-color: #{$atmo-text-secondary-light};
   --global-footer-link-color: #{$atmo-text-primary-light};
   --global-distill-app-color: #{$atmo-ui-text-light};
   --global-divider-color: #{$atmo-divider-light};
   --global-card-bg-color: #{$atmo-card-bg-light};
   --global-highlight-color: #{$red-color-dark};
-  --global-back-to-top-bg-color: rgba(0, 0, 0, 0.3);
+  --global-back-to-top-bg-color: rgba(22, 24, 29, 0.55);
   --global-back-to-top-text-color: #{$white-color};
   --global-newsletter-bg-color: #{$atmo-canvas-light};
   --global-newsletter-text-color: #{$atmo-text-primary-light};
   --global-accent-color: #{$atmo-accent-light};
   --global-card-border-color: #{$atmo-card-border-light};
+  --atmo-spark-color: #{$atmo-spark-light};
+  --atmo-accent-soft: rgba(54, 97, 138, 0.08);
+  --atmo-accent-line: rgba(54, 97, 138, 0.35);
+  --atmo-pill-border: rgba(22, 24, 29, 0.14);
+  --atmo-pill-bg: rgba(255, 255, 255, 0.6);
+  --atmo-shadow: 0 10px 30px -12px rgba(22, 24, 29, 0.25);
+  --atmo-thumb-filter: none;
 
   --global-tip-block: #42b983;
   --global-tip-block-bg: #e2f5ec;
@@ -87,7 +94,7 @@ html[data-theme="dark"] {
   --global-theme-color: #{$atmo-accent-dark};
   --global-hover-color: #{$atmo-accent-dark};
   --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #12121a;
+  --global-footer-bg-color: transparent;
   --global-footer-text-color: #{$atmo-ui-text-dark};
   --global-footer-link-color: #{$atmo-text-primary-dark};
   --global-distill-app-color: #{$atmo-ui-text-dark};
@@ -99,19 +106,26 @@ html[data-theme="dark"] {
   --global-newsletter-text-color: #{$atmo-text-primary-dark};
   --global-accent-color: #{$atmo-accent-dark};
   --global-card-border-color: #{$atmo-card-border-dark};
+  --atmo-spark-color: #{$atmo-spark-dark};
+  --atmo-accent-soft: rgba(156, 195, 234, 0.08);
+  --atmo-accent-line: rgba(156, 195, 234, 0.35);
+  --atmo-pill-border: rgba(200, 220, 255, 0.14);
+  --atmo-pill-bg: rgba(200, 220, 255, 0.025);
+  --atmo-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  --atmo-thumb-filter: brightness(0.88) contrast(1.02);
 
   --global-tip-block: #42b983;
-  --global-tip-block-bg: #e2f5ec;
-  --global-tip-block-text: #215d42;
-  --global-tip-block-title: #359469;
+  --global-tip-block-bg: #215d42;
+  --global-tip-block-text: #beffe2;
+  --global-tip-block-title: #e2f5ec;
   --global-warning-block: #e7c000;
-  --global-warning-block-bg: #fff8d8;
-  --global-warning-block-text: #6b5900;
-  --global-warning-block-title: #b29400;
+  --global-warning-block-bg: #6b5900;
+  --global-warning-block-text: #fff2af;
+  --global-warning-block-title: #fff8d8;
   --global-danger-block: #c00;
-  --global-danger-block-bg: #ffe0e0;
-  --global-danger-block-text: #600;
-  --global-danger-block-title: #c00;
+  --global-danger-block-bg: #600;
+  --global-danger-block-text: #ffb9b9;
+  --global-danger-block-title: #ffe0e0;
 
   .only-light {
     display: none;

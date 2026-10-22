@@ -33,24 +33,28 @@ $white-color: #ffffff !default;
 $black-color: #000000 !default;
 
 // Atmospheric Clarity palette
-$atmo-canvas-light: #FAFAF8;
-$atmo-canvas-dark-start: hsl(186, 13%, 5%);
-$atmo-canvas-dark-mid: hsl(186, 13%, 8%);
-$atmo-canvas-dark-end: hsl(186, 9%, 4%);
-$atmo-text-primary-light: #1a1a1a;
-$atmo-text-secondary-light: #555;
-$atmo-text-primary-dark: #ffffff;
-$atmo-text-secondary-dark: hsl(230, 5%, 95%);
-$atmo-accent-light: #5a7a9a;
-$atmo-accent-dark: #a8c4e0;
-$atmo-ui-text-light: #777;
-$atmo-ui-text-dark: hsl(230, 5%, 56%);
-$atmo-divider-light: rgba(0, 0, 0, 0.06);
-$atmo-divider-dark: rgba(255, 255, 255, 0.04);
-$atmo-card-bg-light: rgba(255, 255, 255, 0.7);
-$atmo-card-border-light: #eee;
-$atmo-card-bg-dark: rgba(255, 255, 255, 0.03);
-$atmo-card-border-dark: rgba(255, 255, 255, 0.06);
+// One cool ink hue (214°) for canvas, text and accent; one warm spark used sparingly
+// for "live" signals. All text tokens meet WCAG AA (≥4.5:1) on their canvas.
+$atmo-canvas-light: #f7f7f4;
+$atmo-canvas-dark-start: hsl(214, 24%, 7%);
+$atmo-canvas-dark-mid: hsl(214, 22%, 9%);
+$atmo-canvas-dark-end: hsl(214, 26%, 5%);
+$atmo-text-primary-light: #16181d;
+$atmo-text-secondary-light: #454a53;
+$atmo-text-primary-dark: hsl(214, 30%, 95%);
+$atmo-text-secondary-dark: hsl(214, 14%, 80%);
+$atmo-accent-light: #36618a;
+$atmo-accent-dark: #9cc3ea;
+$atmo-spark-light: #a85f17;
+$atmo-spark-dark: #e8b06a;
+$atmo-ui-text-light: #656a73;
+$atmo-ui-text-dark: hsl(214, 10%, 62%);
+$atmo-divider-light: rgba(22, 24, 29, 0.09);
+$atmo-divider-dark: rgba(200, 220, 255, 0.09);
+$atmo-card-bg-light: rgba(255, 255, 255, 0.75);
+$atmo-card-border-light: rgba(22, 24, 29, 0.08);
+$atmo-card-bg-dark: rgba(200, 220, 255, 0.035);
+$atmo-card-border-dark: rgba(200, 220, 255, 0.08);
 
 // Theme colors
 

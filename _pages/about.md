@@ -26,6 +26,6 @@ latest_posts:
 
 hello, and welcome to my digital abode! :)
 
-I tinker with _really cool_ ideas (usually across scientific disciplines) on a computer, and get **super** excited when I accidentally discover a thing or two. I'm chronically obssessed with asking fundamental questions about the world, and inventing methods that move me in the direction of their solutions.
+I tinker with _really cool_ ideas (usually across scientific disciplines) on a computer, and get **super** excited when I accidentally discover a thing or two. I'm chronically obsessed with asking fundamental questions about the world, and inventing methods that move me in the direction of their solutions.
 
 I also **love** learning and explaining concepts and ideas from first principles in a way where it just _clicks_, your eyes widen, and you can't help going **_OHHHH I GET IT NOW!!_**. I can't tell you what a deep joy it is to see that expression on a person.

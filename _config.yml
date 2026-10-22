@@ -8,12 +8,12 @@ first_name: Kaustav
 last_name: Mehta
 contact_note:
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Academic website of Kaustav Mehta, an independent research scientist focused on computational biology and protein folding using deep learning and molecular dynamics.
+  Kaustav Mehta is an independent research scientist working across computational biology, biophysics, computational neuroscience and scientific computing, and a teacher who explains ideas from first principles.
 #footer_text: >
 #  Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
 #  Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
 #  Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
-keywords: computational biology, protein folding, deep learning, molecular dynamics, research scientist # a list of keywords for your site, used in the meta tags
+keywords: Kaustav Mehta, independent research scientist, computational biology, biophysics, protein folding, AlphaFold, molecular dynamics, computational neuroscience, graph theory, high-performance computing, data science, teaching # a list of keywords for your site, used in the meta tags
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: ⚛️ # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
@@ -46,7 +46,7 @@ repo_trophies:
 # -----------------------------------------------------------------------------
 
 navbar_fixed: true
-footer_fixed: true
+footer_fixed: false
 search_enabled: true
 socials_in_search: true
 posts_in_search: true
@@ -62,9 +62,9 @@ max_width: 1200px
 # -----------------------------------------------------------------------------
 # Display links to the page with a preview object on social media.
 # see https://schema.org/docs/faq.html for more information
-serve_og_meta: false # Include Open Graph meta tags in the HTML head
-serve_schema_org: false # Include Schema.org in the HTML head
-og_image: # The site-wide (default for all links) Open Graph preview image
+serve_og_meta: true # Include Open Graph meta tags in the HTML head
+serve_schema_org: true # Include Schema.org in the HTML head
+og_image: https://kaustavmehta.github.io/assets/img/prof_pic.jpg # The site-wide (default for all links) Open Graph preview image
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification
@@ -85,8 +85,8 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: al-folio # blog_name will be displayed in your blog page
-blog_description: a simple whitespace theme for academics
+blog_name: notes # blog_name will be displayed in your blog page
+blog_description: notes, explanations and work in progress
 permalink: /blog/:year/:title/
 lsi: false # produce an index for related posts
 
@@ -185,12 +185,37 @@ exclude:
   - lighthouse_results/
   - package.json
   - package-lock.json
-  - _pages/about_einstein.md
   - purgecss.config.js
   - README.md
   - readme_preview/
+  - requirements.txt
   - vendor
   - CLAUDE.md
+  - docs/
+  # al-folio demo content: kept in the repo for reference, never published
+  - _posts/
+  - _news/
+  - _projects/
+  - _books/
+  - _pages/about_einstein.md
+  - _pages/blog.md
+  - _pages/books.md
+  - _pages/dropdown.md
+  - _pages/news.md
+  - _pages/profiles.md
+  - _pages/projects.md
+  - _pages/repositories.md
+  - _pages/teaching.md
+  - assets/jupyter/
+  - assets/json/table_data.json
+  - assets/pdf/example_pdf.pdf
+  - assets/video/pexels-engin-akyurt-6069112-960x540-30fps.mp4
+  - assets/video/tutorial_al_folio.mp4
+  - assets/img/[0-9]*.jpg
+  - assets/img/CV/*.gif
+  - assets/img/publication_preview/*.gif
+  - assets/img/prof_pic_color.jpg
+  - assets/img/template_error.png
 keep_files:
   - CNAME
   - .nojekyll
@@ -231,6 +256,7 @@ sass:
 
 jekyll-minifier:
   compress_javascript: false # set to false since we are using terser as the js minifier
+  compress_css: false # Sass already outputs compressed CSS; the minifier's CSS pass strips the spaces calc() needs
   exclude: ["robots.txt", "assets/js/search/*.js"]
 
 # -----------------------------------------------------------------------------
@@ -290,10 +316,10 @@ scholar:
 # Display different badges withs stats for your publications
 # Customize badge behavior in _layouts/bib.liquid
 enable_publication_badges:
-  altmetric: true # Altmetric badge (Customization options: https://badge-docs.altmetric.com/index.html)
-  dimensions: true # Dimensions badge (Customization options: https://badge.dimensions.ai/)
+  altmetric: false # no entries use it yet; true loads the badge script on every page. Altmetric badge (Customization options: https://badge-docs.altmetric.com/index.html)
+  dimensions: false # no entries use it yet; true loads the badge script on every page. Dimensions badge (Customization options: https://badge.dimensions.ai/)
   google_scholar: true # Google Scholar badge (https://scholar.google.com/intl/en/scholar/citations.html)
-  inspirehep: true # Inspire HEP badge (https://help.inspirehep.net/knowledge-base/citation-metrics/)
+  inspirehep: false # Inspire HEP badge (https://help.inspirehep.net/knowledge-base/citation-metrics/)
 
 # Filter out certain bibtex entry keywords used internally from the bib output
 filtered_bibtex_keywords:
@@ -359,7 +385,6 @@ imagemagick:
     - ".jpeg"
     - ".png"
     - ".tiff"
-    - ".gif"
   output_formats:
     webp: "-quality 85"
 

@@ -4,37 +4,48 @@
 
 // Atmospheric Clarity typography
 body {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Newsreader', Georgia, serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Newsreader", Georgia, serif;
   font-weight: 300;
 }
 
-code, pre, kbd, samp {
-  font-family: 'JetBrains Mono', monospace;
+code,
+pre,
+kbd,
+samp {
+  font-family: "JetBrains Mono", monospace;
 }
 
 .post-header {
   .post-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: 2.4rem;
     line-height: 1.35;
   }
 
+  // Subtitle reads as a sentence, so it is set as one: serif italic, not tracked caps
   .desc {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--global-text-color-dim);
+    font-family: "Newsreader", Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0;
+    color: var(--global-text-color-light);
+    margin-top: 0.25rem;
   }
 }
 
@@ -47,9 +58,19 @@ code, pre, kbd, samp {
     max-width: 580px;
   }
 
+  // One emphasis voice: italics and weight carry it, colour is reserved for links
   em {
-    color: var(--global-accent-color);
+    color: inherit;
     font-style: italic;
+  }
+
+  strong {
+    color: var(--global-text-color);
+    font-weight: 500;
+  }
+
+  a {
+    color: var(--global-theme-color);
   }
 }
 
@@ -130,6 +151,7 @@ blockquote {
       color: var(--global-tip-block-text);
     }
 
+    a,
     h1,
     h2,
     h3,
@@ -151,6 +173,7 @@ blockquote {
       color: var(--global-warning-block-text);
     }
 
+    a,
     h1,
     h2,
     h3,
@@ -172,6 +195,7 @@ blockquote {
       color: var(--global-danger-block-text);
     }
 
+    a,
     h1,
     h2,
     h3,
@@ -304,7 +328,7 @@ ul.task-list input[type="checkbox"] {
   border-bottom: 1px solid var(--global-divider-color);
   background-color: var(--global-bg-color);
   opacity: 0.95;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
 }
 
 .navbar .dropdown-menu {
@@ -342,29 +366,47 @@ ul.task-list input[type="checkbox"] {
 
   .navbar-brand {
     color: var(--global-text-color);
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
   }
 
   .navbar-nav .nav-item .nav-link {
+    position: relative;
     color: var(--global-text-color);
     font-size: 0.875rem;
     font-weight: 400;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.02em;
     transition: color 0.2s ease;
+
+    // Indicator that grows from the centre; static width avoids the old bold-text jitter
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0.5rem;
+      right: 0.5rem;
+      bottom: 0.2rem;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
     &:hover {
       color: var(--global-hover-color);
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      transform: scaleX(1);
     }
   }
 
   .navbar-nav .nav-item.active > .nav-link {
     background-color: inherit;
-    font-weight: bolder;
     color: var(--global-theme-color);
 
-    &:hover {
-      color: var(--global-hover-color);
+    &::after {
+      transform: scaleX(1);
     }
   }
 
@@ -455,6 +497,34 @@ ul.task-list input[type="checkbox"] {
 
   &:hover {
     color: var(--global-hover-color);
+  }
+
+  .ti {
+    font-size: 1.1rem;
+    vertical-align: -0.15em;
+  }
+}
+
+// Visibility of the three icons is owned by _themes.scss; only add motion here
+#light-toggle .ti {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#light-toggle:hover .ti {
+  transform: rotate(-25deg);
+}
+
+#search-toggle .search-hint {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.7rem;
+  color: var(--global-text-color-dim);
+  margin-right: 0.35rem;
+}
+
+// No keyboard shortcut to advertise on touch screens
+@media (hover: none) {
+  #search-toggle .search-hint {
+    display: none;
   }
 }
 
@@ -558,9 +628,10 @@ footer.fixed-bottom {
 
 footer.sticky-bottom {
   border-top: 1px solid var(--global-divider-color);
-  padding-top: 40px;
-  padding-bottom: 40px;
-  font-size: 0.9rem;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  font-size: 0.8rem;
+  color: var(--global-text-color-dim);
 
   .container {
     text-align: center;
@@ -937,6 +1008,18 @@ footer.sticky-bottom {
 // Rouge Color Customization
 figure.highlight {
   margin: 0 0 1rem;
+
+  // Responsive code block container
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  pre {
+    // Ensure code blocks can scroll horizontally
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 pre {
@@ -945,12 +1028,19 @@ pre {
   border-radius: 6px;
   padding: 6px 12px;
 
+  // Responsive behavior for code blocks
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  white-space: pre;
+  word-wrap: normal;
+
   pre,
   code {
     background-color: transparent;
     border-radius: 0;
     margin-bottom: 0;
     padding: 0;
+    white-space: inherit;
   }
 }
 
@@ -959,6 +1049,10 @@ code {
   background-color: var(--global-code-bg-color);
   border-radius: 3px;
   padding: 3px 3px;
+
+  // Inline code should wrap
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 // Transitioning Themes
@@ -1483,4 +1577,9 @@ figure.cover {
   a.cover-link:hover {
     color: #23212d !important;
   }
+}
+
+// Long display formulas scroll instead of widening the page on small screens
+mjx-container[jax="CHTML"][display="true"] {
+  overflow-x: auto;
 }

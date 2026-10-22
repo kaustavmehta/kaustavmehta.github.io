@@ -35,19 +35,19 @@
       end_date: Jul 2025
       skills:
         - name: Python
-          icon: fa-brands fa-python
+          icon: ti ti-brand-python
           description: "Taught Python fundamentals to data science students, covering pandas, numpy, matplotlib, and scikit-learn. Developed custom debugging methodologies for live code troubleshooting in classroom settings."
         - name: Statistics
-          icon: fa-solid fa-chart-line
+          icon: ti ti-chart-line
           description: "Delivered comprehensive applied statistics curriculum covering hypothesis testing, regression analysis, and statistical modeling. Created interactive tutorials and practical assignments for hands-on learning."
         - name: Teaching
-          icon: fa-solid fa-chalkboard-teacher
+          icon: ti ti-presentation
           description: "Specialized in disarming intimidation students face when learning complex technical skills, adapting teaching methods to meet each student at their level and nurturing curiosity."
         - name: Debugging
-          icon: fa-solid fa-bug
+          icon: ti ti-bug
           description: "Developed custom debugging methodologies for live code troubleshooting in classroom settings, helping students grow confident through hands-on problem-solving support."
         - name: Mentoring
-          icon: fa-solid fa-user-graduate
+          icon: ti ti-school
           description: "Provided reliable support to students across varying expertise levels, helping them explore technical concepts without fear and build confidence in their abilities."
       domains:
         - name: Education
@@ -67,24 +67,24 @@
       end_date: Aug 2025
       skills:
         - name: Linux Administration
-          icon: fa-brands fa-linux
+          icon: ti ti-terminal-2
         - name: Rocky Linux
-          icon: fa-solid fa-server
+          icon: ti ti-server
           description: "Migrated and upgraded HPC cluster from EOL CentOS 7 to Rocky Linux 8.9, ensuring system stability and security compliance."
         - name: PBS Scheduler
-          icon: fa-solid fa-tasks
+          icon: ti ti-list-check
           description: "Configured PBS job scheduler across login and compute nodes for efficient resource allocation and workload management."
         - name: CUDA
-          icon: fa-solid fa-microchip
+          icon: ti ti-cpu
           description: "Setup CUDA libraries and drivers for NVIDIA GPU-accelerated workloads, optimizing performance for computational tasks."
         - name: ZFS
-          icon: fa-solid fa-database
+          icon: ti ti-database
           description: "Implemented ZFS pools for network attached home and scratch directories, optimized for read/write performance and data resiliency."
         - name: Environment Modules
-          icon: fa-solid fa-cube
+          icon: ti ti-cube
           description: "Created user-accessible environment modules for quantum chemistry, data analysis, deep learning, molecular dynamics and finance software packages."
         - name: Performance Tuning
-          icon: fa-solid fa-tachometer-alt
+          icon: ti ti-gauge
           description: "Compiled software and tuned Linux kernel for optimal performance, diagnosed bottlenecks and resolved zombie processes."
       domains:
         - name: High-Performance Computing
@@ -103,25 +103,25 @@
       key_people: Dr. Sudip Roy, Dr. Kalyan Chakrabarti and Dr. Siva Srinivasan
       location: Sri City, AP, India.
       start_date: Jul 2024
-      end_date: 
+      end_date:
       skills:
         - name: AlphaFold
-          icon: fa-solid fa-dna
+          icon: ti ti-dna
           description: "Developed a novel AlphaFold framework for generating biophysically meaningful protein folding trajectories, extending beyond static structure prediction to dynamic conformational ensemble generation."
         - name: HPC
-          icon: fa-solid fa-server
+          icon: ti ti-server
           description: "Built and optimized high-performance computing pipelines for large-scale distributed protein folding trajectories from AlphaFold, handling terabyte-scale datasets with efficient parallelization strategies. Focused on maximizing GPU utilization by splitting CUDA streams."
         - name: Python
-          icon: fa-brands fa-python
+          icon: ti ti-brand-python
           description: "Designed and implemented core algorithms for protein analysis, data processing pipelines, and visualization tools. Extensive use of NumPy, SciPy, MDAnalysis, PyRosetta and OpenMM for workflows and pipelines."
         - name: MD Simulations
-          icon: fa-solid fa-atom
+          icon: ti ti-atom
           description: "Validated AlphaFold-derived datasets against 11 milliseconds of DE Shaw molecular dynamics simulations, ensuring biophysical accuracy of generated conformations."
         - name: Biophysics
-          icon: fa-solid fa-microscope
+          icon: ti ti-microscope
           description: "Applied first-principles biophysical analysis to validate protein energy landscapes, conformational distributions, and dynamic properties from AF-generated trajectories."
         - name: Deep Learning
-          icon: fa-solid fa-brain
+          icon: ti ti-brain
           description: "Developed transformer interpretability techniques and perturbation-based analysis methods to extract mechanistic insights from AlphaFold's neural network architecture."
       domains:
         - name: Computational Biology
@@ -138,10 +138,10 @@
         - Co-created the Centre for Structure and Dynamics (CSD) Research Lab at Krea University with Dr. Kalyan Chakrabarti and Dr. Sudip Roy.
         - Developed multiple high-performance computing (HPC) pipelines for generating and analyzing large datasets of protein folding trajectories using my custom AlphaFold framework.
         - Benchmarked generated AF-derived datasets of Ubiquitin (1UBQ) against X-ray, NMR, and 11 milliseconds of DE Shaw's molecular dynamics (MD) simulations to validate the biophysical accuracy of the resulting protein energy landscape, distribution of conformations and dynamics.
-      image: 
-        - assets/img/CV/ubq_AF_example.gif
-        # - assets/img/CV/exp12_sic1.gif
-        # - assets/img/CV/esyt_multimer.gif
+      image:
+        - /assets/video/cv/ubq_AF_example.mp4
+        # - /assets/video/cv/exp12_sic1.mp4
+        # - /assets/video/cv/esyt_multimer.mp4
 
     - title: Data Analyst and Research Associate
       institution: Krea University
@@ -152,22 +152,22 @@
       end_date: Jan 2025
       skills:
         - name: NetworkX
-          icon: fa-solid fa-network-wired
+          icon: ti ti-network
           description: "Developed novel algorithms for recursive disease clustering using graph theory measures, specifically betweenness centrality analysis."
         - name: Pandas
-          icon: fa-solid fa-table
+          icon: ti ti-table
           description: "Built robust data processing pipeline for large-scale medical datasets (50,000+ rows, 1000+ columns) with structured comorbidity extraction."
         - name: Matplotlib
-          icon: fa-solid fa-chart-bar
+          icon: ti ti-chart-bar
           description: "Created comprehensive data visualizations for disease network analysis and comorbidity pattern discovery in medical research."
         - name: Python
-          icon: fa-brands fa-python
+          icon: ti ti-brand-python
           description: "Architected complete data processing pipeline leveraging statistical methods and graph algorithms for medical data analysis."
         - name: Graph Theory
-          icon: fa-solid fa-project-diagram
+          icon: ti ti-topology-star-3
           description: "Applied advanced graph theory concepts to discover previously unknown disease networks through betweenness centrality clustering."
         - name: Statistical Methods
-          icon: fa-solid fa-chart-line
+          icon: ti ti-chart-line
           description: "Implemented statistical approaches for extracting structured comorbidity data and validating disease network discoveries."
       domains:
         - name: Graph Theory
@@ -191,19 +191,19 @@
       end_date: Jun 2022
       skills:
         - name: MNE-Python
-          icon: fa-solid fa-wave-square
+          icon: ti ti-wave-square
           description: "Developed advanced feature engineering algorithms for multi-channel EEG/ECoG signals to extract unique epileptic biomarker signatures using high-frequency oscillations (HFOs)."
         - name: Machine Learning
-          icon: fa-solid fa-robot
+          icon: ti ti-robot
           description: "Trained machine learning models to classify physiological vs pathological neural signals for seizure prediction. Implemented custom algorithms for non-stationary time series analysis."
         - name: Linux
-          icon: fa-brands fa-linux
+          icon: ti ti-terminal-2
           description: "Designed and built custom Linux kernels using Clear Linux patches with optimized schedulers for compute workloads, achieving 20-30% higher throughput on multithreaded operations."
         - name: BTRFS
-          icon: fa-solid fa-hdd
+          icon: ti ti-server-2
           description: "Implemented BTRFS storage subsystems with patched ZSTD compression achieving 50-70% storage footprint reduction with equal or better read performance."
         - name: Performance Optimization
-          icon: fa-solid fa-tachometer-alt
+          icon: ti ti-gauge
           description: "Achieved 20-30% higher throughput on multithreaded workloads through custom kernel compilation and scheduler optimization."
       domains:
         - name: Computational Neuroscience
@@ -230,13 +230,13 @@
       end_date: Aug 2021
       skills:
         - name: Bioinformatics
-          icon: fa-solid fa-dna
+          icon: ti ti-dna
           description: "Comparative sequence analysis using BLAST and Multiple Sequence Alignment to investigate evolutionary correlates across species."
         - name: Evolutionary Biology
-          icon: fa-solid fa-tree
+          icon: ti ti-binary-tree
           description: "Analyzed DNA and RNA sequences across plant and animal species to measure sequence divergence and structural changes."
         - name: Literature Review
-          icon: fa-solid fa-book
+          icon: ti ti-book
           description: "Comprehensive literature surveys on ESyt protein mechanisms and Ubiquitin systems for comparative evolutionary analysis."
       domains:
         - name: Protein Evolution
@@ -244,7 +244,7 @@
         - name: Structural Biology
           description: "Investigation of protein structure changes and evolutionary relationships through bioinformatics approaches."
       maindescription: Surveyed literature to determine the state of research on the utility and mechanisms of Extended Synaptotagmin (ESyt) and used another literature survey of Ubiquitin as an analogous point of comparison. DNA and RNA sequences across plant and animal species were analyzed using BLAST and Multiple Sequence Alignment to investigate possible evolutionary correlates by measuring sequence divergence and changes in protein structures (where obtainable).
-      
+
     - title: Research Collaborator — Amyloid Beta Protein Aggregation Simulation
       institution: Krea University
       department: Biological Sciences
@@ -254,16 +254,16 @@
       end_date: Mar 2022
       skills:
         - name: COPASI
-          icon: fa-solid fa-flask
+          icon: ti ti-flask
           description: "Modeled Amyloid beta accumulation and degradation through deterministic systems of hundreds of differential equations."
         - name: STEPS
-          icon: fa-solid fa-cube
+          icon: ti ti-cube
           description: "Adapted deterministic models into stochastic diffusion systems with reaction-mixture properties for microscopic analysis."
         - name: Parameter Optimization
-          icon: fa-solid fa-sliders-h
+          icon: ti ti-adjustments-horizontal
           description: "Developed parallelized parameter scanning scripts exponentially reducing computation time for model exploration."
         - name: Systems Biology
-          icon: fa-solid fa-project-diagram
+          icon: ti ti-topology-star-3
           description: "Designed first-principles models leveraging literature data to capture biochemical and biophysical dynamics."
       domains:
         - name: Alzheimer's Disease
@@ -285,13 +285,13 @@
       end_date: Apr 2022
       skills:
         - name: UI/UX Testing
-          icon: fa-solid fa-user-check
+          icon: ti ti-user-check
           description: "Beta testing and user experience evaluation for research platform optimization and interface improvement."
         - name: Research Mentoring
-          icon: fa-solid fa-graduation-cap
+          icon: ti ti-school
           description: "Guided high school students through research methodology and project development processes."
         - name: Strategic Consulting
-          icon: fa-solid fa-lightbulb
+          icon: ti ti-bulb
           description: "Provided strategic guidance on platform development and user experience enhancement for research tools."
       domains:
         - name: EdTech
@@ -308,13 +308,13 @@
       end_date: Mar 2023
       skills:
         - name: Technical Support
-          icon: fa-solid fa-headset
+          icon: ti ti-headset
           description: "Provided comprehensive IT support to professors and prospective students for technology-related issues."
         - name: Documentation
-          icon: fa-solid fa-file-alt
+          icon: ti ti-file-text
           description: "Created organizational knowledge documentation for recurring technical issues and solutions."
         - name: Educational Technology
-          icon: fa-solid fa-chalkboard
+          icon: ti ti-chalkboard
           description: "Designed technical and pedagogical aspects of Online Krea Immersive Case for university admissions process."
       domains:
         - name: Educational Administration
@@ -329,11 +329,10 @@
     - start_date: Oct 2020
       end_date: 2022
       title: Krea Research Fellowship Grant
-      maindescription: Awarded a research grant to investigate causative factors of the spread of SARS-CoV-2 in India through a novel approach of data-mining online Indian newspapers. Hired and managed a team of four undergraduate interns to assist in the project. 
+      maindescription: Awarded a research grant to investigate causative factors of the spread of SARS-CoV-2 in India through a novel approach of data-mining online Indian newspapers. Hired and managed a team of four undergraduate interns to assist in the project.
     - year: 2015
       title: Breakthrough Junior Challenge Finalist
       maindescription: Selected as one of the 15 finalists worldwide for the Breakthrough Junior Challenge, an international science communication video competition. My entry was a video explaining the concept of Dark Matter.
-
 # - title: Academic Interests
 #   type: nested_list
 #   contents:

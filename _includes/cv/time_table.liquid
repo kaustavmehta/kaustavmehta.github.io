@@ -1,7 +1,6 @@
 <div class="atmo-cv-entries">
   {% for content in entry.contents %}
     <article class="atmo-cv-entry">
-
       {%- comment -%}
         Sticky entry header: meta strip + title + institution + domains.
         Stays pinned while the description scrolls beneath.
@@ -17,7 +16,13 @@
                 {% if content.start_date and (content.end_date or content.start_date) %}
                   <span class="atmo-cv-date-arrow">→</span>
                 {% endif %}
-                {% if content.end_date %}{{ content.end_date }}{% else %}{% if content.start_date %}Present{% endif %}{% endif %}
+                {% if content.end_date -%}
+                  {{- content.end_date -}}
+                {%- else -%}
+                  {%- if content.start_date -%}
+                    <span class="atmo-cv-present">Present</span>
+                  {%- endif -%}
+                {%- endif %}
               {% endif %}
             </span>
           {% endif %}
@@ -25,7 +30,7 @@
           {% if content.location %}
             <span class="atmo-cv-meta-divider">·</span>
             <span class="atmo-cv-meta-item">
-              <i class="fa-solid fa-location-dot atmo-cv-meta-icon"></i>
+              <i class="ti ti-map-pin atmo-cv-meta-icon" aria-hidden="true"></i>
               {{ content.location }}
             </span>
           {% endif %}
@@ -33,7 +38,7 @@
           {% if content.key_people %}
             <span class="atmo-cv-meta-divider">·</span>
             <span class="atmo-cv-meta-item atmo-cv-collaborators">
-              <i class="fa-solid fa-users atmo-cv-meta-icon"></i>
+              <i class="ti ti-users atmo-cv-meta-icon" aria-hidden="true"></i>
               {{ content.key_people }}
             </span>
           {% endif %}
@@ -45,9 +50,15 @@
 
         {% if content.institution or content.department %}
           <div class="atmo-cv-institution">
-            {% if content.institution %}<span>{{ content.institution }}</span>{% endif %}
-            {% if content.institution and content.department %}<span class="atmo-cv-dept-sep">·</span>{% endif %}
-            {% if content.department %}<span class="atmo-cv-dept">{{ content.department }}</span>{% endif %}
+            {% if content.institution -%}
+              <span>{{ content.institution }}</span>
+            {%- endif %}
+            {% if content.institution and content.department -%}
+              <span class="atmo-cv-dept-sep">·</span>
+            {%- endif %}
+            {% if content.department -%}
+              <span class="atmo-cv-dept">{{ content.department }}</span>
+            {%- endif %}
           </div>
         {% endif %}
 
@@ -56,11 +67,18 @@
             <div class="atmo-cv-pill-list">
               {% for domain in content.domains %}
                 {% if domain.name %}
-                  <span class="atmo-cv-domain{% if domain.description %} has-tooltip{% endif %}"
-                        {% if domain.description %}data-tooltip="{{ domain.description | escape }}"{% endif %}>
-                    {% if domain.icon %}<i class="{{ domain.icon }}"></i>{% endif %}
+                  {% capture tip_id %}tip-{{ entry.title | slugify }}-{{ forloop.parentloop.index }}-d{{ forloop.index }}{% endcapture %}
+                  <span
+                    class="atmo-cv-domain{% if domain.description %} has-tooltip{% endif %}"
+                    {% if domain.description %}
+                      tabindex="0" aria-describedby="{{ tip_id }}"
+                    {% endif %}
+                  >
+                    {% if domain.icon %}<i class="{{ domain.icon }}" aria-hidden="true"></i>{% endif %}
                     {{ domain.name }}
-                    {% if domain.description %}<span class="atmo-cv-tooltip">{{ domain.description }}</span>{% endif %}
+                    {% if domain.description -%}
+                      <span class="atmo-cv-tooltip" role="tooltip" id="{{ tip_id }}">{{ domain.description }}</span>
+                    {%- endif %}
                   </span>
                 {% else %}
                   <span class="atmo-cv-domain">{{ domain }}</span>
@@ -72,7 +90,6 @@
       </header>
 
       <div class="atmo-cv-grid{% unless content.skills %} atmo-cv-grid-solo{% endunless %}">
-
         {%- comment -%} Main content column (description + bullets + links + media) {%- endcomment -%}
         <div class="atmo-cv-main">
           {% if content.maindescription %}
@@ -136,12 +153,17 @@
               {% endif %}
               {% if content.image %}
                 {% if content.image.first %}
-                  {% for image in content.image %}
-                    <img src="{{ image | relative_url }}" alt="{{ content.title | default: 'CV image' }}" class="atmo-cv-image">
-                  {% endfor %}
+                  {% assign media_items = content.image %}
                 {% else %}
-                  <img src="{{ content.image | relative_url }}" alt="{{ content.title | default: 'CV image' }}" class="atmo-cv-image">
+                  {% assign media_items = content.image | split: '|' %}
                 {% endif %}
+                {% for image in media_items %}
+                  {% if image contains '.mp4' %}
+                    {% include looping_video.liquid src=image class="atmo-cv-image" alt=content.title %}
+                  {% else %}
+                    <img src="{{ image | relative_url }}" alt="{{ content.title | default: 'CV image' }}" class="atmo-cv-image" loading="lazy">
+                  {% endif %}
+                {% endfor %}
               {% endif %}
               {% if content.video %}
                 {% assign video_src = content.video %}
@@ -151,10 +173,14 @@
                   {% else %}
                     {% assign video_id = video_src | split: 'v=' | last | split: '&' | first %}
                   {% endif %}
-                  <div class="atmo-cv-video"><iframe src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe></div>
+                  <div class="atmo-cv-video">
+                    <iframe src="https://www.youtube.com/embed/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                  </div>
                 {% elsif video_src contains 'vimeo.com' %}
                   {% assign video_id = video_src | split: '/' | last %}
-                  <div class="atmo-cv-video"><iframe src="https://player.vimeo.com/video/{{ video_id }}" frameborder="0" allowfullscreen></iframe></div>
+                  <div class="atmo-cv-video">
+                    <iframe src="https://player.vimeo.com/video/{{ video_id }}" frameborder="0" allowfullscreen></iframe>
+                  </div>
                 {% else %}
                   <video class="atmo-cv-video" controls>
                     <source src="{{ video_src | relative_url }}" type="video/mp4">
@@ -172,14 +198,23 @@
             <div class="atmo-cv-skill-rail">
               {% for skill in content.skills %}
                 {% if skill.name %}
-                  <span class="atmo-cv-skill{% if skill.description %} has-tooltip{% endif %}"
-                        {% if skill.description %}data-tooltip="{{ skill.description | escape }}"{% endif %}>
-                    {% if skill.icon %}<i class="{{ skill.icon }}"></i>{% endif %}
+                  {% capture tip_id %}tip-{{ entry.title | slugify }}-{{ forloop.parentloop.index }}-s{{ forloop.index }}{% endcapture %}
+                  <span
+                    class="atmo-cv-skill{% if skill.description %} has-tooltip{% endif %}"
+                    {% if skill.description %}
+                      tabindex="0" aria-describedby="{{ tip_id }}"
+                    {% endif %}
+                  >
+                    {% if skill.icon %}<i class="{{ skill.icon }}" aria-hidden="true"></i>{% endif %}
                     <span>{{ skill.name }}</span>
-                    {% if skill.description %}<span class="atmo-cv-tooltip">{{ skill.description }}</span>{% endif %}
+                    {% if skill.description -%}
+                      <span class="atmo-cv-tooltip" role="tooltip" id="{{ tip_id }}">{{ skill.description }}</span>
+                    {%- endif %}
                   </span>
                 {% else %}
-                  <span class="atmo-cv-skill"><span>{{ skill }}</span></span>
+                  <span class="atmo-cv-skill"
+                    ><span>{{ skill }}</span></span
+                  >
                 {% endif %}
               {% endfor %}
             </div>

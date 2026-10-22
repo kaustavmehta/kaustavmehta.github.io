@@ -3,7 +3,10 @@ layout: default
 ---
 <div class="post about">
   {% if page.profile %}
-    <div class="profile float-{% if page.profile.align == 'left' %}left{% else %}right{% endif %} atmo-hero-entrance">
+    <div
+      class="profile float-{% if page.profile.align == 'left' %}left{% else %}right{% endif %}{% if page.profile.image_circular %} profile-circular{% endif %} atmo-hero-entrance"
+      style="--atmo-delay: 160ms"
+    >
       {% if page.profile.image %}
         {% assign profile_image_path = page.profile.image | prepend: 'assets/img/' %}
         {% if page.profile.image_circular %}
@@ -36,7 +39,7 @@ layout: default
   </header>
 
   <article>
-    <div class="clearfix atmo-hero-entrance">{{ content }}</div>
+    <div class="clearfix atmo-hero-entrance" style="--atmo-delay: 120ms">{{ content }}</div>
 
     <!-- Selected papers -->
     {% if page.selected_papers %}
@@ -85,7 +88,7 @@ layout: default
   </article>
 
   <!-- Ambient rings -->
-  <div class="ambient-rings">
+  <div class="ambient-rings" aria-hidden="true">
     <div class="ring"></div>
     <div class="ring"></div>
     <div class="ring"></div>

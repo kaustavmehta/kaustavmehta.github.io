@@ -1,0 +1,24 @@
+{%- comment -%}
+  Muted, looping clip that stands in for an animated GIF.
+  Plays only while on screen and never under prefers-reduced-motion (assets/js/atmospheric.js).
+  Params: src (site-relative .mp4 path), class, alt
+{%- endcomment -%}
+{% assign poster = include.src | replace: '.mp4', '-poster.jpg' %}
+{% assign dims = site.data.video_dimensions[include.src] %}
+<video
+  class="{{ include.class }}"
+  muted
+  loop
+  playsinline
+  preload="none"
+  poster="{{ poster | relative_url }}"
+  {% if dims %}
+    width="{{ dims[0] }}" height="{{ dims[1] }}"
+  {% endif %}
+  aria-label="{{ include.alt | escape }}"
+  data-autoplay
+>
+  <source src="{{ include.src | relative_url }}" type="video/mp4">
+  {%- comment -%} VP9 fallback for browsers built without H.264 {%- endcomment -%}
+  <source src="{{ include.src | replace: '.mp4', '.webm' | relative_url }}" type="video/webm">
+</video>

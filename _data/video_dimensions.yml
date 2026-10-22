@@ -1,0 +1,9 @@
+# Intrinsic [width, height] of looping clips, so the page reserves space before they load.
+# Regenerate with: ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 <file>
+/assets/video/cv/asyn_AF_example.mp4: [814, 804]
+/assets/video/cv/esyt_multimer.mp4: [960, 942]
+/assets/video/cv/exp12_sic1.mp4: [670, 638]
+/assets/video/cv/ubq_AF_example.mp4: [908, 598]
+/assets/video/publication_preview/prevalence-spreadsheet.mp4: [480, 374]
+/assets/video/publication_preview/tbi-comorbidity-network-alt.mp4: [480, 370]
+/assets/video/publication_preview/tbi-comorbidity-network.mp4: [480, 404]
