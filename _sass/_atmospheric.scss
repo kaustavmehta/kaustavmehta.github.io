@@ -696,3 +696,189 @@ nav#toc-sidebar {
     font-size: 1.4rem;
   }
 }
+
+// ============ Blog index ============
+.blog-page {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 6rem;
+
+  // Fixed to the viewport so the glows never meet the edge of the content box
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 520px 360px at 78% 22%, var(--atmo-glow-1) 0%, transparent 70%),
+      radial-gradient(ellipse 420px 420px at 12% 72%, var(--atmo-glow-2) 0%, transparent 70%);
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .ambient-rings {
+    position: absolute;
+    z-index: 0;
+    bottom: 1.5rem;
+    right: -70px;
+  }
+
+  .blog-hero {
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+  }
+  .blog-hero-kicker {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--global-text-color-dim);
+    margin-bottom: 1.1rem;
+  }
+  .blog-hero-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 300;
+    font-size: 2.6rem;
+    line-height: 1.15;
+    margin: 0 0 1.1rem;
+    color: var(--global-text-color);
+    letter-spacing: -0.015em;
+
+    strong {
+      font-weight: 500;
+    }
+  }
+  .blog-hero-lede {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--global-text-color-light);
+    max-width: 620px;
+    margin: 0;
+  }
+
+  .blog-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .blog-entry {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 1.5rem;
+    padding: 2rem 0;
+    margin: 0;
+    border: none;
+
+    &::before {
+      content: '';
+      grid-column: 1 / -1;
+      height: 1px;
+      margin: -2rem 0 0.5rem;
+      background: linear-gradient(90deg, transparent, var(--atmo-separator-color), transparent);
+    }
+
+    &:hover .blog-entry-title a {
+      color: var(--global-theme-color);
+    }
+  }
+
+  .blog-entry-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: var(--global-text-color-dim);
+    padding-top: 0.55rem;
+    white-space: nowrap;
+  }
+
+  .blog-entry-title {
+    font-family: 'Newsreader', Georgia, serif;
+    font-weight: 400;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.6rem;
+
+    a {
+      color: var(--global-text-color);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+  }
+
+  .blog-entry-description {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--global-text-color-light);
+    max-width: 640px;
+    margin: 0 0 0.9rem;
+  }
+
+  .blog-entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.9rem;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.4px;
+    color: var(--global-text-color-dim);
+    margin: 0;
+
+    a {
+      color: var(--global-text-color-dim);
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &::before {
+        content: '·';
+        margin-right: 0.9rem;
+        color: var(--global-text-color-dim);
+      }
+
+      &:hover {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+
+  .pagination .page-link {
+    background: transparent;
+    border-color: var(--atmo-separator-color);
+    color: var(--global-text-color-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .pagination .page-item.active .page-link {
+    color: var(--global-theme-color);
+    border-color: var(--global-theme-color);
+  }
+}
+
+@media (max-width: 575px) {
+  .blog-page {
+    .blog-hero-title {
+      font-size: 2rem;
+    }
+    .blog-entry {
+      grid-template-columns: 1fr;
+      gap: 0.4rem;
+    }
+    .blog-entry-date {
+      padding-top: 0;
+    }
+    .blog-entry-title {
+      font-size: 1.4rem;
+    }
+  }
+}
