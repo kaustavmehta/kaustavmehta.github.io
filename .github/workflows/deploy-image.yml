@@ -1,18 +1,8 @@
 name: Docker Image CI
 
+# Publishes the al-folio Docker image; needs Docker Hub secrets this site does not use. Manual only.
 on:
-  push:
-    branches:
-      - master
-      - main
-    paths:
-      - ".github/workflows/deploy-image.yml"
-      - "bin/entry_point.sh"
-      - "Dockerfile"
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "package.json"
-      - "package-lock.json"
+  workflow_dispatch:
 
 jobs:
   build:

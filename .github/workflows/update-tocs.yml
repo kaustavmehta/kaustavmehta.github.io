@@ -1,13 +1,8 @@
 name: Update TOCs
 # This workflow automatically updates the Table of Contents (TOC) in markdown files
 
+# Regenerates tables of contents in the template's README-style docs. Manual only.
 on:
-  push:
-    branches:
-      - main
-      - master
-    paths:
-      - "*.md"
   workflow_dispatch:
 
 permissions:

@@ -1,47 +1,34 @@
-name: Check for broken links on site
+name: Check external links
+
+# Internal links are checked on every build in deploy.yml. External links (DOIs,
+# arXiv, journals) can rot without any change here, so check them weekly against
+# the live site instead of failing deploys on someone else's outage.
 
 on:
-  workflow_run:
-    workflows: [Deploy site]
-    types: [completed]
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
 
 jobs:
-  check-links-on-site:
-    # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-a-workflow-based-on-the-conclusion-of-another-workflow
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    # available images: https://github.com/actions/runner-images#available-images
+  check-external-links:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v4
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.2.2"
-          bundler-cache: true
-      - name: Update _config.yml ⚙️
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          commitChange: false
-          valueFile: "_config.yml"
-          changes: |
-            {
-              "giscus.repo": "${{ github.repository }}",
-              "baseurl": ""
-            }
-      - name: Install and Build 🔧
-        run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          pip3 install --upgrade jupyter
-          export JEKYLL_ENV=production
-          bundle exec jekyll build
-      - name: Purge unused CSS 🧹
-        run: |
-          npm install -g purgecss
-          purgecss -c purgecss.config.js
       - name: Link Checker 🔗
-        uses: lycheeverse/lychee-action@v1.9.0
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
         with:
-          fail: true
-          # only check local links
-          args: --offline --remap '_site(/?.*)/assets/(.*) _site/assets/$2' --verbose --no-progress '_site/**/*.html'
+          fail: false
+          args: --no-progress --max-concurrency 4 --accept 200,206,403,429 'https://kaustavmehta.github.io/' 'https://kaustavmehta.github.io/publications/' 'https://kaustavmehta.github.io/cv/'
+
+      - name: Open an issue on failure 📝
+        if: steps.lychee.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: Broken external links on the site
+          content-filepath: ./lychee/out.md
+          labels: links

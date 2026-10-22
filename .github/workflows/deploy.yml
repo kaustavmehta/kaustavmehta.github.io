@@ -1,105 +1,89 @@
 name: Deploy site
 
+# Builds once, checks the built HTML for broken internal links, and (on main only)
+# publishes _site to the gh-pages branch. Pull requests get the same build and
+# link check without deploying.
+
 on:
   push:
     branches:
-      - master
       - main
-    paths:
-      - "assets/**"
-      - "_sass/**"
-      - "_scripts/**"
-      - "**.bib"
-      - "**.html"
-      - "**.js"
-      - "**.liquid"
-      - "**/*.md"
-      - "**.yml"
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "!.github/workflows/axe.yml"
-      - "!.github/workflows/broken-links.yml"
-      - "!.github/workflows/deploy-docker-tag.yml"
-      - "!.github/workflows/deploy-image.yml"
-      - "!.github/workflows/docker-slim.yml"
-      - "!.github/workflows/lighthouse-badger.yml"
-      - "!.github/workflows/prettier.yml"
-      - "!lighthouse_results/**"
-      - "!CONTRIBUTING.md"
-      - "!CUSTOMIZE.md"
-      - "!FAQ.md"
-      - "!INSTALL.md"
-      - "!README.md"
+    paths-ignore: &docs-only
+      - "docs/**"
+      - "lighthouse_results/**"
+      - "readme_preview/**"
+      - "README.md"
+      - "CLAUDE.md"
+      - "CONTRIBUTING.md"
+      - "CUSTOMIZE.md"
+      - "FAQ.md"
+      - "INSTALL.md"
   pull_request:
     branches:
-      - master
       - main
-    paths:
-      - "assets/**"
-      - "_sass/**"
-      - "_scripts/**"
-      - "**.bib"
-      - "**.html"
-      - "**.js"
-      - "**.liquid"
-      - "**/*.md"
-      - "**.yml"
-      - "Gemfile"
-      - "Gemfile.lock"
-      - "!.github/workflows/axe.yml"
-      - "!.github/workflows/broken-links.yml"
-      - "!.github/workflows/deploy-docker-tag.yml"
-      - "!.github/workflows/deploy-image.yml"
-      - "!.github/workflows/docker-slim.yml"
-      - "!.github/workflows/lighthouse-badger.yml"
-      - "!.github/workflows/prettier.yml"
-      - "!lighthouse_results/**"
-      - "!CONTRIBUTING.md"
-      - "!CUSTOMIZE.md"
-      - "!FAQ.md"
-      - "!INSTALL.md"
-      - "!README.md"
+    paths-ignore: *docs-only
   workflow_dispatch:
 
 permissions:
   contents: write
 
+# A newer push supersedes an in-flight build for the same branch or PR
+concurrency:
+  group: deploy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  deploy:
-    # available images: https://github.com/actions/runner-images#available-images
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      JEKYLL_ENV: production
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
+
       - name: Setup Ruby 💎
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.3.5"
           bundler-cache: true
-      - name: Setup Python 🐍
-        uses: actions/setup-python@v5
+
+      - name: Setup Node 🟩
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.13"
-          cache: "pip" # caching pip dependencies
-      - name: Update _config.yml ⚙️
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          commitChange: false
-          valueFile: "_config.yml"
-          propertyPath: "giscus.repo"
-          value: ${{ github.repository }}
-      - name: Install and Build 🔧
+          node-version: 22
+          cache: npm
+
+      - name: Install ImageMagick 🖼️
         run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          pip3 install --upgrade nbconvert
-          export JEKYLL_ENV=production
-          bundle exec jekyll build
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends imagemagick
+
+      - name: Restore Jekyll cache ♻️
+        uses: actions/cache@v4
+        with:
+          path: .jekyll-cache
+          key: jekyll-${{ runner.os }}-${{ hashFiles('Gemfile.lock', '_config.yml') }}-${{ github.sha }}
+          restore-keys: |
+            jekyll-${{ runner.os }}-${{ hashFiles('Gemfile.lock', '_config.yml') }}-
+
+      - name: Build 🔧
+        run: bundle exec jekyll build
+
       - name: Purge unused CSS 🧹
         run: |
-          npm install -g purgecss
-          purgecss -c purgecss.config.js
+          npm ci --no-audit --no-fund
+          node bin/purge-css.js
+
+      - name: Check internal links 🔗
+        uses: lycheeverse/lychee-action@v2
+        with:
+          fail: true
+          args: --offline --no-progress --root-dir "${{ github.workspace }}/_site" '_site/**/*.html'
+
       - name: Deploy 🚀
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _site
+          single-commit: true

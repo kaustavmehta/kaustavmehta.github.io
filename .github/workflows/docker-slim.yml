@@ -1,17 +1,9 @@
 name: Docker Slim
 
 #Only trigger, when the build workflow succeeded
+# Slims the al-folio Docker image; only meaningful upstream. Manual only.
 on:
-  push:
-    branches:
-      - master
-      - main
-    paths:
-      - ".github/workflows/docker-slim.yml"
-  workflow_run:
-    workflows: ["Docker Image CI"]
-    types:
-      - completed
+  workflow_dispatch:
 
 # on:
 #   push:
