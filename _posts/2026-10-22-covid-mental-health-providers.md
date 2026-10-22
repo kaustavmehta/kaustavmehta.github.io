@@ -113,7 +113,7 @@ _styles: >
 <span class="mh-attrib">A manager heading outreach at the Schizophrenia Research Foundation, Chennai, on the months after India's 2020 lockdown <d-cite key="nair2021covid"></d-cite></span>
 </blockquote>
 
-That sentence is from an interview with a service provider at the Schizophrenia Research Foundation (SCARF), a non-government organisation in Chennai that provides care for a range of mental disorders and runs outreach services for rural communities. It is an odd thing to hear from a mental health organisation, because food is not usually counted as part of mental health care. But for patients who, in the same manager's words, "can't even afford medicines", the two could not really be separated during a lockdown, and the people interviewed did not try to separate them.
+That sentence is from an interview with a service provider at the Schizophrenia Research Foundation (SCARF), a non-government organisation in Chennai that provides care for a range of mental disorders and runs outreach services for rural communities. It is an odd thing to hear from a mental health organisation, because food is not usually counted as part of mental health care. But the paper places it in a section on the burden of care at home, where the closure of the vocational centre and day-care came on top of job loss, pay cuts and rising debt for caregivers. In that situation the two could not really be separated, and the people interviewed did not try to separate them.
 
 <figure class="mh-fig l-body-outset">
   <div class="mh-kicker">One dot, one patient</div>
@@ -126,7 +126,7 @@ That sentence is from an interview with a service provider at the Schizophrenia 
   <figcaption>The scale the manager was describing. About one patient in twenty received food provisions, gathered “through various sources” while the organisation's usual services were shut or shrinking. Figures as reported by the interviewee <d-cite key="nair2021covid"></d-cite>.</figcaption>
 </figure>
 
-This post is about my first research paper, _The COVID-19 pandemic and its impact on mental health services: the provider perspective_, published in the _Journal of Public Health_ in October 2021 <d-cite key="nair2021covid"></d-cite>. It came out of a collaboration between Krea University and the University of Oxford, funded through the GCRF India–Oxford Initiative, and it asked a fairly simple question: when the country shut down, what happened to community mental health services, and how did the people providing them keep them running?
+This post is about my first research paper, _The COVID-19 pandemic and its impact on mental health services: the provider perspective_, published in the _Journal of Public Health_ in October 2021 <d-cite key="nair2021covid"></d-cite>. It came out of a partnership between LEAD at Krea University and the University of Oxford, funded through the Global Challenges Research Fund's India–Oxford Initiative, and it asked a fairly simple question: when the country shut down, what happened to community mental health services, and how did the people providing them keep them running?
 
 I should say up front what my part in it was. The interviews, the focus group and the thematic analysis were done by my co-authors. My part was the literature review, which meant reading what had been reported from a geographically and socio-economically spread set of countries and using it to place the Chennai data in a wider context. The journal format is tight, about six pages, and most of the participants' words had to be cut down to fragments. So, five years on, I wanted to write about it in a form where the quotes get more room and some of the numbers can be drawn out.
 
@@ -148,9 +148,9 @@ By late 2020 it was already clear that mental health care had been hit hard almo
   <figcaption>Percentages from the WHO's news release of 5 October 2020 <d-cite key="who2020survey"></d-cite>. Hover over a bar for the WHO's own wording. The same release reported that 70% of countries had adopted telemedicine or teletherapy, but that the split was uneven: more than 80% of high-income countries against less than 50% of low-income ones.</figcaption>
 </figure>
 
-The literature I was reading at the time came at the problem from several directions. From China there were accounts of psychiatric hospitals reorganising themselves around infection control <d-cite key="xiang2020covid,li2020challenges"></d-cite>. From the United States, descriptions of how psychiatric care had been reshaped in the first months <d-cite key="bojdani2020covid"></d-cite>. From the UK, a mixed-methods study of services for older adults <d-cite key="bhome2020impact"></d-cite>, and from a cross-continental group, lessons on managing psychiatric conditions during the pandemic <d-cite key="ojeahere2020management"></d-cite>. A piece in _The Lancet Psychiatry_ set out how mental health care should change as a consequence <d-cite key="moreno2020how"></d-cite>. In India, the government had issued Telemedicine Practice Guidelines in March 2020 <d-cite key="mohfw2020telemedicine"></d-cite>, which gave remote consultations a formal footing, and a survey of psychiatry training centres documented how far services had contracted during the lockdown <d-cite key="grover2020state"></d-cite>.
+The literature I was reading at the time came at the problem from several directions. From China there were accounts of psychiatric hospitals reorganising themselves around infection control <d-cite key="xiang2020covid,li2020challenges"></d-cite>. From the United States, descriptions of how psychiatric care had been reshaped in the first months <d-cite key="bojdani2020covid"></d-cite>. From the UK, a mixed-methods study of services for older adults <d-cite key="bhome2020impact"></d-cite>, and from a cross-continental group, lessons on managing psychiatric conditions during the pandemic <d-cite key="ojeahere2020management"></d-cite>. A piece in _The Lancet Psychiatry_ set out how mental health care should change as a consequence <d-cite key="moreno2020how"></d-cite>. In India, services were disrupted by the nationwide lockdown in March 2020, and the government released guidelines to move to telemedicine <d-cite key="mohfw2020telemedicine"></d-cite>. Tele-psychiatry had raised concerns about patient dynamics, proper diagnosis and legal issues <d-cite key="kumar2020community"></d-cite>, though it had worked in some contexts <d-cite key="grover2020state"></d-cite>.
 
-What most of this work described was disruption: what stopped, what moved online, which systems were under strain. There was much less on how the organisations doing the care actually adapted, and that gap matters more in India than in many of the countries above, because community-based mental health care here has long been led by NGOs <d-cite key="vanginneken2014development,kumar2020community"></d-cite>. So the study went to the people who had kept care going, and asked them.
+What most of this work described was disruption: what stopped, what moved online, which systems were under strain. There was much less on how the organisations doing the care actually adapted, and that gap matters more in India than in many of the countries above, because mental health outreach to communities and vulnerable groups here was pioneered by NGOs, and their lessons have proved useful to the public mental health system <d-cite key="vanginneken2014development"></d-cite>. So the study went to the people who had kept care going, and asked them.
 
 ## One organisation, many services
 
@@ -172,7 +172,7 @@ The people interviewed included managers of clinical services, administrative st
     <li class="mh-reveal"><div class="mh-date">Late March 2020</div><div class="mh-event">India's national lockdown begins, and the Ministry of Health and Family Welfare issues its Telemedicine Practice Guidelines <d-cite key="mohfw2020telemedicine"></d-cite>. At SCARF, in the paper’s account, “all services were affected” in the two weeks of complete lockdown, after which essential care services resumed.</div></li>
     <li class="mh-reveal"><div class="mh-date">5 October 2020</div><div class="mh-event">WHO publishes its 130-country survey of disrupted mental health services <d-cite key="who2020survey"></d-cite>.</div></li>
     <li class="mh-reveal is-study"><div class="mh-date">December 2020 – January 2021</div><div class="mh-event">In-depth interviews and a focus group discussion with SCARF's service providers.</div></li>
-    <li class="mh-reveal is-study"><div class="mh-date">29 December 2020</div><div class="mh-event">Preliminary findings presented at a workshop.</div></li>
+    <li class="mh-reveal is-study"><div class="mh-date">29 December 2020</div><div class="mh-event">Preliminary findings presented at <em>India Research Insights: The COVID-19 Impact</em>, a workshop hosted by LEAD and Krea University.</div></li>
     <li class="mh-reveal is-study"><div class="mh-date">26 January 2021</div><div class="mh-event">Manuscript received by the <em>Journal of Public Health</em>; accepted on 5 May 2021.</div></li>
     <li class="mh-reveal is-study"><div class="mh-date">8 October 2021</div><div class="mh-event">Published in a supplement of the journal <d-cite key="nair2021covid"></d-cite>.</div></li>
   </ol>
@@ -181,27 +181,29 @@ The people interviewed included managers of clinical services, administrative st
 
 ## What broke
 
-The first thing to go was access. For two weeks of complete lockdown everything stopped, and even once essential services resumed, getting patients to a clinic, or medicines to patients, remained a problem. At least one provider described it in terms of helplessness.
+The first thing to go was access. For two weeks of complete lockdown everything stopped, and even once essential services resumed, patients could not easily reach the centre. Not every neighbourhood pharmacy stocked psychiatric medication, and some pharmacists that did were reluctant to dispense it. In smaller towns, psychiatric care was taken over for COVID-19 treatment. Rural patients were stopped by the police and fined on their way to refill prescriptions at SCARF, even when they showed the prescription.
 
 <blockquote class="mh-pull mh-reveal">
 “These are people who can’t even afford medicines… it felt painful that we were helpless.”
 <cite>A manager heading outreach efforts (P6)</cite>
 </blockquote>
 
-The pressure showed up in the wards too. One of the psychiatrists recalled handling "at least ten DESPERATE requests for admissions" (the capitals are hers, as transcribed). And in the section on changes in patients' lives, the same psychiatrist said of the people she worked with: "It was sad for them because this was their social life..."
+Missed medication meant relapses of conditions like schizophrenia and mood disorders, often needing in-patient care, at exactly the time the centre had stopped admissions for fear of spreading COVID-19 inside the facility. One of the psychiatrists recalled handling "at least ten DESPERATE requests for admissions" (the capitals are in the transcript). For patients who had been discharged and rehabilitated, the closure of the vocational centre took away a daily routine as well; the same psychiatrist described the "11 o clock tea" and the people they talked to, and said: "It was sad for them because this was their social life..."
 
-The providers were affected as well. The paper has a section on their personal costs, which I think is easy to skim past and should not be. Work moved onto personal phones and into the time that used to belong to families.
+The providers were affected as well. The paper has a section on their personal costs, which I think is easy to skim past and should not be. Work moved onto personal phones and into the time that used to belong to families. One counsellor, taking sessions from home, said that her children "would wonder why the person on the other end was crying so much".
 
 <figure class="mh-fig l-body-outset">
   <div class="mh-kicker">In their words</div>
   <div class="mh-chips" id="mh-chips" role="group" aria-label="Filter quotes by theme"></div>
   <div class="mh-quotes" id="mh-quotes"></div>
-  <figcaption>Excerpts from the interviews as quoted in the paper, grouped by the section of the results they appear in <d-cite key="nair2021covid"></d-cite>. Participant numbers and role descriptions are the paper's own. Ellipses are in the original.</figcaption>
+  <figcaption>Excerpts from the interviews as quoted in the paper, grouped by theme, roughly following the sections of its results <d-cite key="nair2021covid"></d-cite>. Participant numbers and role descriptions are the paper’s own; where an excerpt is printed with only a number, the role is taken from that participant’s other quotes. Ellipses mark cuts, some in the original and some mine.</figcaption>
 </figure>
 
 ## What they built instead
 
-What I find most striking, reading the paper again, is how ordinary the adaptations were. None of them needed new technology. A health worker contacted a patient's doctor on their behalf and passed the prescription along on WhatsApp. People carrying cards and e-passes were still stopped by the police, and the work carried on around that. The adaptations were improvised from whatever was at hand, and, as far as I can tell from the interviews, they depended on the people improvising them already knowing their patients.
+What I find most striking, reading the paper again, is how ordinary the adaptations were. Prescriptions were written on the official pad, signed, photographed and sent over WhatsApp, in line with the teleconsultation guidelines, and the consultants then spent time on the phone with pharmacists sorting out legibility, brand names and substitutes. A health worker tracked down the doctors of clients stuck in other districts and passed their prescriptions along.
+
+A 24-hour helpline, advertised by the government, linked new and existing patients to consultants and therapists, and stretched everyone's working hours. In the in-patient centres, staff used their own phones to set up video calls with families, because many patients did not have smartphones. Even the paperwork needed a person: when staff or patients with cards and e-passes were stopped, the police would be handed a phone with an administrator on the other end. Much of the coordination itself happened in WhatsApp groups.
 
 The clearest change in clinical practice was time. One psychiatrist described how a first consultation for a new patient, which used to take an hour, was now done in fifteen to twenty minutes.
 
@@ -234,23 +236,23 @@ The clearest change in clinical practice was time. One psychiatrist described ho
 
 A natural reading of that number is that care got worse. I do not think the paper lets us say that, and I would be wary of saying it here. The time in the room shrank, but the work was redistributed: the history was taken over the phone before the visit, and a case worker followed up afterwards. Whether that amounted to a loss, a different kind of care, or in some cases a better use of a psychiatrist's hour is something interviews with providers alone cannot settle.
 
-Telemedicine is where the trade-offs were clearest. The paper's abstract says it enabled an expansion of both the service and its clientele, as well as efficiency. It also changed what a therapy session was like, for both sides.
+Telemedicine is where the trade-offs were clearest. The paper's abstract says it enabled an expansion of both the service and its clientele, as well as efficiency. It also changed what a therapy session was like, for both sides: some clients took phone sessions as "a friendly catch-up call rather than a teletherapy session".
 
 <figure class="mh-fig l-body-outset">
   <div class="mh-ledger">
     <div class="mh-gain mh-reveal">
       <h4>What it opened up</h4>
       <ul>
-        <li>Wider access to consultations, prescriptions and counselling, for more clients than before<small>Discussion</small></li>
-        <li>An expansion of the service and of its clientele<small>Abstract</small></li>
-        <li>Efficiency<small>Abstract</small></li>
+        <li>Access to consultations, prescriptions and counselling for more clients, “in a shorter period of time and with less effort”<small>Discussion</small></li>
+        <li>Sessions without travelling to the clinic, which “decreased the overall attrition”<small>Results</small></li>
+        <li>Better compliance where family members became co-therapists; one patient was rehabilitated with the help of her 10-year-old child<small>Results</small></li>
       </ul>
     </div>
     <div class="mh-cost mh-reveal">
       <h4>What it cost</h4>
       <ul>
         <li>“Some think it is just a normal call.”<small>Researcher, trainer and case worker (P10)</small></li>
-        <li>Lack of privacy at home, for patients and for providers<small>Discussion; P2</small></li>
+        <li>“When the husband is around, how can they talk about the husband to someone over [the] phone?”<small>Manager heading outreach (P6), on lack of privacy at home</small></li>
         <li>“Women in rural areas were not comfortable with gadgets.”<small>Manager heading outreach (P6)</small></li>
         <li>An additional burden on counsellors “to ensure that the client attended the calls”<small>Results</small></li>
       </ul>
@@ -282,7 +284,7 @@ When the paper pulls these threads together, it names "three crucial elements in
   <figcaption>The three elements named in the paper <d-cite key="nair2021covid"></d-cite>. The overlapping layout is my own sketch of how they relate, not a figure from the paper. Hover over or tap a circle.</figcaption>
 </figure>
 
-I think the useful thing about this framing is that none of the three is a technology or a policy. They are properties of an organisation that existed before the pandemic and were tested by it. The WhatsApp prescription only works if the health worker already knows the patient's doctor, and provisions only reach 300 patients if somebody already knows who those patients are. In that sense SCARF is a single, fairly small test case of a broader question that the national-level surveys could not get at: what is it, inside an organisation, that lets care continue when the system around it stops?
+I think the useful thing about this framing is that none of the three is a technology or a policy. They are properties of an organisation that existed before the pandemic and were tested by it. The relationships had been built over many years, partly through educating patients and families, and the providers felt that psycho-education showed its value in how well patients kept to treatment. The resilience drew on lessons from earlier floods, a tsunami and cyclones, and on prior experience with tele-psychiatry. The WhatsApp prescription only works if the health worker already knows the patient's doctor, and provisions only reach 300 patients if somebody already knows who those patients are. In that sense SCARF is a single, fairly small test case of a broader question that the national-level surveys could not get at: what is it, inside an organisation, that lets care continue when the system around it stops?
 
 ## What this study cannot tell us
 
@@ -292,7 +294,7 @@ It is also a retrospective account. The interviews were conducted at the end of 
 
 ## Coming back to it
 
-The paper ends by arguing that these insights are crucial for planning resilient community-based mental health care, and the wider literature at the time was saying something similar: that the pandemic was an opportunity to reform mental health care in India <d-cite key="dandona2021covid"></d-cite>, and that health systems needed to be built with preparedness in mind <d-cite key="sundararaman2021pandemic"></d-cite>.
+The paper ends by arguing that these insights are crucial for planning resilient community-based mental health care, and the wider literature at the time was saying something similar: that the pandemic was an opportunity to reform mental health care in India <d-cite key="dandona2021covid"></d-cite>, and that health systems needed to be built with preparedness in mind <d-cite key="sundararaman2021pandemic"></d-cite>. The paper is specific about what that would mean: bringing care for people with mental illness into government and city disaster planning, including housing, transport and medication; sensitising the police and other enforcing authorities to their needs; training health workers for isolation, infection and relocation; and preparing patients and caregivers for how to manage care during a disaster.
 
 Reading it again now, the questions I am left with are ones the study opened rather than answered. Which of these adaptations outlasted the pandemic? Did the phone intake before a consultation become routine, and if it did, did anyone check what it changed for patients? If relationships with communities were what made continuity possible, can that be planned for, or only maintained? And how would you even measure a relationship as a piece of health infrastructure, in a way that would make it visible to the people who fund and plan services? I do not have answers to these, and I suspect they need the patient and family perspective that this study did not have.
 

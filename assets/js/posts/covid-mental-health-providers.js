@@ -213,7 +213,7 @@
   const steps = [
     {
       name: "Sample",
-      text: "<strong>Purposive sampling.</strong> Ten service providers were selected to cover outpatient and inpatient clinical services, residential services, community outreach, psychosocial rehabilitation (including family interventions), research and training.",
+      text: "<strong>Purposive sampling.</strong> Ten service providers were selected for in-depth interviews, drawn from across outpatient and inpatient clinical services, residential services, community outreach, psychosocial rehabilitation (including family interventions), research and training. One interview could not be scheduled within the data collection period.",
     },
     {
       name: "Interview",
@@ -221,7 +221,7 @@
     },
     {
       name: "Focus group",
-      text: "<strong>Focus group discussion.</strong> Four of the interview respondents, chosen to represent management, clinical work, rehabilitation, and outreach and training, discussed the emerging findings together.",
+      text: "<strong>Focus group discussion.</strong> Four of the interview respondents, chosen to represent management, clinical work, rehabilitation, and outreach and training, met as a group to gain shared insights and aid reflection.",
     },
     {
       name: "Code",
@@ -233,7 +233,7 @@
     },
     {
       name: "Analyse",
-      text: "<strong>Thematic analysis</strong> in QDA Miner, with sub-themes set in advance and others allowed to emerge from the data. Ethics approval came from the IFMR Human Subjects Committee and SCARF's Ethics Committee.",
+      text: "<strong>Thematic analysis</strong> in QDA Miner, starting from a broad set of a priori themes drawn from the research areas, with sub-themes allowed to emerge from the data. Ethics approval came from the IFMR Human Subjects Committee and SCARF's Ethics Committee.",
     },
   ];
   const stepBar = document.getElementById("mh-steps");
@@ -263,34 +263,47 @@
   const quotes = [
     {
       theme: "Access",
-      text: "These are people who can't even afford medicines… it felt painful that we were helpless.",
+      text: "(Rural clients), get caught by the police who levied a penalty on them even if they said they were going to refill the medicines at SCARF, even if they showed the prescription. These are people who can’t even afford medicines… it felt painful that we were helpless.",
       who: "P6, male manager heading outreach efforts",
     },
-    { theme: "Access", text: "I would have handled at least ten DESPERATE requests for admissions.", who: "P4, female psychiatrist" },
     {
       theme: "Access",
+      text: "We stopped admission for few months… I would have handled at least ten DESPERATE requests for admissions.",
+      who: "P4, female psychiatrist",
+    },
+    {
+      theme: "Access",
+      text: "I had to talk to a pharmacist 2 weeks back, to honour a prescription that was already overdue… requesting them to give medicines for 1 week or 10 days.",
+      who: "P4, female psychiatrist",
+    },
+    {
+      theme: "Patients’ lives",
+      text: "For them, talking to others, the 11 o clock tea, etc. are some routines they are so used to… It was sad for them because this was their social life...",
+      who: "P4, female psychiatrist",
+    },
+    {
+      theme: "Patients’ lives",
       text: "Of course, we cannot give bread and butter for all 6000 patients. But we gave provisions for about 300 of them through various sources.",
       who: "P6, male manager heading outreach efforts",
     },
-    { theme: "Patients' lives", text: "It was sad for them because this was their social life...", who: "P4, female psychiatrist" },
     {
       theme: "Providers",
-      text: "I am more addicted to checking my phone-every 3–5 min because I don't want to miss anything...",
+      text: "After 4.30 used to be ‘my time’. Now even at 10 p.m. I need to work… I am more addicted to checking my phone-every 3–5 min because I don’t want to miss anything...",
       who: "P5, middle-aged female administrative co-ordinator",
     },
     {
       theme: "Providers",
-      text: "There was loss with respect to my privacy and my family time.",
-      who: "P2, middle-aged female rehabilitation coordinator and counsellor",
+      text: "There was loss with respect to my privacy and my family time. My children were there; my parents were listening when I was on the phone. My children would wonder why the person on the other end was crying so much.",
+      who: "P2, middle-aged female rehabilitation coordinator/counsellor",
     },
     {
       theme: "Adaptations",
-      text: "Even if they had the cards/e-pass, police would still stop them.",
+      text: "Even if they had the cards/e-pass, police would still stop them and ask why they were going out… they would call me and hand over the phone to the police.",
       who: "P5, middle-aged female administrative co-ordinator",
     },
     {
       theme: "Adaptations",
-      text: "I contacted their doctor on their behalf and passed on the prescription over WhatsApp.",
+      text: "Some of the clients who had travelled to other districts and got stuck there… I contacted their doctor on their behalf and passed on the prescription over WhatsApp.",
       who: "P3, middle-aged female health worker",
     },
     {
@@ -298,8 +311,21 @@
       text: "We usually used to take 1 h for a new patient for psychiatric consultation. In view of COVID-19, we addressed them in 15–20 min.",
       who: "P7, female psychiatrist",
     },
-    { theme: "Telemedicine", text: "Some think it is just a normal call.", who: "P10, female researcher, trainer and case worker" },
-    { theme: "Telemedicine", text: "Women in rural areas were not comfortable with gadgets.", who: "P6, male manager heading outreach efforts" },
+    {
+      theme: "Telemedicine",
+      text: "Some think it is just a normal call. If I ask why they didn’t call they’ll say that they thought we called just to ask ‘How are you doing? Are you taking medicine’…",
+      who: "P10, female researcher/trainer/case worker",
+    },
+    {
+      theme: "Telemedicine",
+      text: "Some people might say bonding has increased, but especially families who have alcoholic men at home, women and children have faced a lot of issues.",
+      who: "P6, male manager heading outreach efforts",
+    },
+    {
+      theme: "Telemedicine",
+      text: "I am sitting and talking to you in a sound proof room, but that is not possible for everyone. Women in rural areas were not comfortable with gadgets.",
+      who: "P6, male manager heading outreach efforts",
+    },
   ];
   const chipBar = document.getElementById("mh-chips");
   const quoteGrid = document.getElementById("mh-quotes");
@@ -381,15 +407,15 @@
     const content = {
       relationships: {
         title: "Relationships",
-        body: "Established relationships with communities, in the paper's phrase. My reading of the interviews is that this is what let staff contact a patient's doctor on their behalf, or get provisions to patients, once the usual routes were closed.",
+        body: "Relationships between providers and the patient-caregiver community, built over many years and strengthened through an existing system of educating patients and families. The paper says these were crucial for communication and trust during the crisis, and the providers felt the psycho-education showed its value in how well patients kept to treatment.",
       },
       responsiveness: {
         title: "Responsiveness",
-        body: "Responding to the end-to-end care needs of clients, which in 2020 included food provisions and getting prescriptions through, not only consultations.",
+        body: "Meeting end-to-end care needs, from diagnosis to rehabilitation: making medication, counselling, rehabilitation and job placement available remotely, while still allowing safe physical access when it was needed. In 2020 that also meant food provisions.",
       },
       resilience: {
         title: "Resilience",
-        body: "Continual adaptation to keep services going: shorter consultations with phone intake and follow-up, tele-counselling, and workarounds for movement restrictions.",
+        body: "Learning from past crises, including floods, the tsunami and cyclones, and from earlier experience with tele-psychiatry, while continually adapting to problems on the ground.",
       },
     };
     const intro =
