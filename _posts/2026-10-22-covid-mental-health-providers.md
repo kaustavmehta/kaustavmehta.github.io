@@ -3,11 +3,11 @@ layout: distill
 title: "Bread, butter and a WhatsApp prescription"
 description: How one community mental health organisation in Chennai kept care going through the 2020 lockdown. A visual walk through my first research paper, published in the Journal of Public Health.
 tags: public-health mental-health covid-19 qualitative-research
+cover: waffle
 categories: research
 giscus_comments: false
 related_posts: false
 date: 2026-10-22
-featured: true
 
 authors:
   - name: Kaustav Mehta
