@@ -22,10 +22,26 @@ pagination:
 ---
 
 <div class="post blog-page">
-  <header class="blog-hero atmo-hero-entrance">
-    <div class="blog-hero-kicker">{{ page.kicker }}</div>
-    <h1 class="blog-hero-title"><strong>{{ page.hero_title_strong }}</strong> {{ page.hero_title_rest }}</h1>
-    <p class="blog-hero-lede">{{ page.description }}</p>
+  <div class="blog-hero-field" aria-hidden="true"><canvas id="blog-contours"></canvas></div>
+
+  <header class="blog-hero">
+    <div class="blog-hero-kicker atmo-hero-entrance">
+      <span class="blog-hero-kicker-line"></span>
+      {{ page.kicker }}
+      <span class="blog-hero-count">{{ site.posts | size | prepend: '00' | slice: -2, 2 }} {% if site.posts.size == 1 %}essay{% else %}essays{% endif %}</span>
+    </div>
+    <h1 class="blog-hero-title">
+      {%- assign words = page.hero_title_strong | split: ' ' -%}
+      {%- for word in words -%}
+        <span class="blog-word" style="--i: {{ forloop.index0 }}"><strong>{{ word }}</strong></span>{% unless forloop.last %}&#32;{% endunless %}
+      {%- endfor %}&#32;<em>
+        {%- assign rest = page.hero_title_rest | split: ' ' -%}
+        {%- for word in rest -%}
+          <span class="blog-word" style="--i: {{ forloop.index0 | plus: words.size }}">{{ word }}</span>{% unless forloop.last %}&#32;{% endunless %}
+        {%- endfor -%}
+      </em>
+    </h1>
+    <p class="blog-hero-lede atmo-hero-entrance">{{ page.description }}</p>
   </header>
 
 {% if page.pagination.enabled %}
@@ -48,26 +64,39 @@ pagination:
       {% else %}
         {% assign post_href = post.redirect | relative_url %}
       {% endif %}
+      {% assign is_feature = false %}
+      {% if forloop.first and paginator.page == 1 %}{% assign is_feature = true %}{% endif %}
 
-      <li class="blog-entry atmo-reveal">
-        <div class="blog-entry-date">
-          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d, %Y' }}</time>
-        </div>
-        <div class="blog-entry-body">
-          <h2 class="blog-entry-title">
-            <a href="{{ post_href }}"{% if post.redirect contains '://' %} target="_blank" rel="noopener"{% endif %}>{{ post.title }}</a>
-          </h2>
-          {% if post.description %}
-            <p class="blog-entry-description">{{ post.description }}</p>
+      <li class="blog-entry atmo-reveal{% if is_feature %} is-feature{% endif %}">
+        <a class="blog-entry-link" href="{{ post_href }}"{% if post.redirect contains '://' %} target="_blank" rel="noopener"{% endif %}>
+          {% if is_feature %}
+            <div class="blog-cover">
+              {% if post.cover %}
+                {% include blog_covers/{{ post.cover }}.liquid %}
+              {% else %}
+                <span class="blog-cover-initial">{{ post.title | slice: 0 }}</span>
+              {% endif %}
+            </div>
           {% endif %}
-          <p class="blog-entry-meta">
-            <span>{{ read_time }} min read</span>
-            {% if post.external_source %}<span>{{ post.external_source }}</span>{% endif %}
+          <div class="blog-entry-body">
+            <div class="blog-entry-date">
+              <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d, %Y' }}</time>
+              <span>{{ read_time }} min read</span>
+            </div>
+            <h2 class="blog-entry-title">{{ post.title }}</h2>
+            {% if post.description %}
+              <p class="blog-entry-description">{{ post.description }}</p>
+            {% endif %}
+            <span class="blog-entry-cta">Read the essay <span class="blog-entry-arrow" aria-hidden="true">&rarr;</span></span>
+          </div>
+        </a>
+        {% if post.tags.size > 0 %}
+          <p class="blog-entry-tags">
             {% for tag in post.tags %}
               <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}">{{ tag }}</a>
             {% endfor %}
           </p>
-        </div>
+        {% endif %}
       </li>
     {% endfor %}
 
@@ -84,3 +113,5 @@ pagination:
     <div class="ring"></div>
   </div>
 </div>
+
+<script defer src="{{ '/assets/js/blog-index.js' | relative_url }}"></script>
