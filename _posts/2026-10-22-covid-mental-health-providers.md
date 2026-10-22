@@ -7,7 +7,6 @@ categories: research
 giscus_comments: false
 related_posts: false
 date: 2026-10-22
-featured: true
 
 authors:
   - name: Kaustav Mehta
