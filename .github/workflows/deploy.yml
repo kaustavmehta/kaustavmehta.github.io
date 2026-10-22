@@ -34,8 +34,8 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     env:
       JEKYLL_ENV: production
     steps:
@@ -54,10 +54,30 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install ImageMagick 🖼️
+      # Responsive WebP variants are the slowest part of a build. jekyll-imagemagick
+      # skips any variant already in _site that is newer than its source, so reuse
+      # them when no image (or conversion setting) has changed. Exact-key only, so
+      # a changed image can never be served from a stale variant.
+      - name: Restore WebP variants 🖼️
+        id: webp-cache
+        uses: actions/cache@v4
+        with:
+          path: _site/assets/img/**/*.webp
+          key: webp-${{ hashFiles('assets/img/**', '_config.yml') }}
+
+      - name: Mark cached WebP variants as fresh
+        if: steps.webp-cache.outputs.cache-hit == 'true'
+        # checkout gives sources a new mtime; the variants must be newer to be reused
+        run: find _site/assets/img -name '*.webp' -exec touch {} +
+
+      # Only needed when variants must be (re)generated. apt-get update was the
+      # slowest, most variable step (up to 12 minutes), so try without it first.
+      - name: Install ImageMagick 🧰
+        if: steps.webp-cache.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends imagemagick
+          if command -v convert >/dev/null; then convert -version | head -1; exit 0; fi
+          sudo apt-get install -y -qq --no-install-recommends imagemagick \
+            || { sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends imagemagick; }
 
       - name: Restore Jekyll cache ♻️
         uses: actions/cache@v4
