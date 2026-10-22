@@ -7,6 +7,7 @@ Redesign the homepage (about page) of kaustavmehta.github.io with the "Atmospher
 ## Design Direction
 
 A hybrid of two aesthetics:
+
 - **From "Geometric + Precise"**: Structure, clarity, light/airy openness, readable layouts
 - **From "Abstract + Atmospheric"**: Bold personal text, mood/depth, subtle visual details, expressive typography
 
@@ -15,6 +16,7 @@ The site should feel like it was made by a person who thinks rigorously and care
 ## Color System
 
 ### Light Mode (active when system preference is light, or user toggles to light)
+
 - Canvas: `#FAFAF8` (warm white)
 - Text primary: `#1a1a1a`
 - Text secondary: `#777`
@@ -26,6 +28,7 @@ The site should feel like it was made by a person who thinks rigorously and care
 - Card backgrounds: `rgba(255,255,255,0.7)` with `#eee` borders
 
 ### Dark Mode (site default; also active when system preference is dark)
+
 - Canvas: linear gradient `#0c0c14` → `#0e1520` → `#0a0e18` (deep blue-black, 160deg)
 - Text primary: `rgba(255,255,255,0.9)`
 - Text secondary: `rgba(255,255,255,0.4)`
@@ -37,6 +40,7 @@ The site should feel like it was made by a person who thinks rigorously and care
 - Card backgrounds: `rgba(255,255,255,0.03)` with `rgba(255,255,255,0.06)` borders
 
 ### Implementation Notes
+
 - All colors must be CSS custom properties on `:root` / `html[data-theme="dark"]`
 - Existing al-folio theme variable names (`--global-bg-color`, `--global-text-color`, `--global-theme-color`, etc.) should be remapped to these values
 - The dark mode gradient background requires overriding `--global-bg-color` and adding a `background-image` on `body`
@@ -44,14 +48,17 @@ The site should feel like it was made by a person who thinks rigorously and care
 ## Typography
 
 ### Font Stack
-| Role | Font | Weight | Fallback |
-|------|------|--------|----------|
-| Headlines (h1, h2, hero) | Newsreader | 300, 400 | Georgia, serif |
-| Body text, UI, nav | Space Grotesk | 300, 400, 500 | system-ui, sans-serif |
-| Code blocks, inline code | JetBrains Mono | 300, 400 | monospace |
+
+| Role                     | Font           | Weight        | Fallback              |
+| ------------------------ | -------------- | ------------- | --------------------- |
+| Headlines (h1, h2, hero) | Newsreader     | 300, 400      | Georgia, serif        |
+| Body text, UI, nav       | Space Grotesk  | 300, 400, 500 | system-ui, sans-serif |
+| Code blocks, inline code | JetBrains Mono | 300, 400      | monospace             |
 
 ### Self-Hosting
+
 Fonts must be self-hosted (not loaded from Google Fonts CDN) for:
+
 - Firefox Enhanced Tracking Protection compatibility
 - Privacy (no third-party requests)
 - Faster load (no DNS lookup to fonts.googleapis.com)
@@ -59,6 +66,7 @@ Fonts must be self-hosted (not loaded from Google Fonts CDN) for:
 Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declarations in SCSS.
 
 ### Typographic Scale
+
 - Hero text: 26-30px, Newsreader 300, line-height 1.45-1.5
 - Kicker (above hero): 10-11px, Space Grotesk 500, uppercase, letter-spacing 2.5px
 - Body text: 15px, Space Grotesk 300, line-height 1.8
@@ -150,6 +158,7 @@ Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declara
 ```
 
 ### Content Decisions
+
 - No topic/tag pills, stat counters, or labeled category grids on homepage
 - Profile image: circular, existing `prof_pic.jpg`
 - Hero text is the existing "I tinker with really cool ideas..." copy
@@ -160,6 +169,7 @@ Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declara
 ## Ambient Visual Details
 
 ### Radial Glows
+
 - 2-3 large, very subtle radial gradient ellipses positioned behind content
 - Light mode: blue-grey and purple-grey tones at 5-7% opacity
 - Dark mode: blue and purple tones at 7-10% opacity
@@ -167,6 +177,7 @@ Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declara
 - Applied via `::before` pseudo-element on the main content area
 
 ### Concentric Rings
+
 - 3-4 nested circle outlines, decreasing opacity from outside in
 - Positioned at bottom-right edge of content, partially clipped
 - Light mode: `rgba(100,130,180,0.12)` outer to `rgba(100,130,180,0.03)` inner
@@ -174,6 +185,7 @@ Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declara
 - Purely decorative, no interaction
 
 ### Gradient Separators
+
 - Between content sections: `linear-gradient(90deg, transparent, <color>, transparent)`
 - 1px height, centered horizontally with padding from edges
 - Light: `rgba(0,0,0,0.06)` · Dark: `rgba(255,255,255,0.04)`
@@ -183,6 +195,7 @@ Download WOFF2 files and place in `assets/fonts/`. Load via `@font-face` declara
 Level: "Considered motion" — smooth and crafted but restrained.
 
 ### Scroll Animations
+
 - Sections fade in and translate up slightly (10-20px) on scroll into viewport
 - Duration: 0.6s, ease-out timing
 - Staggered: each section delays 0.1s after the previous
@@ -190,17 +203,20 @@ Level: "Considered motion" — smooth and crafted but restrained.
 - Respect `prefers-reduced-motion: reduce` — disable all animations
 
 ### Hover States
+
 - Nav links: smooth color transition (0.2s)
 - Publication cards: subtle border color shift and slight translateY(-2px)
 - Links: underline animation (width from 0 to 100%)
 
 ### Ambient Parallax
+
 - Radial glows shift very slightly based on scroll position
 - Maximum displacement: 10-15px
 - Implementation: CSS `transform: translateY()` driven by scroll percentage
 - Subtle enough to be felt, not consciously noticed
 
 ### Page Load
+
 - Hero text fades in on initial load (0.4s delay, 0.6s duration)
 - Profile image fades in simultaneously
 - No loading spinner or skeleton — content just appears softly
@@ -208,6 +224,7 @@ Level: "Considered motion" — smooth and crafted but restrained.
 ## Technical Constraints
 
 ### Must Preserve
+
 - Jekyll/al-folio template structure — modify, don't replace
 - Dark mode toggle functionality (already built into the theme)
 - Existing nav structure and page routing
@@ -216,6 +233,7 @@ Level: "Considered motion" — smooth and crafted but restrained.
 - SEO metadata generation
 
 ### Files to Modify
+
 - `_sass/_themes.scss` — remap CSS custom properties to new color values
 - `_sass/_variables.scss` — update color palette variables
 - `_sass/_base.scss` — typography overrides, ambient elements, motion
@@ -225,11 +243,13 @@ Level: "Considered motion" — smooth and crafted but restrained.
 - `assets/css/main.scss` — add new SCSS partials if needed
 
 ### New Files
+
 - `assets/fonts/` — self-hosted WOFF2 font files
 - `_sass/_fonts.scss` — `@font-face` declarations
 - `_sass/_animations.scss` — scroll animations and motion utilities
 
 ### Performance
+
 - Self-hosted fonts: subset to Latin characters, WOFF2 only
 - Font display: `swap` to prevent FOIT
 - Animations: CSS transforms only (no layout thrashing), GPU-composited
@@ -237,6 +257,7 @@ Level: "Considered motion" — smooth and crafted but restrained.
 - IntersectionObserver for scroll animations (not scroll event listeners)
 
 ## Out of Scope
+
 - CV page redesign (separate cycle)
 - Blog post template redesign
 - Publications page redesign
