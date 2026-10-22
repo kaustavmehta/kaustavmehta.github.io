@@ -70,7 +70,7 @@ pagination:
       <li class="blog-entry atmo-reveal{% if is_feature %} is-feature{% endif %}">
         <a class="blog-entry-link" href="{{ post_href }}"{% if post.redirect contains '://' %} target="_blank" rel="noopener"{% endif %}>
           {% if is_feature %}
-            <div class="blog-cover">
+            <div class="blog-cover" data-seed="{{ post.title | escape }}">
               {% if post.cover %}
                 {% include blog_covers/{{ post.cover }}.liquid %}
               {% else %}

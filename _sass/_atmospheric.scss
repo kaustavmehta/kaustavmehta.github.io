@@ -952,6 +952,24 @@ nav#toc-sidebar {
     transform: scale(1.03);
   }
 
+  // Generative cover art replaces the static SVG once its script runs
+  .cover-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+
+  .blog-cover.has-art {
+    .cover-art {
+      display: block;
+    }
+    svg {
+      display: none;
+    }
+  }
+
   .cover-dot-muted {
     fill: var(--global-text-color-light);
     opacity: 0.32;
