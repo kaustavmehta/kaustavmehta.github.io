@@ -23,7 +23,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/cv/";
           },
-        },{id: "post-a-post-with-plotly-js",
+        },{id: "post-bread-butter-and-a-whatsapp-prescription",
+        
+          title: "Bread, butter and a WhatsApp prescription",
+        
+        description: "How one community mental health organisation in Chennai kept care going through the 2020 lockdown. A visual walk through my first research paper, published in the Journal of Public Health.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/covid-mental-health-providers/";
+          
+        },
+      },{id: "post-a-post-with-plotly-js",
         
           title: "a post with plotly.js",
         
