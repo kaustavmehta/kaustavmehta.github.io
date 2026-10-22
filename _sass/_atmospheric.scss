@@ -147,6 +147,55 @@ html[data-theme="dark"] {
   }
 }
 
+// Profile links under the bio: a quiet row, not the template's 4rem icon wall
+.about .social {
+  text-align: left;
+  margin-top: 1.25rem;
+
+  .contact-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    font-size: 1.15rem;
+    // Pull the first 44px hit area back so its glyph lines up with the bio text
+    margin-left: -12px;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      transition:
+        background-color 0.2s ease,
+        transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+
+      i::before {
+        color: var(--global-text-color-light);
+        transition: color 0.2s ease;
+      }
+
+      &:hover,
+      &:focus-visible {
+        background: var(--atmo-accent-soft);
+        transform: translateY(-2px);
+
+        i::before {
+          color: var(--global-theme-color);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 575px) {
+    .contact-icons {
+      justify-content: center;
+      margin-left: 0;
+    }
+  }
+}
+
 // Gradient separators between homepage sections
 .atmo-separator {
   height: 1px;

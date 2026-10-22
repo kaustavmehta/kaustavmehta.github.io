@@ -41,6 +41,16 @@ layout: default
   <article>
     <div class="clearfix atmo-hero-entrance" style="--atmo-delay: 120ms">{{ content }}</div>
 
+    <!-- Social -->
+    {% if page.social %}
+      <div class="social atmo-hero-entrance" style="--atmo-delay: 200ms">
+        <div class="contact-icons">{% include social.liquid %}</div>
+        {% if site.contact_note %}
+          <div class="contact-note">{{ site.contact_note }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
     <!-- Selected papers -->
     {% if page.selected_papers %}
       <div class="atmo-separator"></div>
@@ -71,14 +81,6 @@ layout: default
           <a href="{{ '/news/' | relative_url }}">news</a>
         </h2>
         {% include news.liquid limit=true %}
-      </div>
-    {% endif %}
-
-    <!-- Social -->
-    {% if page.social %}
-      <div class="social atmo-reveal">
-        <div class="contact-icons">{% include social.liquid %}</div>
-        <div class="contact-note">{{ site.contact_note }}</div>
       </div>
     {% endif %}
 
