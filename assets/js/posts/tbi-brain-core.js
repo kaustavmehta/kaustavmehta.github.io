@@ -524,6 +524,7 @@ function buildContacts(meshes) {
     n = new Float32Array(N * 3),
     g = new Float32Array(N),
     rough = new Float32Array(N),
+    hw = new Float32Array(N),
     target = new Uint32Array(N);
   list.forEach(([name, i], k) => {
     const m = meshes[name];
@@ -531,9 +532,11 @@ function buildContacts(meshes) {
     n.set(m.cnormal.subarray(i * 3, i * 3 + 3), k * 3);
     g[k] = m.gap[i];
     rough[k] = m.crough[i];
+    // cerebellar and brainstem contusions are uncommon (the tentorium and the posterior fossa shelter them)
+    hw[k] = name.startsWith("cortex") ? 1 : 0.2;
     target[k] = offsets[name] + i;
   });
-  return { N, r, n, g, rough, target, offsets, total };
+  return { N, r, n, g, rough, hw, target, offsets, total };
 }
 
 /* ------------------------------------------------------------------ the toy mechanics */
@@ -548,23 +551,27 @@ export const SIM = {
   t0: 6, // pulse start (ms)
   pulse: 8, // ms, half-sine
   k: 0.11, // tethering spring (1/ms^2)  -> period ~19 ms
-  c: 0.09,
+  c: 0.05,
   kRot: 0.07,
   cRot: 0.1,
   kCore: 0.16,
   cCore: 0.16,
   coreFromShell: 0.15,
-  kContact: 0.0035, // per contacting vertex
-  cContact: 0.0006,
+  kContact: 0.01, // per contacting vertex
+  cContact: 0.0002,
   invI: 1 / 2200, // 1 / (I/m), mm^-2
+  sag: -1.1, // mm: buoyant in CSF, the brain still settles a little onto the skull base
+  suction: 0.22,
+  crush: 2.5,
+  scrape: 4.5,
   linPerSev: 0.11, // mm/ms^2 per severity step (~11 g)
-  rotPerSev: 0.0011, // rad/ms^2 per severity step
+  rotPerSev: 0.0008, // rad/ms^2 per severity step
 };
 
 export function simulate(data, scenarioKey, severity) {
   const S = SCENARIOS[scenarioKey];
   const { contact } = data;
-  const { N, r, n, g, rough, target, total } = contact;
+  const { N, r, n, g, rough, hw, target, total } = contact;
   const heat = new Float32Array(total);
   const dt = SIM.dt;
   const steps = Math.round(SIM.duration / dt);
@@ -574,7 +581,7 @@ export function simulate(data, scenarioKey, severity) {
   const Al = SIM.rotPerSev * severity;
   const pivot = data.pivot;
   // state
-  const u = new THREE.Vector3(),
+  const u = new THREE.Vector3(0, SIM.sag, 0),
     v = new THREE.Vector3(),
     th = new THREE.Vector3(),
     w = new THREE.Vector3(),
@@ -632,8 +639,12 @@ export function simulate(data, scenarioKey, severity) {
       const dx = u.x + th.y * rz - th.z * ry;
       const dy = u.y + th.z * rx - th.x * rz;
       const dz = u.z + th.x * ry - th.y * rx;
-      const p = dx * nx + dy * ny + dz * nz - g[i];
-      if (p < -0.5) continue;
+      const dn = dx * nx + dy * ny + dz * nz;
+      const p = dn - g[i];
+      // contrecoup by tension: while the skull is being accelerated, the far side of the brain is pulled
+      // away from the bone, and the pressure there drops (cavitation in the classic accounts)
+      if (dn < -0.8 && pl > 0.05) heat[target[i]] += SIM.suction * (dn + 0.8) * (dn + 0.8) * pl * dt * hw[i] * (g[i] < 4 ? 1 : 0.3);
+      if (p < -2) continue;
       const vx = v.x + w.y * rz - w.z * ry;
       const vy = v.y + w.z * rx - w.x * rz;
       const vz = v.z + w.x * ry - w.y * rx;
@@ -642,9 +653,9 @@ export function simulate(data, scenarioKey, severity) {
         ty = vy - vn * ny,
         tz = vz - vn * nz;
       const vt = Math.sqrt(tx * tx + ty * ty + tz * tz);
-      const prox = Math.min(1, 1 + p / 0.5);
+      const prox = Math.max(0, Math.min(1, 1 + p / 1.6));
       // scraping along a rough floor (skull base) while close to it
-      let dh = rough[i] * rough[i] * prox * vt * 0.9;
+      let dh = rough[i] * rough[i] * prox * prox * vt * SIM.scrape;
       if (p > 0) {
         contactNow++;
         const f = SIM.kContact * p + SIM.cContact * Math.max(vn, 0);
@@ -655,14 +666,14 @@ export function simulate(data, scenarioKey, severity) {
         Tq.x -= f * (ry * nz - rz * ny);
         Tq.y -= f * (rz * nx - rx * nz);
         Tq.z -= f * (rx * ny - ry * nx);
-        dh += p * p * 1.6 + p * Math.max(vn, 0) * 3;
+        dh += SIM.crush * (p * p * 1.6 + p * Math.max(vn, 0) * 3);
         if (p > maxPen) maxPen = p;
       }
-      heat[target[i]] += dh * dt;
+      heat[target[i]] += dh * dt * hw[i];
     }
     // integrate brain translation and rotation (semi-implicit Euler)
     const ax = -aS.x - SIM.k * u.x - SIM.c * v.x + F.x;
-    const ay = -aS.y - SIM.k * u.y - SIM.c * v.y + F.y;
+    const ay = -aS.y - SIM.k * (u.y - SIM.sag) - SIM.c * v.y + F.y;
     const az = -aS.z - SIM.k * u.z - SIM.c * v.z + F.z;
     v.x += ax * dt;
     v.y += ay * dt;
@@ -711,7 +722,7 @@ export function simulate(data, scenarioKey, severity) {
 }
 
 // Turn accumulated "heat" into a 0..1 bruise value, smoothed over the surface so bruises read as patches.
-const HEAT_SCALE = 0.11;
+const HEAT_SCALE = 0.07;
 function heatToBruise(data, raw, out) {
   const { offsets, total } = data.contact;
   for (let i = 0; i < total; i++) out[i] = 1 - Math.exp(-raw[i] * HEAT_SCALE);
@@ -732,6 +743,10 @@ function heatToBruise(data, raw, out) {
   }
   return out;
 }
+
+// Relative sensitivity to rotational shear: grey-white junction > corpus callosum > brainstem,
+// so that, as in Adams et al.'s grading of diffuse axonal injury, deeper levels need harder rotation.
+const SHEAR_W = [1.0, 0.45, 0.28];
 
 /* ------------------------------------------------------------------ shaders */
 
@@ -1890,7 +1905,7 @@ class BrainView {
   prepareShear(res) {
     // sensitivity per site: grey-white junction < corpus callosum < brainstem (the order of Adams' DAI grades)
     const axis = res.axis.lengthSq() > 0 ? res.axis : new THREE.Vector3(1, 0, 0);
-    const W = [1.0, 0.72, 0.5];
+    const W = SHEAR_W;
     const PHI0 = 0.0125; // core-lag rotation (rad) at which a typical grey-white fibre reaches threshold
     const lever = (p) => clamp(new THREE.Vector3().crossVectors(axis, p).length() / 70, 0.25, 1.2);
     res.phiScale = 1 / PHI0;
@@ -2113,7 +2128,7 @@ class BrainView {
       (ticks || []).forEach(([x, name]) => track.append(h("span", { class: "tbi-brain-tick", style: `left:${x * 100}%`, title: name, "data-label": name })));
       return h("div", { class: "tbi-brain-barrow" }, [h("div", { class: "tbi-brain-barlabel", text: label }), track]);
     };
-    const W = [1.0, 0.72, 0.5];
+    const W = SHEAR_W;
     const SHEAR_MAX = 1 / W[2] + 0.3;
     const ticks = [
       [1 / W[0] / SHEAR_MAX, "grey–white junction"],

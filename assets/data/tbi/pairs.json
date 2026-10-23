@@ -1,0 +1,120 @@
+{
+  "_meta": {
+    "source": "TBIMS National Database public-use files (2021-10-06 release); aggregates only.",
+    "generated": "2026-10-23",
+    "processing": "2x2 tables of people answering both questions. bothYes = a and b, aOnly = a not b, bOnly = b not a, neither. phi = (bothYes*neither - aOnly*bOnly)/sqrt(product of the four margins); t = phi*sqrt(N-2)/sqrt(1-phi^2); edge rule from BMC Neurology 2025: t above the one-tailed critical value at p < 0.01 with N-2 df.",
+    "suppression": "Only pairs whose four cells are all >= 11 are exported."
+  },
+  "pairs": [
+    {
+      "id": "anxiety-depression-onset",
+      "role": "strong positive (an edge in the published network)",
+      "a": "Anxiety",
+      "b": "Depression",
+      "aLabel": "Anxiety",
+      "bLabel": "Depression",
+      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; table as used for the network: yes = reported with onset at or after the injury",
+      "table": {
+        "bothYes": 19,
+        "aOnly": 14,
+        "bOnly": 14,
+        "neither": 133,
+        "N": 180
+      },
+      "phi": 0.4805,
+      "t": 7.31,
+      "tCritical_p01_oneTailed": 2.347,
+      "pTwoTailed": 0.0,
+      "edgeInNetwork": true,
+      "note": "phi = 0.48, the value quoted in BMC Neurology 2025 for depression-anxiety. People reporting the condition with onset before the injury drop out of this table, which is why N is smaller than the cohort."
+    },
+    {
+      "id": "anxiety-depression-any",
+      "role": "strong positive (same pair, any onset)",
+      "a": "Anxiety",
+      "b": "Depression",
+      "aLabel": "Anxiety",
+      "bLabel": "Depression",
+      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all, regardless of onset",
+      "table": {
+        "bothYes": 48,
+        "aOnly": 17,
+        "bOnly": 21,
+        "neither": 133,
+        "N": 219
+      },
+      "phi": 0.5921,
+      "t": 10.824,
+      "tCritical_p01_oneTailed": 2.344,
+      "pTwoTailed": 0.0,
+      "edgeInNetwork": true,
+      "note": "Same pair without the onset rule: an even stronger association."
+    },
+    {
+      "id": "depression-hypertension",
+      "role": "near zero (no edge)",
+      "a": "Depression",
+      "b": "Hypertension",
+      "aLabel": "Depression",
+      "bLabel": "Hypertension",
+      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all",
+      "table": {
+        "bothYes": 34,
+        "aOnly": 36,
+        "bOnly": 72,
+        "neither": 78,
+        "N": 220
+      },
+      "phi": 0.0053,
+      "t": 0.079,
+      "tCritical_p01_oneTailed": 2.344,
+      "pTwoTailed": 0.9374,
+      "edgeInNetwork": false,
+      "note": "Two common conditions that simply do not travel together in this cohort: the table looks exactly like what independence predicts."
+    },
+    {
+      "id": "cataracts-depression",
+      "role": "weak negative (not significant)",
+      "a": "Cataracts",
+      "b": "Depression",
+      "aLabel": "Cataracts",
+      "bLabel": "Depression",
+      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all",
+      "table": {
+        "bothYes": 11,
+        "aOnly": 34,
+        "bOnly": 59,
+        "neither": 115,
+        "N": 219
+      },
+      "phi": -0.082,
+      "t": -1.212,
+      "tCritical_p01_oneTailed": 2.344,
+      "pTwoTailed": 0.2268,
+      "edgeInNetwork": false,
+      "note": "Slightly fewer people with both than independence would predict; far from significant. Plausibly an age effect (cataracts in older people, depression reported more by younger people in this cohort)."
+    },
+    {
+      "id": "adhd-hypertension-allseverities",
+      "role": "negative (exploratory, larger sample)",
+      "a": "ADDADHD",
+      "b": "Hypertension",
+      "aLabel": "ADD / ADHD",
+      "bLabel": "Hypertension",
+      "cohort": "All severities pooled (GCS 3-15), 5-year follow-up, comorbidity respondents; yes = reported at all. Exploratory: not a cohort used in the papers.",
+      "table": {
+        "bothYes": 12,
+        "aOnly": 44,
+        "bOnly": 174,
+        "neither": 275,
+        "N": 505
+      },
+      "phi": -0.1128,
+      "t": -2.546,
+      "tCritical_p01_oneTailed": 2.334,
+      "pTwoTailed": 0.0112,
+      "edgeInNetwork": false,
+      "note": "The strongest negative association with every cell >= 11. Would pass p < 0.05 but not the p < 0.01 edge rule. Almost certainly age again: ADHD is reported by younger people, hypertension by older people."
+    }
+  ]
+}
