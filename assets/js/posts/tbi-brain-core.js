@@ -10,6 +10,7 @@ import { OrbitControls } from "../vendor/OrbitControls.js";
 
 const DATA_JSON = new URL("../../data/tbi/brain.json", import.meta.url);
 const DATA_BIN = new URL("../../data/tbi/brain.bin", import.meta.url);
+const DATA_HI = new URL("../../data/tbi/brain-hi.bin", import.meta.url);
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -270,6 +271,99 @@ const loadData = () => {
   return dataPromise;
 };
 
+// Detail level: phones and small or low-memory devices use fsaverage5 (~20k cortical vertices);
+// everything else adds the fsaverage6 refinement (~82k), fetched as a separate 430 kB file.
+export const wantHighDetail = (el) => {
+  const q = el && el.dataset.quality;
+  if (q === "low") return false;
+  if (q === "high") return true;
+  const small = Math.min(window.innerWidth, window.screen ? window.screen.width : 9999) < 700;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const lowMem = navigator.deviceMemory !== undefined && navigator.deviceMemory < 4;
+  const fewCores = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency < 4;
+  return !(small || (coarse && window.innerWidth < 1100) || lowMem || fewCores);
+};
+
+let hiPromise = null;
+const loadHi = (data) => {
+  if (!hiPromise) hiPromise = fetch(DATA_HI).then((r) => r.arrayBuffer()).then((buf) => decodeHi(data, buf));
+  return hiPromise;
+};
+
+function decodeHi(data, buf) {
+  const out = {};
+  const sc = data.manifest.scale;
+  const C = data.manifest.centre;
+  for (const name of ["cortex_left", "cortex_right"]) {
+    const base = data.meshes[name];
+    const ref = data.manifest.refine[name];
+    const n0 = base.count;
+    const n = n0 + ref.count;
+    const pos = new Float32Array(n * 3);
+    pos.set(base.pos);
+    const q = view(buf, ref.pos);
+    for (let i = 0; i < q.length; i += 3) {
+      pos[n0 * 3 + i] = q[i] * sc - C[0];
+      pos[n0 * 3 + i + 1] = q[i + 1] * sc - C[1];
+      pos[n0 * 3 + i + 2] = q[i + 2] * sc - C[2];
+    }
+    const sulc = new Float32Array(n);
+    sulc.set(base.geometry.getAttribute("aSulc").array);
+    const sq = view(buf, ref.sulc);
+    for (let i = 0; i < sq.length; i++) sulc[n0 + i] = sq[i] / 255;
+    // subdivide every triangle into four, numbering midpoints in first-seen edge order (as the data prep did)
+    const idx0 = base.geometry.index.array;
+    const edge = new Map();
+    const parents = new Uint16Array(ref.count * 2);
+    let next = 0;
+    const midOf = (a, b) => {
+      const k = a < b ? a * 65536 + b : b * 65536 + a;
+      let m = edge.get(k);
+      if (m === undefined) {
+        m = next++;
+        edge.set(k, m);
+        parents[m * 2] = a;
+        parents[m * 2 + 1] = b;
+      }
+      return n0 + m;
+    };
+    // the base index may have been flipped for orientation; the edge order uses the original winding,
+    // which only differs by swapping the 2nd and 3rd vertex: recover it from base.flipped
+    const idx = new Uint32Array(idx0.length * 4);
+    let o = 0;
+    for (let t = 0; t < idx0.length; t += 3) {
+      let a = idx0[t],
+        b = idx0[t + 1],
+        c = idx0[t + 2];
+      if (base.flipped) [b, c] = [c, b];
+      const ab = midOf(a, b),
+        bc = midOf(b, c),
+        ca = midOf(c, a);
+      let tris = [a, ab, ca, ab, b, bc, ca, bc, c, ab, bc, ca];
+      if (base.flipped) for (let k = 0; k < 12; k += 3) [tris[k + 1], tris[k + 2]] = [tris[k + 2], tris[k + 1]];
+      idx.set(tris, o);
+      o += 12;
+    }
+    const region = new Float32Array(n);
+    const r0 = base.geometry.getAttribute("aRegion").array;
+    region.set(r0);
+    for (let m = 0; m < ref.count; m++) {
+      const a = parents[m * 2],
+        b = parents[m * 2 + 1];
+      region[n0 + m] = r0[a] === r0[b] ? r0[a] : Math.min(r0[a] || 99, r0[b] || 99) % 99;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setIndex(new THREE.BufferAttribute(n < 65536 ? new Uint16Array(idx) : idx, 1));
+    g.computeVertexNormals();
+    g.setAttribute("aRegion", new THREE.BufferAttribute(region, 1));
+    g.setAttribute("aSulc", new THREE.BufferAttribute(sulc, 1));
+    g.computeBoundingSphere();
+    out[name] = { geometry: g, parents, n0, count: n };
+  }
+  return out;
+}
+
 const view = (buf, s) => {
   const C = { int16: Int16Array, uint16: Uint16Array, uint32: Uint32Array, uint8: Uint8Array, int8: Int8Array, float32: Float32Array }[s.dtype];
   return new C(buf, s.offset, s.length);
@@ -306,7 +400,8 @@ function decode(m, buf) {
     // Orientation: everything faces outward except the inner table of the skull, which faces the brain.
     const vol = signedVolume(pos, idx);
     const wantInward = e.kind === "skull_inner";
-    if ((vol < 0) !== wantInward) for (let t = 0; t < idx.length; t += 3) [idx[t + 1], idx[t + 2]] = [idx[t + 2], idx[t + 1]];
+    const flipped = (vol < 0) !== wantInward;
+    if (flipped) for (let t = 0; t < idx.length; t += 3) [idx[t + 1], idx[t + 2]] = [idx[t + 2], idx[t + 1]];
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
     g.setIndex(new THREE.BufferAttribute(idx, 1));
@@ -328,7 +423,7 @@ function decode(m, buf) {
     }
     g.setAttribute("aRough", new THREE.BufferAttribute(rough, 1));
     g.computeBoundingSphere();
-    const out = { name: e.name, kind: e.kind, count: n, geometry: g, pos };
+    const out = { name: e.name, kind: e.kind, count: n, geometry: g, pos, flipped };
     if (e.gap) {
       const gq = view(buf, e.gap),
         nq = view(buf, e.normal),
@@ -388,7 +483,7 @@ function decode(m, buf) {
   const contact = buildContacts(meshes);
   const adjacency = {};
   for (const name of ["cortex_left", "cortex_right", "cerebellum"]) adjacency[name] = buildAdjacency(meshes[name]);
-  return { meshes, anchors, fibres, pivot, contact, adjacency };
+  return { manifest: m, meshes, anchors, fibres, pivot, contact, adjacency };
 }
 
 function buildAdjacency(mesh) {
@@ -1063,6 +1158,7 @@ class BrainView {
     let data;
     try {
       data = await loadData();
+      if (wantHighDetail(this.el)) this.hi = await loadHi(data).catch(() => null);
     } catch (e) {
       this.fail("The brain model could not be loaded. Try reloading the page.");
       return;
@@ -1199,15 +1295,39 @@ class BrainView {
       return g;
     };
     this.meshByName = {};
+    this.hiSync = [];
     for (const name of ["cortex_left", "cortex_right"]) {
       const mat = this.tissueMaterial();
-      const mesh = new THREE.Mesh(makeGeom(meshes[name]), mat);
+      const baseGeom = makeGeom(meshes[name]);
+      const hi = this.hi && this.hi[name];
+      let geom = baseGeom;
+      if (hi) {
+        // fine mesh for display; its heat is interpolated from the coarse (simulated) vertices
+        geom = new THREE.BufferGeometry();
+        for (const k of ["position", "normal", "aRegion", "aSulc"]) geom.setAttribute(k, hi.geometry.getAttribute(k));
+        geom.setIndex(hi.geometry.index);
+        geom.boundingSphere = hi.geometry.boundingSphere;
+        const heat = new THREE.BufferAttribute(new Float32Array(hi.count), 1).setUsage(THREE.DynamicDrawUsage);
+        const shear = new THREE.BufferAttribute(new Float32Array(hi.count), 1).setUsage(THREE.DynamicDrawUsage);
+        geom.setAttribute("aHeat", heat);
+        geom.setAttribute("aShear", shear);
+        this.hiSync.push({ hi, src: baseGeom, heat: heat.array, shear: shear.array });
+      }
+      const mesh = new THREE.Mesh(geom, mat);
       mesh.renderOrder = 2;
       mesh.userData = { name, cortex: true };
       this.brain.add(mesh);
       this.tissue.push(mesh);
-      this.pickables.push(mesh);
       this.meshByName[name] = mesh;
+      if (hi) {
+        // invisible coarse proxy for fast picking
+        const proxy = new THREE.Mesh(baseGeom, mat);
+        proxy.userData = { name, cortex: true, proxyOf: mesh };
+        proxy.visible = false;
+        proxy.layers.set(1);
+        this.brain.add(proxy);
+        this.pickables.push(proxy);
+      } else this.pickables.push(mesh);
     }
     const cerebC = new THREE.Vector3(0, -38 - 15.41, 52 - 17.77);
     for (const name of ["corpus_callosum", "thalamus", "basal_ganglia", "hippocampus", "amygdala", "ventricles", "brainstem", "cerebellum"]) {
@@ -1589,7 +1709,9 @@ class BrainView {
       const r = this.canvas.getBoundingClientRect();
       ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
       ray.setFromCamera(ndc, this.camera);
-      const objs = this.pickables.filter((m) => m.visible && (!this.ghost || !m.userData.cortex || DEEP.has(this.selected) === false || true));
+      const shown = (m) => (m.userData.proxyOf ? m.userData.proxyOf.visible : m.visible);
+      const objs = this.pickables.filter(shown);
+      ray.layers.enableAll();
       const hits = ray.intersectObjects(objs, false);
       for (const hit of hits) {
         const m = hit.object;
@@ -1600,7 +1722,7 @@ class BrainView {
         }
         if (this.ghost && m.userData.cortex) {
           // in see-through mode, prefer deep structures behind the translucent cortex
-          const deeper = hits.find((x) => !x.object.userData.cortex && x.object.visible);
+          const deeper = hits.find((x) => !x.object.userData.cortex && shown(x.object));
           if (deeper) return deeper.object.userData.region;
         }
         if (m.userData.region) return m.userData.region;
@@ -1848,6 +1970,21 @@ class BrainView {
   }
 
   markHeat() {
+    for (const s of this.hiSync) {
+      const { hi, src, heat, shear } = s;
+      const h0 = src.getAttribute("aHeat").array,
+        s0 = src.getAttribute("aShear").array;
+      heat.set(h0);
+      shear.set(s0);
+      const P = hi.parents,
+        n0 = hi.n0;
+      for (let m = 0, M = P.length / 2; m < M; m++) {
+        const a = P[m * 2],
+          b = P[m * 2 + 1];
+        heat[n0 + m] = 0.5 * (h0[a] + h0[b]);
+        shear[n0 + m] = 0.5 * (s0[a] + s0[b]);
+      }
+    }
     for (const m of this.tissue) {
       m.geometry.getAttribute("aHeat").needsUpdate = true;
       m.geometry.getAttribute("aShear").needsUpdate = true;
@@ -2127,14 +2264,12 @@ function mulberry32(a) {
   };
 }
 
-/* ------------------------------------------------------------------ boot */
-function boot() {
-  document.querySelectorAll(".tbi-brain").forEach((el) => {
-    if (el.__tbiBrain) return;
-    const v = new BrainView(el);
-    el.__tbiBrain = v;
-    onVisible(el, () => v.init(), 0.05);
-  });
+/* ------------------------------------------------------------------ entry point */
+// Called by the lightweight loader (tbi-brain.js) when a figure nears the viewport.
+export function mount(el) {
+  if (el.__tbiBrain) return el.__tbiBrain;
+  const v = new BrainView(el);
+  el.__tbiBrain = v;
+  v.init();
+  return v;
 }
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-else boot();
