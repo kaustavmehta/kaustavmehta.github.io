@@ -3,7 +3,8 @@ layout: distill
 title: "Bread, butter and a WhatsApp prescription"
 description: How one community mental health organisation in Chennai kept care going through the 2020 lockdown. A visual walk through my first research paper, published in the Journal of Public Health.
 tags: public-health mental-health covid-19 qualitative-research
-cover: waffle
+cover: threads
+og_image: https://kaustavmehta.github.io/assets/img/blog/bread-butter-threads-og.png
 categories: research
 giscus_comments: false
 related_posts: false
@@ -115,6 +116,14 @@ _styles: >
     .mh-bar-fill, .mh-bar-val { transition: none; }
   }
 ---
+
+<figure class="threads-figure l-page">
+  <div class="threads-banner">
+    <canvas class="threads-art" data-mode="story" data-seed="{{ page.title | escape }}" role="img" aria-label="Threads, standing for patients, run across the page. At the lockdown they fray; most are re-tied through five knots, each an adaptation from the paper, and some are left frayed."></canvas>
+    <div class="threads-tip" role="status" hidden></div>
+  </div>
+  <figcaption>Each thread stands for some of SCARF’s patients. At the lockdown they fray, and most are re-tied through five knots, each an adaptation described in the paper; some are left frayed. Hover over, tap or tab to a knot, or hover over a frayed end. An illustration of the paper’s argument rather than a chart of its data.</figcaption>
+</figure>
 
 <blockquote class="mh-lede">
 “Of course, we cannot give bread and butter for all 6000 patients. But we gave provisions for about 300 of them through various sources.”
@@ -329,3 +338,4 @@ It was my first time seeing my name on a paper, and I am properly thankful to my
 
 <div class="mh-tooltip" id="mh-tooltip" role="tooltip"></div>
 <script src="{{ '/assets/js/posts/covid-mental-health-providers.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/threads.js' | relative_url }}"></script>

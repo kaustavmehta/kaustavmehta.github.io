@@ -721,14 +721,6 @@ nav#toc-sidebar {
   }
 }
 
-@keyframes blogLitSweep {
-  from {
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    clip-path: inset(0 0 0 0);
-  }
-}
 
 .blog-page {
   position: relative;
@@ -906,9 +898,6 @@ nav#toc-sidebar {
         transform: translateX(6px);
       }
 
-      .cover-lit-rows {
-        animation: blogLitSweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
     }
   }
 
@@ -952,74 +941,19 @@ nav#toc-sidebar {
     background:
       radial-gradient(ellipse 80% 70% at 30% 20%, var(--atmo-glow-1), transparent 70%),
       radial-gradient(ellipse 70% 60% at 80% 90%, var(--atmo-glow-2), transparent 70%);
-
-    svg {
-      position: absolute;
-      inset: 1.75rem 1.75rem 4.5rem;
-      width: calc(100% - 3.5rem);
-      height: calc(100% - 6.25rem);
-      transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
   }
 
-  .blog-entry-link:hover .blog-cover svg {
-    transform: scale(1.03);
-  }
-
-  // Generative cover art replaces the static SVG once its script runs
-  .cover-art {
+  .blog-cover .threads-banner {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
+    inset: 0 0 3.2rem;
+    height: auto;
   }
 
-  .blog-cover.has-art {
-    .cover-art {
-      display: block;
-    }
-    svg {
-      display: none;
-    }
-  }
-
-  .cover-dot-muted {
-    fill: var(--global-text-color-light);
-    opacity: 0.32;
-  }
-
-  .cover-lit-rows {
-    filter: drop-shadow(0 0 2px var(--global-theme-color));
-  }
-
-  .cover-dot-lit {
-    fill: var(--global-theme-color);
-  }
-
-  .blog-entry.revealed .cover-lit-rows {
-    animation: blogLitSweep 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both;
-  }
-
-  .cover-caption {
+  .blog-cover-caption {
     position: absolute;
     left: 1.75rem;
     right: 1.75rem;
-    bottom: 1.4rem;
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-  }
-
-  .cover-figure {
-    font-family: 'Newsreader', Georgia, serif;
-    font-weight: 300;
-    font-size: 2.1rem;
-    line-height: 1;
-    color: var(--global-theme-color);
-  }
-
-  .cover-label {
+    bottom: 1.25rem;
     font-family: 'Space Grotesk', system-ui, sans-serif;
     font-size: 0.72rem;
     letter-spacing: 0.4px;
@@ -1148,13 +1082,7 @@ nav#toc-sidebar {
       grid-template-columns: 1fr;
     }
     .blog-cover {
-      min-height: 17rem;
-
-      svg {
-        inset: 1.25rem 1.25rem 5.25rem;
-        width: calc(100% - 2.5rem);
-        height: calc(100% - 6.5rem);
-      }
+      min-height: 15rem;
       border-right: none;
       border-bottom: 1px solid var(--global-card-border-color, var(--atmo-separator-color));
     }
@@ -1172,12 +1100,87 @@ nav#toc-sidebar {
       animation: none;
     }
     .blog-entry-link,
-    .blog-cover svg,
     .blog-entry-arrow {
       transition: none;
     }
-    .blog-entry-link:hover .cover-lit-rows {
-      animation: none;
-    }
+  }
+}
+
+// ============ Threads (post banner and blog card cover) ============
+.threads-banner {
+  position: relative;
+  height: 22rem;
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}
+
+.threads-figure {
+  margin: 0 0 2.5rem;
+
+  .threads-banner {
+    border-radius: 18px;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 50%, var(--atmo-glow-1), transparent 70%),
+      radial-gradient(ellipse 40% 60% at 85% 80%, var(--atmo-glow-2), transparent 70%);
+  }
+
+  figcaption {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--global-text-color-light);
+    margin-top: 0.75rem;
+  }
+}
+
+// Invisible hit targets over each knot, so knots can be reached by keyboard and touch
+.threads-knot {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 2px;
+  }
+}
+
+.threads-tip {
+  position: absolute;
+  z-index: 2;
+  max-width: 15rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--atmo-separator-color);
+  background: var(--global-bg-color);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.3);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--global-text-color-light);
+  pointer-events: none;
+
+  strong {
+    display: block;
+    font-weight: 500;
+    color: var(--global-text-color);
+    margin-bottom: 0.15rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .threads-banner {
+    height: 15rem;
   }
 }
