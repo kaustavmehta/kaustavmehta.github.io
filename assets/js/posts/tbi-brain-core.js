@@ -809,8 +809,8 @@ void main(){
   vec3 base = mix(uGyrus, uSulcus, s);
   base = mix(base, uTint, uTintMix);
   if (uFolia > 0.5) {
-    float f = sin(length(vPos - uFoliaC) * 1.7 + vnoise(vPos*0.15)*2.0);
-    base *= 0.8 + 0.2 * smoothstep(-0.7, 0.9, f);
+    float f = sin(length(vPos - uFoliaC) * 2.6 + vnoise(vPos * 0.12) * 3.0 + vnoise(vPos * 0.5));
+    base *= 0.9 + 0.1 * smoothstep(-0.8, 0.8, f);
   }
   base *= 0.95 + 0.05 * vnoise(vPos * 0.45);
   base = mix(base, uTheme, sel * 0.62 + hov * 0.28);
@@ -1416,7 +1416,7 @@ class BrainView {
       up = new THREE.Vector3();
     fibres.forEach((f, fi) => {
       const P = f.pts;
-      const r = f.kind === 0 ? 0.45 : 0.6;
+      const r = f.kind === 0 ? 0.32 : 0.42;
       const base = v;
       for (let k = 0; k < P.length; k++) {
         tan.subVectors(P[Math.min(k + 1, P.length - 1)], P[Math.max(k - 1, 0)]).normalize();
@@ -1460,7 +1460,7 @@ class BrainView {
     const rng = mulberry32(11);
     this.fibreInfo = fibres.map((f) => ({
       kind: f.kind,
-      jitter: 0.78 + rng() * 0.44,
+      jitter: Math.exp((rng() - 0.5) * 1.1), // spread of individual thresholds, ~0.58x to 1.73x
       tb: 0.3 + rng() * 0.4,
       mid: f.pts[Math.floor(f.pts.length / 2)],
     }));
@@ -1477,7 +1477,7 @@ class BrainView {
         uState: { value: this.fibreTex },
         uNF: { value: NF },
         uPhi: { value: new THREE.Vector3() },
-        uRadius: { value: 0.5 },
+        uRadius: { value: 0.36 },
         uTime: { value: 0 },
         uFibre: { value: new THREE.Vector3() },
         uFibre2: { value: new THREE.Vector3() },
@@ -1634,7 +1634,7 @@ class BrainView {
   }
 
   defaultDir() {
-    if (this.mode === "impact") return new THREE.Vector3(-1, 0.22, -0.42).normalize();
+    if (this.mode === "impact") return new THREE.Vector3(-0.92, -0.08, -0.62).normalize();
     if (this.mode === "shear") return new THREE.Vector3(-0.75, 0.42, -0.6).normalize();
     return new THREE.Vector3(-0.8, 0.35, -0.62).normalize();
   }
@@ -1653,11 +1653,11 @@ class BrainView {
 
   fitDistance() {
     const aspect = this.width && this.height ? this.width / this.height : 1.4;
-    const r = 112; // radius of the skull, mm
+    const r = 100; // roughly the skull's radius, mm
     const fov = (this.camera.fov * Math.PI) / 180;
     const dV = r / Math.sin(fov / 2);
     const dH = r / Math.sin(Math.atan(Math.tan(fov / 2) * aspect));
-    return Math.max(dV, dH) * 0.98;
+    return Math.max(dV, dH) * 0.95;
   }
 
   zoom(f) {
@@ -1955,13 +1955,24 @@ class BrainView {
         a.p.divideScalar(a.sum);
         const side = name === "cortex_left" ? "left" : name === "cortex_right" ? "right" : "";
         const where = a.p.clone().normalize().dot(site);
-        out.push({ region: +r, side, score: a.sum, where });
+        out.push({ region: +r, side, score: a.sum, where, p: a.p.clone() });
       }
     }
     out.sort((a, b) => b.score - a.score);
     const phi = res.maxPhi * res.phiScale;
     const levels = { gwj: phi * 1.0 >= 1, cc: phi * res.ccSens >= 1, bs: phi * res.bsSens >= 1 };
     return { bruised: out, phi, levels, pen: res.maxPen };
+  }
+
+  // After the event, turn the camera toward the worst bruise so the reader sees it.
+  lookAtDamage(sum) {
+    if (!sum || !sum.bruised.length || this.cut || this._lookedFor === this.result) return;
+    this._lookedFor = this.result;
+    const p = sum.bruised[0].p.clone().normalize();
+    const cur = this.camera.position.clone().sub(this.controls.target).normalize();
+    const dir = p.lerp(cur, 0.35).normalize();
+    dir.y = clamp(dir.y, -0.45, 0.5);
+    this.tweenTo(dir.normalize(), this.camera.position.distanceTo(this.controls.target));
   }
 
   togglePlay() {
@@ -2109,6 +2120,7 @@ class BrainView {
     if (t >= SIM.duration - 1e-6 || fi === res.frames.length - 1) {
       if (!this._summaryShown) {
         this._summaryShown = true;
+        this.lookAtDamage(res.summary);
         this.renderReadout(res.summary);
         this.updateAria();
       }

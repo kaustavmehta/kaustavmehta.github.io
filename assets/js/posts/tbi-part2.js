@@ -753,7 +753,7 @@
         .style("pointer-events", mode === "graph" && !walking ? null : "none")
         .classed("is-walked", (e) => e.walked != null)
         .call((g) => g.selectAll("path").attr("d", (e) => pathD(e, t)))
-        .call((g) => g.select(".tbi2-kb-line").style("opacity", 0.25 + 0.75 * t))
+        .call((g) => g.select(".tbi2-kb-line").style("opacity", t))
         .call((g) =>
           g
             .select(".tbi2-kb-num")
@@ -810,7 +810,7 @@
         .call((g) =>
           g
             .select(".tbi2-kb-name")
-            .attr("y", (d) => (t > 0.5 ? (d.id === 2 ? -38 : 38) * 0 + (d.y > 300 ? -36 : 36) * t : 0))
+            .attr("y", (d) => (d.y > 300 ? -36 : 36) * t)
             .text((d) => d.name)
         )
         .call((g) =>
@@ -824,7 +824,7 @@
             }
             d3.select(this)
               .attr("x", -bw / 2)
-              .attr("y", -13 + (t > 0.5 ? (d.y > 300 ? -36 : 36) * t : 0))
+              .attr("y", -13 + (d.y > 300 ? -36 : 36) * t)
               .attr("width", bw)
               .attr("height", 26)
               .style("opacity", 1 - t);
@@ -1092,6 +1092,7 @@
     nodeSel.select(".tbi2-node-halo").attr("r", (d, i) => r(d, i) + 6);
     nodeSel
       .select(".tbi2-node-label")
+      .attr("class", labelPos === "inside" ? "tbi2-node-label is-inside" : "tbi2-node-label")
       .attr("dy", (d, i) => (labelPos === "inside" ? "0.35em" : r(d, i) + 13))
       .text((d) => d.label);
     return { edgeSel, nodeSel };
@@ -3118,26 +3119,7 @@
       [0.38, 0.9],
     ];
     const nodes = pos.map(([x, y], i) => ({ i, label: String.fromCharCode(65 + i), x, y }));
-    const E = [
-      [0, 1],
-      [0, 2],
-      [0, 3],
-      [0, 4],
-      [1, 2],
-      [2, 4],
-      [3, 4],
-      [2, 3],
-      [4, 12],
-      [2, 5],
-      [5, 6],
-      [6, 7],
-      [6, 8],
-      [6, 9],
-      [6, 10],
-      [6, 11],
-      [7, 8],
-      [5, 12],
-    ];
+    const E = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 4], [3, 4], [2, 3], [1, 3], [4, 12], [2, 5], [5, 6], [5, 11], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [7, 8], [5, 12], [8, 9], [9, 10], [10, 11]];
     const g = algo.build(nodes.length, E);
     const k = algo.degree(g);
     const measures = {
