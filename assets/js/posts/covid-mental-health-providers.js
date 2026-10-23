@@ -192,7 +192,7 @@
     { label: "Critical harm reduction services", value: 65, quote: "65% to critical harm reduction services" },
     { label: "Antenatal or postnatal services for women", value: 61, quote: "women requiring antenatal or postnatal services (61%)" },
     { label: "Opioid agonist maintenance treatment", value: 45, quote: "45% to opioid agonist maintenance treatment for opioid dependence" },
-    { label: "Emergency interventions", value: 35, key: true, quote: "More than a third (35%) reported disruptions to emergency interventions" },
+    { label: "Emergency interventions", value: 35, quote: "More than a third (35%) reported disruptions to emergency interventions" },
     {
       label: "Access to medications",
       value: 30,
@@ -311,7 +311,7 @@
     },
     {
       theme: "Providers",
-      text: "After 4.30 used to be ‘my time’. Now even at 10 p.m. I need to work… I am more addicted to checking my phone-every 3–5 min because I don’t want to miss anything...",
+      text: "After 4.30 used to be ‘my time’. Now even at 10 p.m. I need to work-check if everything is ready as per requirement. I am more addicted to checking my phone-every 3–5 min because I don’t want to miss anything...",
       who: "P5, middle-aged female administrative co-ordinator",
     },
     {
@@ -345,8 +345,8 @@
       who: "P6, male manager heading outreach efforts",
     },
     {
-      theme: "Telemedicine",
-      text: "I am sitting and talking to you in a sound proof room, but that is not possible for everyone. Women in rural areas were not comfortable with gadgets.",
+      theme: "Outreach",
+      text: "Many people are not comfortable talking virtually. I am sitting and talking to you in a sound proof room, but that is not possible for everyone. Women in rural areas were not comfortable with gadgets.",
       who: "P6, male manager heading outreach efforts",
     },
   ];
@@ -441,7 +441,7 @@
       },
       responsiveness: {
         title: "Responsiveness",
-        body: "Meeting end-to-end care needs, from diagnosis to rehabilitation: making medication, counselling, rehabilitation and job placement available remotely, while still allowing safe physical access when it was needed. In 2020 that also meant food provisions.",
+        body: "Meeting end-to-end care needs, from diagnosis to rehabilitation: making medication, counselling, rehabilitation and job placement available remotely, while still allowing safe physical access when it was needed. My own reading is that the food provisions belong here too.",
       },
       resilience: {
         title: "Resilience",
