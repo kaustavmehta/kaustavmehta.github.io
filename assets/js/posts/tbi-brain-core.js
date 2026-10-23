@@ -540,7 +540,7 @@ function buildContacts(meshes) {
 // Brain = rigid body on a damped spring inside the skull (a few mm of CSF), plus a "deep core" that lags
 // the brain's outer layers in rotation (a stand-in for shear between structures of different stiffness).
 // Everything is in the skull's frame: the skull's acceleration appears as an opposite pseudo-force.
-const SIM = {
+export const SIM = {
   dt: 0.05, // ms
   duration: 90, // ms
   frameEvery: 5, // record every 0.25 ms
@@ -553,6 +553,7 @@ const SIM = {
   cRot: 0.1,
   kCore: 0.16,
   cCore: 0.16,
+  coreFromShell: 0.15,
   kContact: 0.0035, // per contacting vertex
   cContact: 0.0006,
   invI: 1 / 2200, // 1 / (I/m), mm^-2
@@ -560,7 +561,7 @@ const SIM = {
   rotPerSev: 0.0011, // rad/ms^2 per severity step
 };
 
-function simulate(data, scenarioKey, severity) {
+export function simulate(data, scenarioKey, severity) {
   const S = SCENARIOS[scenarioKey];
   const { contact } = data;
   const { N, r, n, g, rough, target, total } = contact;
@@ -675,9 +676,10 @@ function simulate(data, scenarioKey, severity) {
     w.z += bz * dt;
     th.addScaledVector(w, dt);
     // deep core lags the brain's outer layers: driven by their total angular acceleration
-    const cx = -(alS.x + bx) - SIM.kCore * ph.x - SIM.cCore * pw.x;
-    const cy = -(alS.y + by) - SIM.kCore * ph.y - SIM.cCore * pw.y;
-    const cz = -(alS.z + bz) - SIM.kCore * ph.z - SIM.cCore * pw.z;
+    // (contact torques jolt the outer brain too, but only a fraction of that reaches the core as shear)
+    const cx = -(alS.x + SIM.coreFromShell * bx) - SIM.kCore * ph.x - SIM.cCore * pw.x;
+    const cy = -(alS.y + SIM.coreFromShell * by) - SIM.kCore * ph.y - SIM.cCore * pw.y;
+    const cz = -(alS.z + SIM.coreFromShell * bz) - SIM.kCore * ph.z - SIM.cCore * pw.z;
     pw.x += cx * dt;
     pw.y += cy * dt;
     pw.z += cz * dt;
