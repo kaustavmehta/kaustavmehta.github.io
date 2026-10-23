@@ -14,7 +14,6 @@
     let rows = 0;
     let values = new Float32Array(0);
     let color = "";
-    let visible = true;
     let frame = null;
     let last = 0;
 
@@ -29,6 +28,8 @@
     };
 
     const resize = () => {
+      // Match the visible width, which excludes a scrollbar that 100vw would count
+      canvas.parentElement.style.width = `${document.documentElement.clientWidth}px`;
       const rect = canvas.parentElement.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = rect.width;
@@ -44,6 +45,33 @@
     };
 
     const lerp = (a, b, level) => (level - a) / (b - a);
+    // Marching-squares lookup: for each corner pattern, the cell edges each segment joins
+    // (0 top, 1 right, 2 bottom, 3 left). Patterns 5 and 10 are the two-segment saddles.
+    const SEGMENTS = [
+      [],
+      [[3, 2]],
+      [[2, 1]],
+      [[3, 1]],
+      [[0, 1]],
+      [
+        [3, 0],
+        [2, 1],
+      ],
+      [[0, 2]],
+      [[3, 0]],
+      [[3, 0]],
+      [[0, 2]],
+      [
+        [3, 2],
+        [0, 1],
+      ],
+      [[0, 1]],
+      [[3, 1]],
+      [[2, 1]],
+      [[3, 2]],
+      [],
+    ];
+    const edge = [0, 0, 0, 0, 0, 0, 0, 0];
 
     const draw = (t) => {
       for (let j = 0; j < rows; j++) {
@@ -65,36 +93,18 @@
             if (index === 0 || index === 15) continue;
             const x = i * cell;
             const y = j * cell;
-            const top = [x + cell * lerp(a, b, level), y];
-            const right = [x + cell, y + cell * lerp(b, c, level)];
-            const bottom = [x + cell * lerp(d, c, level), y + cell];
-            const left = [x, y + cell * lerp(a, d, level)];
-            const segments = {
-              1: [[left, bottom]],
-              2: [[bottom, right]],
-              3: [[left, right]],
-              4: [[top, right]],
-              5: [
-                [left, top],
-                [bottom, right],
-              ],
-              6: [[top, bottom]],
-              7: [[left, top]],
-              8: [[left, top]],
-              9: [[top, bottom]],
-              10: [
-                [left, bottom],
-                [top, right],
-              ],
-              11: [[top, right]],
-              12: [[left, right]],
-              13: [[bottom, right]],
-              14: [[left, bottom]],
-            }[index];
-            segments.forEach(([p, q]) => {
-              ctx.moveTo(p[0], p[1]);
-              ctx.lineTo(q[0], q[1]);
-            });
+            edge[0] = x + cell * lerp(a, b, level);
+            edge[1] = y;
+            edge[2] = x + cell;
+            edge[3] = y + cell * lerp(b, c, level);
+            edge[4] = x + cell * lerp(d, c, level);
+            edge[5] = y + cell;
+            edge[6] = x;
+            edge[7] = y + cell * lerp(a, d, level);
+            for (const [p, q] of SEGMENTS[index]) {
+              ctx.moveTo(edge[p * 2], edge[p * 2 + 1]);
+              ctx.lineTo(edge[q * 2], edge[q * 2 + 1]);
+            }
           }
         }
         ctx.stroke();
@@ -102,30 +112,50 @@
       ctx.globalAlpha = 1;
     };
 
+    // The field drifts slowly, so ~15 fps is plenty. The loop runs only while the canvas
+    // is on screen and the tab is visible, and is cancelled (not idled) otherwise.
+    let onScreen = true;
     const loop = (now) => {
       frame = requestAnimationFrame(loop);
-      if (!visible || now - last < 40) return;
+      if (now - last < 66) return;
       last = now;
       draw(now / 1000);
+    };
+    const updateRunning = () => {
+      const shouldRun = !reduceMotion && onScreen && !document.hidden;
+      if (shouldRun && frame === null) frame = requestAnimationFrame(loop);
+      if (!shouldRun && frame !== null) {
+        cancelAnimationFrame(frame);
+        frame = null;
+      }
     };
 
     readColor();
     resize();
     draw(0);
-    if (!reduceMotion) frame = requestAnimationFrame(loop);
+    updateRunning();
 
+    let resizeTimer = null;
     window.addEventListener("resize", () => {
-      resize();
-      draw(performance.now() / 1000);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize();
+        draw(performance.now() / 1000);
+      }, 150);
     });
     new MutationObserver(() => {
       readColor();
       draw(performance.now() / 1000);
     }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     if ("IntersectionObserver" in window) {
-      new IntersectionObserver((entries) => entries.forEach((entry) => (visible = entry.isIntersecting))).observe(canvas);
+      new IntersectionObserver((entries) =>
+        entries.forEach((entry) => {
+          onScreen = entry.isIntersecting;
+          updateRunning();
+        })
+      ).observe(canvas);
     }
-    document.addEventListener("visibilitychange", () => (visible = !document.hidden));
+    document.addEventListener("visibilitychange", updateRunning);
   }
 
   // Cover art: the post's dot grid laid over seeded flow lines. The dots sway along the
@@ -266,11 +296,22 @@
       ctx.globalAlpha = 1;
     };
 
+    // Animate only while something is happening (the sweep, or a pointer over the cover);
+    // otherwise the last frame stays on screen and no work is done.
+    let frame = null;
+    let sweeping = false;
     const loop = (now) => {
-      requestAnimationFrame(loop);
-      if (!visible || now - last < 33) return;
+      frame = requestAnimationFrame(loop);
+      if (now - last < 33) return;
       last = now;
       draw(now / 1000);
+      if (!visible || (!pointer && !sweeping)) {
+        cancelAnimationFrame(frame);
+        frame = null;
+      }
+    };
+    const start = () => {
+      if (frame === null && visible) frame = requestAnimationFrame(loop);
     };
 
     cover.classList.add("has-art");
@@ -278,15 +319,17 @@
     draw(0);
 
     if (!reduceMotion) {
-      requestAnimationFrame(loop);
       const sweep = () => {
-        const start = performance.now();
+        sweeping = true;
+        const begin = performance.now() + 500;
         const step = (now) => {
-          const k = Math.min(1, (now - start) / 1600);
+          const k = Math.min(1, Math.max(0, (now - begin) / 1600));
           litShown = Math.round((1 - Math.pow(1 - k, 3)) * litTotal);
           if (k < 1) requestAnimationFrame(step);
+          else sweeping = false;
         };
-        setTimeout(() => requestAnimationFrame(step), 500);
+        requestAnimationFrame(step);
+        start();
       };
       if ("IntersectionObserver" in window) {
         const observer = new IntersectionObserver(
@@ -304,8 +347,12 @@
       cover.addEventListener("pointermove", (event) => {
         const rect = cover.getBoundingClientRect();
         pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+        start();
       });
-      cover.addEventListener("pointerleave", () => (pointer = null));
+      cover.addEventListener("pointerleave", () => {
+        pointer = null;
+        start();
+      });
     }
 
     window.addEventListener("resize", () => {

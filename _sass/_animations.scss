@@ -2,10 +2,13 @@
 // Scroll fade-ins, hover refinements, page-load animations
 
 // Scroll reveal — elements start invisible and animate in
-.atmo-reveal {
+// Hidden only when JS is running (html.js), so the content still shows without scripts
+html.js .atmo-reveal {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 
   &.revealed {
     opacity: 1;
@@ -54,7 +57,7 @@
 
 // Respect reduced motion
 @media (prefers-reduced-motion: reduce) {
-  .atmo-reveal {
+  html.js .atmo-reveal {
     opacity: 1;
     transform: none;
     transition: none;

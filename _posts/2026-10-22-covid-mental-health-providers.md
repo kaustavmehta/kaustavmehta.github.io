@@ -27,24 +27,29 @@ toc:
   - name: Coming back to it
 
 _styles: >
+  :root { --mh-rule: rgba(0, 0, 0, 0.12); }
+  html[data-theme="dark"] { --mh-rule: rgba(255, 255, 255, 0.14); }
+  d-article blockquote.mh-lede { border-left: none !important; background: none; padding: 0; }
+  d-article blockquote.mh-pull { border-left: 3px solid var(--global-theme-color) !important; background: none; }
   .mh-fig { margin: 2rem 0 2.5rem; }
   .mh-fig figcaption, .mh-caption { font-size: 0.8rem; line-height: 1.5; color: var(--global-text-color-light); margin-top: 0.75rem; }
   .mh-kicker { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--global-text-color-light); margin-bottom: 0.4rem; font-weight: 600; }
-  .mh-lede { font-family: Georgia, "Times New Roman", serif; font-size: 1.45rem; line-height: 1.45; color: var(--global-text-color); border: none; margin: 1.5rem 0 0.5rem; padding: 0; }
+  .mh-lede { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 1.45rem; line-height: 1.45; color: var(--global-text-color); border: none; margin: 1.5rem 0 0.5rem; padding: 0; }
   .mh-lede .mh-attrib { display: block; font-family: inherit; font-size: 0.85rem; margin-top: 0.75rem; color: var(--global-text-color-light); font-style: normal; }
-  .mh-pull { font-family: Georgia, "Times New Roman", serif; font-size: 1.35rem; line-height: 1.45; border-left: 3px solid var(--global-theme-color); padding: 0.25rem 0 0.25rem 1.25rem; margin: 2rem 0; color: var(--global-text-color); }
+  .mh-pull { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 1.35rem; line-height: 1.45; border-left: 3px solid var(--global-theme-color); padding: 0.25rem 0 0.25rem 1.25rem; margin: 2rem 0; color: var(--global-text-color); }
   .mh-pull cite { display: block; font-size: 0.8rem; font-style: normal; color: var(--global-text-color-light); margin-top: 0.6rem; font-family: inherit; }
   .mh-reveal { opacity: 0; transform: translateY(14px); transition: opacity 0.7s ease, transform 0.7s ease; }
   .mh-reveal.is-visible { opacity: 1; transform: none; }
   .mh-waffle-wrap { position: relative; }
-  .mh-waffle-wrap canvas { width: 100%; display: block; }
+  .mh-waffle-wrap canvas { width: 100%; aspect-ratio: 150 / 40; display: block; }
   .mh-waffle-legend { display: flex; flex-wrap: wrap; gap: 1.25rem; font-size: 0.8rem; color: var(--global-text-color-light); margin-top: 0.6rem; align-items: center; }
   .mh-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 0.4rem; vertical-align: middle; }
-  .mh-btn { font: inherit; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--global-divider-color); background: transparent; color: var(--global-text-color); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
-  .mh-btn:hover, .mh-btn:focus-visible { border-color: var(--global-theme-color); color: var(--global-theme-color); outline: none; }
+  .mh-btn { font: inherit; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid var(--mh-rule); background: transparent; color: var(--global-text-color); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+  .mh-btn:hover { border-color: var(--global-theme-color); color: var(--global-theme-color); }
+  .mh-btn:focus-visible, .mh-bar-track:focus-visible { outline: 2px solid var(--global-theme-color); outline-offset: 3px; }
   .mh-btn[aria-pressed="true"] { background: var(--global-theme-color); border-color: var(--global-theme-color); color: var(--global-bg-color); }
   .mh-stat { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  .mh-stat-num { font-family: Georgia, "Times New Roman", serif; font-size: 3.5rem; line-height: 1; color: var(--global-theme-color); font-variant-numeric: tabular-nums; }
+  .mh-stat-num { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 3.5rem; line-height: 1; color: var(--global-theme-color); font-variant-numeric: tabular-nums; }
   .mh-stat-label { font-size: 0.95rem; color: var(--global-text-color); max-width: 26rem; line-height: 1.4; }
   .mh-bars { display: grid; grid-template-columns: minmax(8rem, 15rem) 1fr; gap: 0.45rem 0.9rem; align-items: center; }
   .mh-bar-label { font-size: 0.8rem; color: var(--global-text-color); text-align: right; line-height: 1.25; }
@@ -53,22 +58,23 @@ _styles: >
   .mh-bar-fill.is-key { background: var(--global-theme-color); opacity: 1; }
   .mh-bar-track:hover .mh-bar-fill { opacity: 0.85; }
   .mh-bar-val { position: absolute; top: 0; left: 0; height: 100%; display: flex; align-items: center; font-size: 0.75rem; font-variant-numeric: tabular-nums; color: var(--global-text-color); padding-left: 0.4rem; transition: left 1.1s cubic-bezier(0.2, 0.8, 0.2, 1); white-space: nowrap; }
-  .mh-tooltip { position: fixed; z-index: 1000; pointer-events: none; max-width: 18rem; padding: 0.55rem 0.75rem; border-radius: 6px; background: var(--global-card-bg-color, var(--global-bg-color)); border: 1px solid var(--global-divider-color); color: var(--global-text-color); font-size: 0.78rem; line-height: 1.45; box-shadow: 0 4px 16px rgba(0,0,0,0.12); opacity: 0; transition: opacity 0.15s; }
+  .mh-tooltip { position: fixed; z-index: 1000; pointer-events: none; max-width: 18rem; padding: 0.55rem 0.75rem; border-radius: 6px; background: var(--global-card-bg-color, var(--global-bg-color)); border: 1px solid var(--mh-rule); color: var(--global-text-color); font-size: 0.78rem; line-height: 1.45; box-shadow: 0 4px 16px rgba(0,0,0,0.12); opacity: 0; transition: opacity 0.15s; }
   .mh-tooltip.is-on { opacity: 1; }
-  .mh-timeline { position: relative; margin: 1rem 0 0; padding-left: 1.6rem; border-left: 2px solid var(--global-divider-color); list-style: none; }
+  .mh-timeline { position: relative; margin: 1rem 0 0 7px; padding-left: 1.6rem; border-left: 2px solid var(--mh-rule); list-style: none; }
   .mh-timeline li { position: relative; margin: 0 0 1.3rem; }
   .mh-timeline li::before { content: ""; position: absolute; left: calc(-1.6rem - 6px); top: 0.3rem; width: 10px; height: 10px; border-radius: 50%; background: var(--global-bg-color); border: 2px solid var(--global-theme-color); }
   .mh-timeline li.is-study::before { background: var(--global-theme-color); }
   .mh-timeline .mh-date { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--global-text-color-light); font-weight: 600; }
   .mh-timeline .mh-event { font-size: 0.92rem; color: var(--global-text-color); line-height: 1.45; }
   .mh-steps { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
-  .mh-step-detail { min-height: 5.5rem; padding: 1rem 1.1rem; border-radius: 8px; border: 1px solid var(--global-divider-color); font-size: 0.9rem; line-height: 1.55; color: var(--global-text-color); }
+  .mh-step-detail { min-height: 5.5rem; padding: 1rem 1.1rem; border-radius: 8px; border: 1px solid var(--mh-rule); font-size: 0.9rem; line-height: 1.55; color: var(--global-text-color); }
   .mh-step-detail strong { color: var(--global-theme-color); }
+  .mh-chips-centred { justify-content: center; }
   .mh-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.1rem; }
   .mh-quotes { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.9rem; }
-  .mh-quote { padding: 1rem 1.1rem 0.9rem; border-radius: 8px; border: 1px solid var(--global-divider-color); background: var(--global-card-bg-color, transparent); transition: opacity 0.35s, transform 0.35s; }
+  .mh-quote { padding: 1rem 1.1rem 0.9rem; border-radius: 8px; border: 1px solid var(--mh-rule); background: var(--global-card-bg-color, transparent); transition: opacity 0.35s, transform 0.35s; }
   .mh-quote.is-hidden { display: none; }
-  .mh-quote p { font-family: Georgia, "Times New Roman", serif; font-size: 1rem; line-height: 1.5; margin: 0 0 0.6rem; }
+  .mh-quote p { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 1rem; line-height: 1.5; margin: 0 0 0.6rem; }
   .mh-quote .mh-who { font-size: 0.72rem; color: var(--global-text-color-light); line-height: 1.4; }
   .mh-quote .mh-theme { display: inline-block; font-size: 0.65rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--global-theme-color); margin-bottom: 0.5rem; font-weight: 600; }
   .mh-clocks { display: flex; flex-wrap: wrap; justify-content: center; gap: 2.5rem; align-items: flex-start; }
@@ -77,23 +83,23 @@ _styles: >
   .mh-clock .mh-clock-label { font-size: 0.85rem; color: var(--global-text-color); margin-top: 0.3rem; line-height: 1.35; }
   .mh-clock .mh-clock-sub { font-size: 0.75rem; color: var(--global-text-color-light); }
   .mh-flow { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; align-items: stretch; margin-top: 1.5rem; }
-  .mh-flow-step { flex: 1 1 9rem; max-width: 13rem; padding: 0.7rem 0.8rem; border-radius: 8px; border: 1px dashed var(--global-divider-color); font-size: 0.8rem; line-height: 1.45; color: var(--global-text-color); text-align: center; }
+  .mh-flow-step { flex: 1 1 9rem; max-width: 13rem; padding: 0.7rem 0.8rem; border-radius: 8px; border: 1px dashed var(--mh-rule); font-size: 0.8rem; line-height: 1.45; color: var(--global-text-color); text-align: center; }
   .mh-flow-step.is-core { border-style: solid; border-color: var(--global-theme-color); }
   .mh-flow-arrow { align-self: center; color: var(--global-text-color-light); font-size: 1rem; }
   .mh-ledger { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  .mh-ledger h4 { font-size: 0.75rem !important; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--global-divider-color); }
+  .mh-ledger h3 { font-size: 0.75rem !important; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--mh-rule); }
   .mh-ledger .mh-gain h4 { border-bottom-color: var(--global-theme-color); }
   .mh-ledger ul { list-style: none; padding: 0; margin: 0; }
-  .mh-ledger li { font-size: 0.88rem; line-height: 1.45; padding: 0.55rem 0; border-bottom: 1px solid var(--global-divider-color); }
+  .mh-ledger li { font-size: 0.88rem; line-height: 1.45; padding: 0.55rem 0; border-bottom: 1px solid var(--mh-rule); }
   .mh-ledger li small { display: block; color: var(--global-text-color-light); font-size: 0.72rem; margin-top: 0.2rem; }
   .mh-venn { display: grid; grid-template-columns: minmax(14rem, 22rem) 1fr; gap: 1.5rem; align-items: center; }
   .mh-venn svg { width: 100%; height: auto; }
   .mh-venn circle { fill: var(--global-theme-color); fill-opacity: 0.12; stroke: var(--global-theme-color); stroke-width: 1.5; cursor: pointer; transition: fill-opacity 0.25s; }
   .mh-venn circle.is-active { fill-opacity: 0.38; }
-  .mh-venn circle:focus-visible { outline: none; stroke-width: 3; }
+  .mh-venn circle:focus-visible { outline: none; stroke-width: 3; stroke-dasharray: 5 4; }
   .mh-venn text { fill: var(--global-text-color); font-size: 13px; pointer-events: none; }
   .mh-venn text.mh-centre { font-size: 10px; fill: var(--global-text-color-light); }
-  .mh-venn-panel h4 { margin: 0 0 0.5rem; font-size: 1.05rem !important; }
+  .mh-venn-panel h3 { margin: 0 0 0.5rem; font-size: 1.05rem !important; }
   .mh-venn-panel p { font-size: 0.9rem; line-height: 1.55; margin: 0 0 0.5rem; }
   @media (max-width: 640px) {
     .mh-lede { font-size: 1.2rem; }
@@ -145,7 +151,7 @@ By late 2020 it was already clear that mental health care had been hit hard almo
     <span><span class="mh-swatch" style="background: var(--global-theme-color)"></span>Services our interviewees talked about directly</span>
     <span><span class="mh-swatch" style="background: var(--global-text-color-light); opacity: 0.35"></span>Other services</span>
   </div>
-  <figcaption>Percentages from the WHO's news release of 5 October 2020 <d-cite key="who2020survey"></d-cite>. Hover over a bar for the WHO's own wording. The same release reported that 70% of countries had adopted telemedicine or teletherapy, but that the split was uneven: more than 80% of high-income countries against less than 50% of low-income ones.</figcaption>
+  <figcaption>Percentages from the WHO's news release of 5 October 2020 <d-cite key="who2020survey"></d-cite>. Hover over, tap or tab to a bar for the WHO's own wording. The same release reported that 70% of countries had adopted telemedicine or teletherapy, but that the split was uneven: more than 80% of high-income countries against less than 50% of low-income ones.</figcaption>
 </figure>
 
 The literature I was reading at the time came at the problem from several directions. From China there were accounts of psychiatric hospitals reorganising themselves around infection control <d-cite key="xiang2020covid,li2020challenges"></d-cite>. From the United States, descriptions of how psychiatric care had been reshaped in the first months <d-cite key="bojdani2020covid"></d-cite>. From the UK, a mixed-methods study of services for older adults <d-cite key="bhome2020impact"></d-cite>, and from a cross-continental group, lessons on managing psychiatric conditions during the pandemic <d-cite key="ojeahere2020management"></d-cite>. A piece in _The Lancet Psychiatry_ set out how mental health care should change as a consequence <d-cite key="moreno2020how"></d-cite>. In India, services were disrupted by the nationwide lockdown in March 2020, and the government released guidelines to move to telemedicine <d-cite key="mohfw2020telemedicine"></d-cite>. Tele-psychiatry had raised concerns about patient dynamics, proper diagnosis and legal issues <d-cite key="kumar2020community"></d-cite>, though it had worked in some contexts <d-cite key="grover2020state"></d-cite>.
@@ -158,8 +164,8 @@ SCARF is, in the paper's words, a training centre for psychiatry, psychology and
 
 <figure class="mh-fig">
   <div class="mh-kicker">How the study was done</div>
-  <div class="mh-steps" id="mh-steps" role="tablist" aria-label="Study steps"></div>
-  <div class="mh-step-detail" id="mh-step-detail" role="tabpanel" aria-live="polite"></div>
+  <div class="mh-steps" id="mh-steps" role="group" aria-label="Study steps"></div>
+  <div class="mh-step-detail" id="mh-step-detail" aria-live="polite"></div>
   <figcaption>The design, step by step, as described in the paper's methods <d-cite key="nair2021covid"></d-cite>. Click through the steps.</figcaption>
 </figure>
 
@@ -208,20 +214,20 @@ A 24-hour helpline, advertised by the government, linked new and existing patien
 The clearest change in clinical practice was time. One psychiatrist described how a first consultation for a new patient, which used to take an hour, was now done in fifteen to twenty minutes.
 
 <figure class="mh-fig">
-  <div class="mh-chips" role="group" aria-label="Compare consultation times">
+  <div class="mh-chips mh-chips-centred" role="group" aria-label="Compare consultation times">
     <button class="mh-btn" type="button" data-clock="before" aria-pressed="true">Before COVID-19</button>
     <button class="mh-btn" type="button" data-clock="during" aria-pressed="false">During COVID-19</button>
   </div>
   <div class="mh-clocks">
     <div class="mh-clock">
       <svg viewBox="0 0 120 120" id="mh-clock" role="img" aria-label="Time spent in a first psychiatric consultation">
-        <circle cx="60" cy="60" r="48" fill="none" stroke="var(--global-divider-color)" stroke-width="12"></circle>
+        <circle cx="60" cy="60" r="48" fill="none" stroke="var(--mh-rule)" stroke-width="12"></circle>
         <circle id="mh-clock-range" cx="60" cy="60" r="48" fill="none" stroke="var(--global-theme-color)" stroke-opacity="0.35" stroke-width="12" transform="rotate(-90 60 60)"></circle>
         <circle id="mh-clock-arc" cx="60" cy="60" r="48" fill="none" stroke="var(--global-theme-color)" stroke-width="12" transform="rotate(-90 60 60)"></circle>
-        <text x="60" y="58" text-anchor="middle" id="mh-clock-text" style="font-size: 15px; fill: var(--global-text-color); font-family: Georgia, serif">60 min</text>
+        <text x="60" y="58" text-anchor="middle" id="mh-clock-text" style="font-size: 15px; fill: var(--global-text-color); font-family: Newsreader, Georgia, serif">60 min</text>
         <text x="60" y="76" text-anchor="middle" style="font-size: 8px; fill: var(--global-text-color-light)">new patient</text>
       </svg>
-      <div class="mh-clock-label" id="mh-clock-label">The usual first psychiatric consultation</div>
+      <div class="mh-clock-label" id="mh-clock-label" aria-live="polite">The usual first psychiatric consultation</div>
     </div>
   </div>
   <div class="mh-flow" id="mh-flow" aria-hidden="false">
@@ -241,7 +247,7 @@ Telemedicine is where the trade-offs were clearest. The paper's abstract says it
 <figure class="mh-fig l-body-outset">
   <div class="mh-ledger">
     <div class="mh-gain mh-reveal">
-      <h4>What it opened up</h4>
+      <h3>What it opened up</h3>
       <ul>
         <li>Access to consultations, prescriptions and counselling for more clients, “in a shorter period of time and with less effort”<small>Discussion</small></li>
         <li>Sessions without travelling to the clinic, which “decreased the overall attrition”<small>Results</small></li>
@@ -249,7 +255,7 @@ Telemedicine is where the trade-offs were clearest. The paper's abstract says it
       </ul>
     </div>
     <div class="mh-cost mh-reveal">
-      <h4>What it cost</h4>
+      <h3>What it cost</h3>
       <ul>
         <li>“Some think it is just a normal call.”<small>Researcher, trainer and case worker (P10)</small></li>
         <li>“When the husband is around, how can they talk about the husband to someone over [the] phone?”<small>Manager heading outreach (P6), on lack of privacy at home</small></li>
@@ -261,7 +267,7 @@ Telemedicine is where the trade-offs were clearest. The paper's abstract says it
   <figcaption>Gains and costs of tele-counselling as the paper reports them <d-cite key="nair2021covid"></d-cite>. The paper's own summary of the costs is “lack of privacy, casualization of the exchange between service provider and patient, and absence of the social connect”.</figcaption>
 </figure>
 
-The phrase "casualization" is the one I keep coming back to.<d-footnote>The abstract uses "casualization of therapy"; the discussion uses "casualization of the exchange between service provider and patient". I have used both, since they describe the same concern from slightly different angles.</d-footnote> A therapy session in a clinic has a frame around it: a room, a time, a journey to get there. Over the phone, that frame dissolves into the rest of the day, and some patients, reasonably enough, treated it like any other call. I doubt better connectivity would have fixed that.
+The phrase "casualization" is the one I keep coming back to.<d-footnote>The abstract uses “casualization of therapy”; the discussion uses “casualization of the exchange between service provider and patient”. I have used both, since they describe the same concern from slightly different angles.</d-footnote> A therapy session in a clinic has a frame around it: a room, a time, a journey to get there. Over the phone, that frame dissolves into the rest of the day, and some patients, reasonably enough, treated it like any other call. I doubt better connectivity would have fixed that.
 
 ## Relationships, responsiveness, resilience
 

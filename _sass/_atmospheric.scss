@@ -698,6 +698,7 @@ nav#toc-sidebar {
 }
 
 // ============ Blog index ============
+
 @keyframes blogWordRise {
   from {
     opacity: 0;
@@ -754,7 +755,7 @@ nav#toc-sidebar {
     position: absolute;
     z-index: 0;
     bottom: 1.5rem;
-    right: -70px;
+    right: 0;
   }
 
   // Contour field behind the hero, bleeding to the viewport edges and fading out
@@ -763,6 +764,7 @@ nav#toc-sidebar {
     z-index: 0;
     top: -4rem;
     left: 50%;
+    // 100vw includes any scrollbar; blog-index.js narrows this to the visible width
     width: 100vw;
     height: 34rem;
     transform: translateX(-50%);
@@ -891,7 +893,6 @@ nav#toc-sidebar {
       transform: translateY(-4px);
       border-color: color-mix(in srgb, var(--global-theme-color) 45%, transparent);
       box-shadow: 0 30px 60px -30px rgba(20, 40, 70, 0.35);
-      outline: none;
 
       &::after {
         opacity: 1;
@@ -908,6 +909,19 @@ nav#toc-sidebar {
       .cover-lit-rows {
         animation: blogLitSweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       }
+    }
+  }
+
+  .blog-entry-link:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 4px;
+  }
+
+  // On touch screens a tap would leave the hover lift stuck on
+  @media (hover: none) {
+    .blog-entry-link:hover {
+      transform: none;
+      box-shadow: none;
     }
   }
 
@@ -1112,7 +1126,8 @@ nav#toc-sidebar {
     font-size: 0.8rem;
   }
   .pagination .page-item.active .page-link {
-    color: var(--global-theme-color);
+    color: var(--global-bg-color);
+    background: var(--global-theme-color);
     border-color: var(--global-theme-color);
   }
 }
