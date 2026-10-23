@@ -25,26 +25,51 @@
     observer.observe(el);
   };
 
-  const showTooltip = (html, event) => {
+  // `at` is a pointer event or an element; the tooltip sits beside the point or below the element.
+  const showTooltip = (html, at) => {
     if (!tooltip) return;
     tooltip.innerHTML = html;
     tooltip.classList.add("is-on");
-    moveTooltip(event);
-  };
-
-  const moveTooltip = (event) => {
-    if (!tooltip) return;
     const pad = 14;
     const rect = tooltip.getBoundingClientRect();
-    let x = event.clientX + pad;
-    let y = event.clientY + pad;
-    if (x + rect.width > window.innerWidth - 8) x = event.clientX - rect.width - pad;
-    if (y + rect.height > window.innerHeight - 8) y = event.clientY - rect.height - pad;
-    tooltip.style.left = `${Math.max(8, x)}px`;
+    let x;
+    let y;
+    if (at instanceof Element) {
+      const box = at.getBoundingClientRect();
+      x = box.left;
+      y = box.bottom + 8;
+    } else {
+      x = at.clientX + pad;
+      y = at.clientY + pad;
+      if (x + rect.width > window.innerWidth - 8) x = at.clientX - rect.width - pad;
+    }
+    if (y + rect.height > window.innerHeight - 8) y = (at instanceof Element ? at.getBoundingClientRect().top : at.clientY) - rect.height - pad;
+    tooltip.style.left = `${Math.min(Math.max(8, x), window.innerWidth - rect.width - 8)}px`;
     tooltip.style.top = `${Math.max(8, y)}px`;
   };
 
   const hideTooltip = () => tooltip && tooltip.classList.remove("is-on");
+
+  // Hover with a mouse, tap on touch, focus with a keyboard. `content` returns null for "nothing here".
+  const attachTooltip = (el, content) => {
+    el.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "mouse") return;
+      const html = content(event);
+      html ? showTooltip(html, event) : hideTooltip();
+    });
+    el.addEventListener("pointerleave", (event) => event.pointerType === "mouse" && hideTooltip());
+    el.addEventListener("pointerup", (event) => {
+      if (event.pointerType === "mouse") return;
+      const html = content(event);
+      html ? showTooltip(html, event) : hideTooltip();
+    });
+    el.addEventListener("focus", () => {
+      const html = content(null);
+      if (html) showTooltip(html, el);
+    });
+    el.addEventListener("blur", hideTooltip);
+  };
+  window.addEventListener("scroll", hideTooltip, { passive: true });
 
   // Scroll reveals
   document.querySelectorAll(".mh-reveal").forEach((el) => onVisible(el, () => el.classList.add("is-visible"), 0.2));
@@ -57,17 +82,21 @@
     const highlighted = 300;
     let progress = 0;
     let frame = null;
+    let sizedFor = 0;
+    const ctx = waffle.getContext("2d");
 
     const draw = () => {
       const width = waffle.clientWidth;
       const cell = width / cols;
       const height = cell * rows;
-      const dpr = window.devicePixelRatio || 1;
-      waffle.width = Math.round(width * dpr);
-      waffle.height = Math.round(height * dpr);
-      waffle.style.height = `${height}px`;
-      const ctx = waffle.getContext("2d");
-      ctx.scale(dpr, dpr);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (sizedFor !== width * dpr) {
+        sizedFor = width * dpr;
+        waffle.width = Math.round(width * dpr);
+        waffle.height = Math.round(height * dpr);
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
       const gap = Math.max(0.6, cell * 0.18);
       const size = cell - gap;
       const accent = cssVar("--global-theme-color");
@@ -108,20 +137,18 @@
     window.addEventListener("resize", draw);
     new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
-    waffle.addEventListener("mousemove", (event) => {
+    attachTooltip(waffle, (event) => {
+      if (!event) return null;
       const rect = waffle.getBoundingClientRect();
       const cell = rect.width / cols;
       const c = Math.floor((event.clientX - rect.left) / cell);
       const r = Math.floor((event.clientY - rect.top) / cell);
+      if (c < 0 || c >= cols || r < 0 || r >= rows) return null;
       const index = r * cols + c + 1;
-      if (index < 1 || index > cols * rows) return hideTooltip();
-      const text =
-        index <= highlighted
-          ? `Patient ${index.toLocaleString()} of 6,000<br><strong>Among the ~300 who received provisions</strong>`
-          : `Patient ${index.toLocaleString()} of 6,000`;
-      showTooltip(text, event);
+      return index <= highlighted
+        ? `Patient ${index.toLocaleString()} of 6,000<br><strong>Among the ~300 who received provisions</strong>`
+        : `Patient ${index.toLocaleString()} of 6,000`;
     });
-    waffle.addEventListener("mouseleave", hideTooltip);
   }
 
   // WHO survey: headline counter and bars
@@ -183,16 +210,16 @@
       label.textContent = d.label;
       const track = document.createElement("div");
       track.className = "mh-bar-track";
-      track.setAttribute("aria-label", `${d.label}: ${d.value}% of countries`);
+      track.setAttribute("aria-label", `${d.label}: ${d.value}% of countries. WHO: ${d.quote}`);
       track.setAttribute("role", "img");
+      track.tabIndex = 0;
       const fill = document.createElement("div");
       fill.className = `mh-bar-fill${d.key ? " is-key" : ""}`;
       const val = document.createElement("span");
       val.className = "mh-bar-val";
       val.textContent = `${d.value}%`;
       track.append(fill, val);
-      track.addEventListener("mousemove", (event) => showTooltip(`<strong>${d.label}: ${d.value}%</strong><br>WHO: “${d.quote}”`, event));
-      track.addEventListener("mouseleave", hideTooltip);
+      attachTooltip(track, () => `<strong>${d.label}: ${d.value}%</strong><br>WHO: “${d.quote}”`);
       bars.append(label, track);
       fills.push({ fill, val, value: d.value });
     });
@@ -243,17 +270,13 @@
       const b = document.createElement("button");
       b.type = "button";
       b.className = "mh-btn";
-      b.setAttribute("role", "tab");
       b.textContent = `${i + 1}. ${s.name}`;
       b.addEventListener("click", () => select(i));
       stepBar.append(b);
       return b;
     });
     const select = (i) => {
-      buttons.forEach((b, j) => {
-        b.setAttribute("aria-pressed", String(i === j));
-        b.setAttribute("aria-selected", String(i === j));
-      });
+      buttons.forEach((b, j) => b.setAttribute("aria-pressed", String(i === j)));
       stepDetail.innerHTML = steps[i].text;
     };
     select(0);
@@ -385,18 +408,25 @@
       before: { solid: 60, upper: 60, text: "60 min", label: "The usual first psychiatric consultation" },
       during: { solid: 15, upper: 20, text: "15–20 min", label: "The same consultation during COVID-19" },
     };
+    let autoSwitch = null;
     const setClock = (key) => {
       const s = states[key];
       arc.style.strokeDasharray = `${(s.solid / 60) * circumference} ${circumference}`;
       range.style.strokeDasharray = `${(s.upper / 60) * circumference} ${circumference}`;
       clockText.textContent = s.text;
-      clockLabel.textContent = s.label;
+      clockLabel.textContent = `${s.label}: ${s.text}`;
+      arc.ownerSVGElement.setAttribute("aria-label", `${s.label}: ${s.text}`);
       document.querySelectorAll("[data-clock]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.clock === key)));
     };
-    document.querySelectorAll("[data-clock]").forEach((b) => b.addEventListener("click", () => setClock(b.dataset.clock)));
+    document.querySelectorAll("[data-clock]").forEach((b) =>
+      b.addEventListener("click", () => {
+        clearTimeout(autoSwitch);
+        setClock(b.dataset.clock);
+      })
+    );
+    setClock("before");
     onVisible(arc.closest("figure"), () => {
-      setClock("before");
-      if (!reduceMotion) setTimeout(() => setClock("during"), 1800);
+      if (!reduceMotion) autoSwitch = setTimeout(() => setClock("during"), 1800);
     });
   }
 
@@ -419,11 +449,19 @@
       },
     };
     const intro =
-      "<h4>Continuity of care</h4><p>The paper's argument is that continuity came from these three together. Select a circle to see what each one meant in practice.</p>";
+      "<h3>Continuity of care</h3><p>The paper names these three elements together. Select a circle to see what each one meant in practice.</p>";
     const circles = venn.querySelectorAll("circle");
+    let selected = null;
     const activate = (key) => {
-      circles.forEach((c) => c.classList.toggle("is-active", c.dataset.r === key));
-      panel.innerHTML = key ? `<h4>${content[key].title}</h4><p>${content[key].body}</p>` : intro;
+      circles.forEach((c) => {
+        c.classList.toggle("is-active", c.dataset.r === key);
+        c.setAttribute("aria-pressed", String(c.dataset.r === selected));
+      });
+      panel.innerHTML = key ? `<h3>${content[key].title}</h3><p>${content[key].body}</p>` : intro;
+    };
+    const select = (key) => {
+      selected = key;
+      activate(key);
     };
     // The circles overlap, so pick the one whose centre is nearest the pointer.
     const nearest = (event) => {
@@ -442,18 +480,26 @@
       });
       return best;
     };
-    venn.addEventListener("mousemove", (event) => activate(nearest(event)));
-    venn.addEventListener("click", (event) => activate(nearest(event)));
+    venn.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "mouse") activate(nearest(event) || selected);
+    });
+    venn.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse") activate(selected);
+    });
+    venn.addEventListener("click", (event) => {
+      // Keyboard "clicks" have no pointer position; those are handled on the circle itself.
+      if (event.detail === 0) return;
+      const key = nearest(event);
+      if (key) select(key);
+    });
     circles.forEach((c) => {
-      c.addEventListener("focus", () => activate(c.dataset.r));
       c.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          activate(c.dataset.r);
+          select(c.dataset.r);
         }
       });
     });
-    venn.addEventListener("mouseleave", () => activate(null));
     activate(null);
   }
 })();
