@@ -115,3 +115,4 @@ pagination:
 </div>
 
 <script defer src="{{ '/assets/js/blog-index.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/threads.js' | relative_url }}"></script>
