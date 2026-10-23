@@ -1,0 +1,310 @@
+/* Shared styles for the three-part TBI series ("tbi-" prefix).
+   Part-specific styles live in each post's `_styles` front matter with tbi1- / tbi2- / tbi3- prefixes. */
+
+:root {
+  --tbi-rule: rgba(0, 0, 0, 0.12);
+  --tbi-soft: rgba(0, 0, 0, 0.04);
+  --tbi-ink: var(--global-text-color);
+  --tbi-ink-2: var(--global-text-color-light);
+  --tbi-accent: var(--global-theme-color);
+  /* Categorical palette for condition groups, used across parts 1 and 3 */
+  --tbi-psych: #7b5ea7;
+  --tbi-cardio: #c4553a;
+  --tbi-metab: #d08c2c;
+  --tbi-resp: #3a8fb7;
+  --tbi-musc: #5f8f4e;
+  --tbi-neuro: #4a6fa5;
+  --tbi-subst: #a0567a;
+  --tbi-other: #8a8a8a;
+  --tbi-injury: #d9483b;
+}
+html[data-theme="dark"] {
+  --tbi-rule: rgba(255, 255, 255, 0.14);
+  --tbi-soft: rgba(255, 255, 255, 0.05);
+  --tbi-psych: #a68bd4;
+  --tbi-cardio: #e57c62;
+  --tbi-metab: #e8b25c;
+  --tbi-resp: #6cb8dc;
+  --tbi-musc: #8fbf7c;
+  --tbi-neuro: #7fa3d8;
+  --tbi-subst: #cf88aa;
+  --tbi-other: #a8a8a8;
+  --tbi-injury: #ff6b5c;
+}
+
+/* Series navigation */
+.tbi-series {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 1.5rem 0 2rem;
+}
+.tbi-series a,
+.tbi-series span.tbi-series-item {
+  display: block;
+  padding: 0.7rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--tbi-rule);
+  text-decoration: none;
+  color: var(--tbi-ink);
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.tbi-series a:hover {
+  border-color: var(--tbi-accent);
+}
+.tbi-series .is-current {
+  border-color: var(--tbi-accent);
+  background: var(--tbi-soft);
+}
+.tbi-series .tbi-series-num {
+  display: block;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tbi-ink-2);
+  font-weight: 600;
+}
+.tbi-series .tbi-series-title {
+  display: block;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  margin-top: 0.2rem;
+}
+
+/* Figures */
+.tbi-fig {
+  margin: 2rem 0 2.5rem;
+}
+.tbi-fig figcaption,
+.tbi-caption {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--tbi-ink-2);
+  margin-top: 0.75rem;
+}
+.tbi-kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tbi-ink-2);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.tbi-panel {
+  border: 1px solid var(--tbi-rule);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  background: var(--global-card-bg-color, transparent);
+}
+.tbi-fig svg,
+.tbi-fig canvas {
+  display: block;
+  max-width: 100%;
+}
+.tbi-fig svg text {
+  fill: var(--tbi-ink);
+}
+
+/* Lede and pull quotes (match the existing blog post's typography) */
+d-article blockquote.tbi-lede,
+d-article blockquote.tbi-pull {
+  border-left: none !important;
+  background: none;
+}
+.tbi-lede {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.45rem;
+  line-height: 1.45;
+  color: var(--tbi-ink);
+  margin: 1.5rem 0 0.5rem;
+  padding: 0;
+}
+.tbi-pull {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.3rem;
+  line-height: 1.45;
+  border-left: 3px solid var(--tbi-accent) !important;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  margin: 2rem 0;
+  color: var(--tbi-ink);
+}
+.tbi-pull cite {
+  display: block;
+  font-size: 0.8rem;
+  font-style: normal;
+  color: var(--tbi-ink-2);
+  margin-top: 0.6rem;
+}
+
+/* Big numbers */
+.tbi-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.tbi-stat-num {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: 3.2rem;
+  line-height: 1;
+  color: var(--tbi-accent);
+  font-variant-numeric: tabular-nums;
+}
+.tbi-stat-label {
+  font-size: 0.95rem;
+  color: var(--tbi-ink);
+  max-width: 28rem;
+  line-height: 1.4;
+}
+
+/* Controls */
+.tbi-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+.tbi-btn {
+  font: inherit;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--tbi-rule);
+  background: transparent;
+  color: var(--tbi-ink);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.tbi-btn:hover {
+  border-color: var(--tbi-accent);
+  color: var(--tbi-accent);
+}
+.tbi-btn[aria-pressed="true"],
+.tbi-btn.is-active {
+  background: var(--tbi-accent);
+  border-color: var(--tbi-accent);
+  color: var(--global-bg-color);
+}
+.tbi-btn:focus-visible,
+.tbi-focusable:focus-visible {
+  outline: 2px solid var(--tbi-accent);
+  outline-offset: 3px;
+}
+.tbi-range {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--tbi-ink-2);
+}
+.tbi-range input[type="range"] {
+  accent-color: var(--global-theme-color);
+  width: 9rem;
+}
+.tbi-readout {
+  font-size: 0.85rem;
+  color: var(--tbi-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Callouts: definitions and asides */
+.tbi-def {
+  border-left: 3px solid var(--tbi-accent);
+  padding: 0.6rem 0 0.6rem 1rem;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+.tbi-def .tbi-def-term {
+  font-weight: 600;
+  color: var(--tbi-accent);
+}
+.tbi-aside {
+  border: 1px dashed var(--tbi-rule);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 1.5rem 0;
+}
+
+/* Tooltip shared by all parts */
+.tbi-tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 19rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  background: var(--global-card-bg-color, var(--global-bg-color));
+  border: 1px solid var(--tbi-rule);
+  color: var(--tbi-ink);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.tbi-tooltip.is-on {
+  opacity: 1;
+}
+
+/* Scroll reveal */
+.tbi-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.tbi-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Legends */
+.tbi-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+  font-size: 0.78rem;
+  color: var(--tbi-ink-2);
+  margin-top: 0.6rem;
+  align-items: center;
+}
+.tbi-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+  vertical-align: middle;
+}
+
+@media (max-width: 640px) {
+  .tbi-series {
+    grid-template-columns: 1fr;
+  }
+  .tbi-lede {
+    font-size: 1.2rem;
+  }
+  .tbi-stat-num {
+    font-size: 2.6rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tbi-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
