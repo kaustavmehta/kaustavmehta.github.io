@@ -30,7 +30,40 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/cv/";
           },
-        },{id: "post-bread-butter-and-a-whatsapp-prescription",
+        },{id: "post-the-quiet-injury",
+        
+          title: "The quiet injury",
+        
+        description: "Part 1 of a series on traumatic brain injury. What a brain injury is, how a blow that never breaks the skull can still damage a brain, why “mild” is a misleading word, and why the injury is better thought of as the start of a long process than as an event.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/tbi-part-1-the-quiet-injury/";
+          
+        },
+      },{id: "post-thinking-in-graphs",
+        
+          title: "Thinking in graphs",
+        
+        description: "Part 2 of a series on traumatic brain injury. Graph networks built up from Euler&#39;s bridges, with every measure my research used made into something you can poke: degree, paths, triangles, assortativity, centrality and small worlds.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/tbi-part-2-thinking-in-graphs/";
+          
+        },
+      },{id: "post-a-map-of-what-comes-after",
+        
+          title: "A map of what comes after",
+        
+        description: "Part 3 of a series on traumatic brain injury. The research itself: from 225 people five years after a mild brain injury to a network of 26 conditions, its hubs and bridges, its clusters, how it differs between younger and older people, and what it cannot tell us.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/tbi-part-3-a-map-of-what-comes-after/";
+          
+        },
+      },{id: "post-bread-butter-and-a-whatsapp-prescription",
         
           title: "Bread, butter and a WhatsApp prescription",
         
