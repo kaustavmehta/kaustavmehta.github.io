@@ -1,1 +1,36 @@
-{"source":"Advanced Atlas of 80 Bundles in MNI space (Garyfallidis; figshare 10.6084/m9.figshare.7375883.v2; CC BY 4.0), from the HCP-842 tractography atlas (Yeh et al. 2018)","coords":"three.js: x=MNI x, y=MNI z, z=-MNI y; subtract brain.json centre","scaleStart":0.00390625,"scaleDelta":0.03125,"tracts":{"1":"cc_genu","2":"cc_body","3":"cc_splenium","4":"cst","5":"projection","6":"cingulum","7":"fornix","8":"uncinate","9":"ilf","10":"ifof","11":"slf_af","12":"cerebellar"},"base":{"count":3031,"points":146241,"lens":{"offset":0,"length":3031,"dtype":"uint8"},"tract":{"offset":3032,"length":3031,"dtype":"uint8"},"start":{"offset":6064,"length":9093,"dtype":"int16"},"delta":{"offset":24252,"length":429630,"dtype":"int8"}},"hi":{"count":3031,"points":145751,"lens":{"offset":0,"length":3031,"dtype":"uint8"},"tract":{"offset":3032,"length":3031,"dtype":"uint8"},"start":{"offset":6064,"length":9093,"dtype":"int16"},"delta":{"offset":24252,"length":428160,"dtype":"int8"}}}
+{
+  "source": "Advanced Atlas of 80 Bundles in MNI space (Garyfallidis; figshare 10.6084/m9.figshare.7375883.v2; CC BY 4.0), from the HCP-842 tractography atlas (Yeh et al. 2018)",
+  "coords": "three.js: x=MNI x, y=MNI z, z=-MNI y; subtract brain.json centre",
+  "scaleStart": 0.00390625,
+  "scaleDelta": 0.03125,
+  "tracts": {
+    "1": "cc_genu",
+    "2": "cc_body",
+    "3": "cc_splenium",
+    "4": "cst",
+    "5": "projection",
+    "6": "cingulum",
+    "7": "fornix",
+    "8": "uncinate",
+    "9": "ilf",
+    "10": "ifof",
+    "11": "slf_af",
+    "12": "cerebellar"
+  },
+  "base": {
+    "count": 3031,
+    "points": 146241,
+    "lens": { "offset": 0, "length": 3031, "dtype": "uint8" },
+    "tract": { "offset": 3032, "length": 3031, "dtype": "uint8" },
+    "start": { "offset": 6064, "length": 9093, "dtype": "int16" },
+    "delta": { "offset": 24252, "length": 429630, "dtype": "int8" }
+  },
+  "hi": {
+    "count": 3031,
+    "points": 145751,
+    "lens": { "offset": 0, "length": 3031, "dtype": "uint8" },
+    "tract": { "offset": 3032, "length": 3031, "dtype": "uint8" },
+    "start": { "offset": 6064, "length": 9093, "dtype": "int16" },
+    "delta": { "offset": 24252, "length": 428160, "dtype": "int8" }
+  }
+}

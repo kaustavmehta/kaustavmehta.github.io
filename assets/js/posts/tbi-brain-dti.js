@@ -270,7 +270,7 @@ class FaDemo {
   restart() {
     this.t0 = performance.now();
     this.last = 0;
-    for (const p of this.parts) (p.x = 0), (p.y = 0), (p.tx.length = 0), (p.ty.length = 0);
+    for (const p of this.parts) ((p.x = 0), (p.y = 0), (p.tx.length = 0), (p.ty.length = 0));
     if (this.ctx.reduceMotion) {
       // static end state: sample where the walkers would be after the full interval
       const L = lambdas(this.dmg);
@@ -305,7 +305,7 @@ class FaDemo {
         p.y += g[1] * Math.sqrt(L[1] * frac) * 0.55;
         p.tx.push(p.x);
         p.ty.push(p.y);
-        if (p.tx.length > 14) p.tx.shift(), p.ty.shift();
+        if (p.tx.length > 14) (p.tx.shift(), p.ty.shift());
       }
     } else if (!this.dirty) return;
     this.dirty = false;
@@ -391,7 +391,7 @@ class DtiView {
     if (hi) decodeLevel(m, m.hi, hi, centre, lines);
     let nv = 0,
       ns = 0;
-    for (const l of lines) (nv += l.pts.length / 3), (ns += l.pts.length / 3 - 1);
+    for (const l of lines) ((nv += l.pts.length / 3), (ns += l.pts.length / 3 - 1));
     const pos = new Float32Array(nv * 3),
       tan = new Float32Array(nv * 3),
       tid = new Float32Array(nv),
@@ -417,7 +417,7 @@ class DtiView {
         pos[(v + k) * 3 + 1] = P[k * 3 + 1];
         pos[(v + k) * 3 + 2] = P[k * 3 + 2];
         tid[v + k] = l.tract;
-        if (k < n - 1) (idx[e++] = v + k), (idx[e++] = v + k + 1);
+        if (k < n - 1) ((idx[e++] = v + k), (idx[e++] = v + k + 1));
       }
       v += n;
     }

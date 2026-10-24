@@ -205,7 +205,8 @@ html[data-theme="dark"] .tbi-brain {
   background: var(--tbi-injury);
 }
 .tbi-brain-sw-dots {
-  background: radial-gradient(circle at 30% 35%, var(--tbi-injury) 0 1.6px, transparent 2px),
+  background:
+    radial-gradient(circle at 30% 35%, var(--tbi-injury) 0 1.6px, transparent 2px),
     radial-gradient(circle at 72% 66%, var(--tbi-injury) 0 1.6px, transparent 2px);
   border: 1px solid var(--tbi-injury);
 }

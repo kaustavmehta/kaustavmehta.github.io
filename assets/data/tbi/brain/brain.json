@@ -1,1 +1,134 @@
-{"scale":0.00390625,"coords":"three.js: x=MNI x (right), y=MNI z (up), z=-MNI y (posterior)","meshes":[{"name":"cortex_left","kind":"cortex","count":10242,"pos":{"offset":0,"length":30726,"dtype":"int16"},"index":{"offset":61452,"length":61440,"dtype":"uint16"},"region":{"offset":184332,"length":10242,"dtype":"uint8"},"sulc":{"offset":194576,"length":10242,"dtype":"uint8"},"gap":{"offset":204820,"length":10242,"dtype":"uint8"},"normal":{"offset":215064,"length":30726,"dtype":"int8"},"rough":{"offset":245792,"length":10242,"dtype":"uint8"}},{"name":"cortex_right","kind":"cortex","count":10242,"pos":{"offset":256036,"length":30726,"dtype":"int16"},"index":{"offset":317488,"length":61440,"dtype":"uint16"},"region":{"offset":440368,"length":10242,"dtype":"uint8"},"sulc":{"offset":450612,"length":10242,"dtype":"uint8"},"gap":{"offset":460856,"length":10242,"dtype":"uint8"},"normal":{"offset":471100,"length":30726,"dtype":"int8"},"rough":{"offset":501828,"length":10242,"dtype":"uint8"}},{"name":"hippocampus","kind":"sub","count":1202,"pos":{"offset":512072,"length":3606,"dtype":"int16"},"index":{"offset":519284,"length":7200,"dtype":"uint16"},"region":{"offset":533684,"length":1202,"dtype":"uint8"}},{"name":"amygdala","kind":"sub","count":701,"pos":{"offset":534888,"length":2103,"dtype":"int16"},"index":{"offset":539096,"length":4194,"dtype":"uint16"},"region":{"offset":547484,"length":701,"dtype":"uint8"}},{"name":"thalamus","kind":"sub","count":1002,"pos":{"offset":548188,"length":3006,"dtype":"int16"},"index":{"offset":554200,"length":6000,"dtype":"uint16"},"region":{"offset":566200,"length":1002,"dtype":"uint8"}},{"name":"basal_ganglia","kind":"sub","count":1502,"pos":{"offset":567204,"length":4506,"dtype":"int16"},"index":{"offset":576216,"length":9000,"dtype":"uint16"},"region":{"offset":594216,"length":1502,"dtype":"uint8"}},{"name":"corpus_callosum","kind":"sub","count":1501,"pos":{"offset":595720,"length":4503,"dtype":"int16"},"index":{"offset":604728,"length":8994,"dtype":"uint16"},"region":{"offset":622716,"length":1501,"dtype":"uint8"}},{"name":"brainstem","kind":"sub","count":1202,"pos":{"offset":624220,"length":3606,"dtype":"int16"},"index":{"offset":631432,"length":7200,"dtype":"uint16"},"region":{"offset":645832,"length":1202,"dtype":"uint8"},"gap":{"offset":647036,"length":1202,"dtype":"uint8"},"normal":{"offset":648240,"length":3606,"dtype":"int8"},"rough":{"offset":651848,"length":1202,"dtype":"uint8"}},{"name":"cerebellum","kind":"sub","count":4502,"pos":{"offset":653052,"length":13506,"dtype":"int16"},"index":{"offset":680064,"length":27000,"dtype":"uint16"},"region":{"offset":734064,"length":4502,"dtype":"uint8"},"gap":{"offset":738568,"length":4502,"dtype":"uint8"},"normal":{"offset":743072,"length":13506,"dtype":"int8"},"rough":{"offset":756580,"length":4502,"dtype":"uint8"}},{"name":"ventricles","kind":"sub","count":1202,"pos":{"offset":761084,"length":3606,"dtype":"int16"},"index":{"offset":768296,"length":7200,"dtype":"uint16"},"region":{"offset":782696,"length":1202,"dtype":"uint8"}},{"name":"skull_inner","kind":"skull_inner","count":6993,"pos":{"offset":790896,"length":20979,"dtype":"int16"},"index":{"offset":832856,"length":41859,"dtype":"uint16"},"rough":{"offset":783900,"length":6993,"dtype":"uint8"}},{"name":"skull_outer","kind":"skull_outer","count":5912,"pos":{"offset":916576,"length":17736,"dtype":"int16"},"index":{"offset":952048,"length":35364,"dtype":"uint16"}}],"fibres":{"pos":{"offset":1022776,"length":28872,"dtype":"int16"},"lengths":{"offset":1080520,"length":364,"dtype":"uint8"},"kind":{"offset":1080884,"length":364,"dtype":"uint8"}},"refine":{"cortex_left":{"count":30720,"pos":{"offset":0,"length":92160,"dtype":"int16"},"sulc":{"offset":184320,"length":30720,"dtype":"uint8"}},"cortex_right":{"count":30720,"pos":{"offset":215040,"length":92160,"dtype":"int16"},"sulc":{"offset":399360,"length":30720,"dtype":"uint8"}}},"centre":[0.53,15.41,17.77],"pivot":[0,-75,30]}
+{
+  "scale": 0.00390625,
+  "coords": "three.js: x=MNI x (right), y=MNI z (up), z=-MNI y (posterior)",
+  "meshes": [
+    {
+      "name": "cortex_left",
+      "kind": "cortex",
+      "count": 10242,
+      "pos": { "offset": 0, "length": 30726, "dtype": "int16" },
+      "index": { "offset": 61452, "length": 61440, "dtype": "uint16" },
+      "region": { "offset": 184332, "length": 10242, "dtype": "uint8" },
+      "sulc": { "offset": 194576, "length": 10242, "dtype": "uint8" },
+      "gap": { "offset": 204820, "length": 10242, "dtype": "uint8" },
+      "normal": { "offset": 215064, "length": 30726, "dtype": "int8" },
+      "rough": { "offset": 245792, "length": 10242, "dtype": "uint8" }
+    },
+    {
+      "name": "cortex_right",
+      "kind": "cortex",
+      "count": 10242,
+      "pos": { "offset": 256036, "length": 30726, "dtype": "int16" },
+      "index": { "offset": 317488, "length": 61440, "dtype": "uint16" },
+      "region": { "offset": 440368, "length": 10242, "dtype": "uint8" },
+      "sulc": { "offset": 450612, "length": 10242, "dtype": "uint8" },
+      "gap": { "offset": 460856, "length": 10242, "dtype": "uint8" },
+      "normal": { "offset": 471100, "length": 30726, "dtype": "int8" },
+      "rough": { "offset": 501828, "length": 10242, "dtype": "uint8" }
+    },
+    {
+      "name": "hippocampus",
+      "kind": "sub",
+      "count": 1202,
+      "pos": { "offset": 512072, "length": 3606, "dtype": "int16" },
+      "index": { "offset": 519284, "length": 7200, "dtype": "uint16" },
+      "region": { "offset": 533684, "length": 1202, "dtype": "uint8" }
+    },
+    {
+      "name": "amygdala",
+      "kind": "sub",
+      "count": 701,
+      "pos": { "offset": 534888, "length": 2103, "dtype": "int16" },
+      "index": { "offset": 539096, "length": 4194, "dtype": "uint16" },
+      "region": { "offset": 547484, "length": 701, "dtype": "uint8" }
+    },
+    {
+      "name": "thalamus",
+      "kind": "sub",
+      "count": 1002,
+      "pos": { "offset": 548188, "length": 3006, "dtype": "int16" },
+      "index": { "offset": 554200, "length": 6000, "dtype": "uint16" },
+      "region": { "offset": 566200, "length": 1002, "dtype": "uint8" }
+    },
+    {
+      "name": "basal_ganglia",
+      "kind": "sub",
+      "count": 1502,
+      "pos": { "offset": 567204, "length": 4506, "dtype": "int16" },
+      "index": { "offset": 576216, "length": 9000, "dtype": "uint16" },
+      "region": { "offset": 594216, "length": 1502, "dtype": "uint8" }
+    },
+    {
+      "name": "corpus_callosum",
+      "kind": "sub",
+      "count": 1501,
+      "pos": { "offset": 595720, "length": 4503, "dtype": "int16" },
+      "index": { "offset": 604728, "length": 8994, "dtype": "uint16" },
+      "region": { "offset": 622716, "length": 1501, "dtype": "uint8" }
+    },
+    {
+      "name": "brainstem",
+      "kind": "sub",
+      "count": 1202,
+      "pos": { "offset": 624220, "length": 3606, "dtype": "int16" },
+      "index": { "offset": 631432, "length": 7200, "dtype": "uint16" },
+      "region": { "offset": 645832, "length": 1202, "dtype": "uint8" },
+      "gap": { "offset": 647036, "length": 1202, "dtype": "uint8" },
+      "normal": { "offset": 648240, "length": 3606, "dtype": "int8" },
+      "rough": { "offset": 651848, "length": 1202, "dtype": "uint8" }
+    },
+    {
+      "name": "cerebellum",
+      "kind": "sub",
+      "count": 4502,
+      "pos": { "offset": 653052, "length": 13506, "dtype": "int16" },
+      "index": { "offset": 680064, "length": 27000, "dtype": "uint16" },
+      "region": { "offset": 734064, "length": 4502, "dtype": "uint8" },
+      "gap": { "offset": 738568, "length": 4502, "dtype": "uint8" },
+      "normal": { "offset": 743072, "length": 13506, "dtype": "int8" },
+      "rough": { "offset": 756580, "length": 4502, "dtype": "uint8" }
+    },
+    {
+      "name": "ventricles",
+      "kind": "sub",
+      "count": 1202,
+      "pos": { "offset": 761084, "length": 3606, "dtype": "int16" },
+      "index": { "offset": 768296, "length": 7200, "dtype": "uint16" },
+      "region": { "offset": 782696, "length": 1202, "dtype": "uint8" }
+    },
+    {
+      "name": "skull_inner",
+      "kind": "skull_inner",
+      "count": 6993,
+      "pos": { "offset": 790896, "length": 20979, "dtype": "int16" },
+      "index": { "offset": 832856, "length": 41859, "dtype": "uint16" },
+      "rough": { "offset": 783900, "length": 6993, "dtype": "uint8" }
+    },
+    {
+      "name": "skull_outer",
+      "kind": "skull_outer",
+      "count": 5912,
+      "pos": { "offset": 916576, "length": 17736, "dtype": "int16" },
+      "index": { "offset": 952048, "length": 35364, "dtype": "uint16" }
+    }
+  ],
+  "fibres": {
+    "pos": { "offset": 1022776, "length": 28872, "dtype": "int16" },
+    "lengths": { "offset": 1080520, "length": 364, "dtype": "uint8" },
+    "kind": { "offset": 1080884, "length": 364, "dtype": "uint8" }
+  },
+  "refine": {
+    "cortex_left": {
+      "count": 30720,
+      "pos": { "offset": 0, "length": 92160, "dtype": "int16" },
+      "sulc": { "offset": 184320, "length": 30720, "dtype": "uint8" }
+    },
+    "cortex_right": {
+      "count": 30720,
+      "pos": { "offset": 215040, "length": 92160, "dtype": "int16" },
+      "sulc": { "offset": 399360, "length": 30720, "dtype": "uint8" }
+    }
+  },
+  "centre": [0.53, 15.41, 17.77],
+  "pivot": [0, -75, 30]
+}
