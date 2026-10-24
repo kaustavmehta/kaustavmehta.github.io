@@ -49,7 +49,6 @@ _styles: >
   .tbi3-gcs-moderate { fill: var(--tbi-metab); stroke: var(--tbi-metab); }
   .tbi3-gcs-mild { fill: var(--tbi-resp); stroke: var(--tbi-resp); }
   .tbi3-gcs-bar rect { stroke: none; opacity: 0.85; transition: fill 0.4s; }
-  .tbi3-gcs-bar rect.is-13 { stroke: var(--tbi-ink); stroke-width: 1.5; stroke-dasharray: 3 2; }
   .tbi3-gcs-bar { outline: none; cursor: default; }
   .tbi3-gcs-bar:focus-visible rect { stroke: var(--tbi-ink); stroke-width: 2; }
   .tbi3-band-line { stroke-width: 3; stroke-linecap: round; }
@@ -216,11 +215,6 @@ _styles: >
   .tbi3-bx-node { fill: var(--c); }
   .tbi3-bx-node.is-iso { opacity: 0.3; }
   .tbi3-bx-lab { display: block; font-size: 0.62rem; line-height: 1.2; text-align: center; font-variant-numeric: tabular-nums; }
-  .tbi3-lineage { width: 100%; font-size: 0.8rem; border-collapse: collapse; margin: 0.5rem 0; }
-  .tbi3-lineage th, .tbi3-lineage td { padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--tbi-rule); text-align: left; vertical-align: top; }
-  .tbi3-lineage thead th { font-weight: 600; color: var(--tbi-ink-2); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; }
-  .tbi3-lineage tbody th { font-weight: 600; }
-  .tbi3-scroll { overflow-x: auto; }
   .tbi3-conds { column-count: 2; column-gap: 1.8rem; }
   .tbi3-cgroup { break-inside: avoid; margin-bottom: 1rem; }
   .tbi3-cgroup-h { font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; font-weight: 600; color: var(--tbi-ink-2); margin-bottom: 0.2rem; }
@@ -231,10 +225,7 @@ _styles: >
   .tbi3-cbar:focus-visible { box-shadow: 0 0 0 2px var(--tbi-accent); border-radius: 4px; }
   .tbi3-ctrack { display: flex; height: 10px; border-radius: 5px; background: var(--tbi-soft); overflow: hidden; }
   .tbi3-cbar-a { background: var(--c); transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); width: 0; }
-  .tbi3-cbar-b { background: var(--tbi-ink-2); opacity: 0.4; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); width: 0; }
   .tbi3-cval { font-size: 0.68rem; color: var(--tbi-ink-2); font-variant-numeric: tabular-nums; }
-  .tbi3-key.tbi3-k-after { background: var(--tbi-psych); height: 10px; width: 10px; }
-  .tbi3-key.tbi3-k-before { background: var(--tbi-ink-2); opacity: 0.45; height: 10px; width: 10px; }
   @media (max-width: 760px) {
     .tbi3-conds { column-count: 1; }
     .tbi3-split, .tbi3-rr-grid { grid-template-columns: 1fr; }
@@ -277,7 +268,7 @@ Part 2 was about a way of looking. A graph is a set of things and the connection
 
 This part is about the research that did that for mild traumatic brain injury (I will write TBI from here on). It began as my undergraduate capstone at Krea University in 2023, supervised by Dr Shyam Kumar Sudhakar <d-cite key="mehta2023thesis"></d-cite>, and grew into three papers with him: one measuring how common 26 conditions were five years after a mild TBI <d-cite key="sudhakar2023frontiers"></d-cite>, a perspective arguing that comorbidity networks could be useful in TBI care <d-cite key="sudhakar2024bosn"></d-cite>, and one building the networks themselves, for everyone and separately for younger and older people <d-cite key="mehta2025bmc"></d-cite>. The question running through all of them is simple to state. After a mild TBI, which conditions keep company, and what does the web they form look like?
 
-I want to walk through every step, from where the data comes from to what the final network can and cannot say, and to fill in enough of the surrounding medicine and statistics that each step makes sense on its own. For this post the whole analysis was also rebuilt from the raw public-use files and my original code, so every number in the figures below is either taken from the papers or recomputed from the same data, and where the two disagree, or where the papers were less than clear about what was done, I say so.
+I want to walk through every step, from where the data comes from to what the final network can and cannot say, and to fill in enough of the surrounding medicine and statistics that each step makes sense on its own. For this post the whole analysis was also rebuilt from the raw public-use files and my original code, so every number in the figures below is either taken from the papers or recomputed from the same data.
 
 ## Where the numbers come from
 
@@ -289,23 +280,15 @@ The most important thing to understand about TBIMS, for everything that follows,
 
 ### What makes an injury "mild"
 
-The Glasgow Coma Scale, described by Graham Teasdale and Bryan Jennett in 1974, scores how responsive someone is on three counts: whether and how they open their eyes (1 to 4), how they respond verbally (1 to 5), and how they move in response to instructions or pressure (1 to 6) <d-cite key="teasdale1974,gcs_website"></d-cite>. The three add up to a total between 3 and 15. By convention, 13 to 15 is mild, 9 to 12 moderate and 3 to 8 severe, and that is how the thesis and both papers describe the groups. It is worth knowing that the scale's authors have since argued that individual patients are best described by the three components separately, and that the total is better used to characterise groups <d-cite key="teasdale2014"></d-cite>, which is what a study like this does.
+The Glasgow Coma Scale, described by Graham Teasdale and Bryan Jennett in 1974, scores how responsive someone is on three counts: whether and how they open their eyes (1 to 4), how they respond verbally (1 to 5), and how they move in response to instructions or pressure (1 to 6) <d-cite key="teasdale1974,gcs_website"></d-cite>. The three add up to a total between 3 and 15. By convention, 13 to 15 is mild, 9 to 12 moderate and 3 to 8 severe, and that is how the thesis and both papers describe the groups <d-cite key="mehta2023thesis,sudhakar2023frontiers,mehta2025bmc"></d-cite>. It is worth knowing that the scale's authors have since argued that individual patients are best described by the three components separately, and that the total is better used to characterise groups <d-cite key="teasdale2014"></d-cite>, which is what a study like this does.
 
 <figure class="tbi-fig tbi3-fig l-body-outset">
   <div class="tbi-kicker">Coma scores on arrival, everyone aged 16 or over</div>
-  <div class="tbi-controls" style="margin-top: 0">
-    <span class="tbi3-group-label">Count “mild” as</span>
-    <span class="tbi3-group" role="group" aria-label="Definition of mild">
-      <button class="tbi-btn" type="button" data-gcs="paper" aria-pressed="true">13–15, as the papers say</button>
-      <button class="tbi-btn" type="button" data-gcs="code" aria-pressed="false">14–15, as the code ran</button>
-    </span>
-  </div>
   <svg id="tbi3-gcs" role="img" aria-label="Bar chart of the number of people at each total Glasgow Coma Scale score from 3 to 15. Scores of 15 and 14 are by far the most common."></svg>
-  <div class="tbi-readout" id="tbi3-gcs-read" aria-live="polite"></div>
-  <figcaption>Recomputed data: the TBIMS public-use files (release of October 2021), everyone aged 16 or over with a valid total score (10,404 people). Another 7,340 had no score because they were sedated, intubated or otherwise untestable, or the score was unknown. Hover, tap or tab to a bar for its count; the buttons switch which band a score of 13 falls in.</figcaption>
+  <figcaption>Recomputed data: the TBIMS public-use files (release of October 2021), everyone aged 16 or over with a valid total score (10,404 people). Another 7,340 had no score because they were sedated, intubated or otherwise untestable, or the score was unknown. Hover, tap or tab to a bar for its count.</figcaption>
 </figure>
 
-Rebuilding the analysis turned up the first of several discrepancies between what the papers say and what the code did. The code selected mild injuries with the condition $13 < \text{GCS} \le 15$, which keeps scores of 14 and 15 and leaves out everyone who scored exactly 13. The papers say 13 to 15. The effect is to make the "mild" group slightly milder than described, and it is the kind of off-by-one that is invisible in a paper and obvious in code, which is one reason I have come to think analysis code should be published alongside papers as a matter of course. Everything below uses the groups as the code actually defined them, because that is what produced the published networks.
+In what follows, “mild” means mild as the papers define it.
 
 ### From thousands to 225
 
@@ -360,7 +343,7 @@ Part 1 introduced the conditions by family. Here I want to be exact about what e
 
 ### The 26 conditions
 
-At each follow-up, the TBIMS interview includes a block of questions modelled on the US National Health and Nutrition Examination Survey (NHANES), asked in the style of “Has a doctor or other health professional ever told you that you have…?”. A condition counts only if a doctor or other health professional diagnosed it; self-diagnosis was not accepted <d-cite key="sudhakar2023frontiers"></d-cite>. If the answer is yes, the interviewer asks when it began: before the injury, around the time of it, or after. My thesis used 25 of these conditions (all but “other heart conditions”); the BMC paper used all 26 <d-cite key="mehta2023thesis,mehta2025bmc"></d-cite>.
+At each follow-up, the TBIMS interview includes a block of questions modelled on the US National Health and Nutrition Examination Survey (NHANES), asked in the style of “Has a doctor or other health professional ever told you that you have…?”. A condition counts only if a doctor or other health professional diagnosed it; self-diagnosis was not accepted <d-cite key="sudhakar2023frontiers"></d-cite>. My thesis used 25 of these conditions (all but “other heart conditions”); the BMC paper used all 26 <d-cite key="mehta2023thesis,mehta2025bmc"></d-cite>.
 
 <figure class="tbi-fig tbi3-fig l-body-outset">
   <div class="tbi-kicker">The 26 conditions, and when people said they began</div>
@@ -409,20 +392,16 @@ At each follow-up, the TBIMS interview includes a block of questions modelled on
     </div>
   </div>
   <div class="tbi-legend">
-    <span><span class="tbi3-key tbi3-k-after"></span>Began at or after the injury</span>
-    <span><span class="tbi3-key tbi3-k-before"></span>Began before it</span>
     <span>Bars run to 50% of the people asked</span>
   </div>
-  <figcaption>Descriptions are mine, in plain language. Recomputed data: the share of people at the five-year follow-up who reported each condition (of those who gave a clear yes or no, about 220 per condition), split by when they said it began, from the TBIMS public-use files. Counts below 11 are not shown, under the data-use agreement, and the bar is marked “&lt;11”. Hover, tap or tab to a bar for the numbers. Groups follow Sudhakar et al. 2023, with substance use split from the other psychiatric conditions and high cholesterol drawn with diabetes rather than with the heart.</figcaption>
+  <figcaption>Descriptions are mine, in plain language. Recomputed data: the share of people at the five-year follow-up who reported each condition (of those who gave a clear yes or no) from the TBIMS public-use files. Counts below 11 are not shown, under the data-use agreement, and the bar is marked “&lt;11”. Hover, tap or tab to a bar for the numbers. Groups follow Sudhakar et al. 2023, with substance use split from the other psychiatric conditions and high cholesterol drawn with diabetes rather than with the heart.</figcaption>
 </figure>
 
 ### From answers to ones and zeros
 
-In the data each condition is stored as a code: yes, no, or one of several codes for “unknown”, “refused” or “not asked”. Anything other than a clear yes or no is set aside, which is why the number of people behind each condition is a little below 225. The onset question adds a second code (before, around the time of, or after the injury).
+In the data each condition is stored as a code: yes, no, or one of several codes for “unknown”, “refused” or “not asked”. Anything other than a clear yes or no is set aside, which is why the number of people behind each condition is a little below 225. One wrinkle, which I cannot fully resolve from the public files: the Frontiers paper notes that a condition reported at an earlier follow-up was not asked about again <d-cite key="sudhakar2023frontiers"></d-cite>, so how earlier answers are carried forward to year five is something I would want to check before trusting any single person’s record.
 
-The network then applies a rule that neither paper states plainly, though the code is clear about it. A condition counts as present only if it began at or around the time of the injury or after it. A “no” is always a no. But a “yes, and it began before the injury” is neither: that person is dropped from every pair involving that condition, and so is anyone who said yes without saying when. The idea is reasonable (the study is about what comes after the injury, and a condition someone already had is not part of that), but it has two consequences worth knowing. Every pair of conditions ends up resting on a different set of people, from 126 to 220 of the 225, because each pair loses whoever had either condition beforehand. And the measured associations change: anxiety and depression, counted regardless of onset, correlate more strongly than when only post-injury cases count, because many people had one or both already. One more wrinkle, which I cannot fully resolve from the public files: the Frontiers paper notes that a condition reported at an earlier follow-up was not asked about again <d-cite key="sudhakar2023frontiers"></d-cite>, so how earlier answers are carried forward to year five is something I would want to check before trusting any single person’s record.
-
-So the data that goes into the network is, for each person and each condition, a 1 (diagnosed, beginning at or after the injury), a 0 (never diagnosed), or a blank. Everything from here on is arithmetic on those columns.
+So the data that goes into the network is, for each person and each condition, a 1 (diagnosed), a 0 (never diagnosed), or a blank. Everything from here on is arithmetic on those columns.
 
 ## From people to pairs
 
@@ -453,7 +432,7 @@ Take one pair, anxiety and depression. Every person who answered both questions 
     </div>
   </div>
   <div class="tbi-readout" id="tbi3-grid-read" aria-live="polite"></div>
-  <figcaption>Recomputed data: real counts from the five-year mild TBI group, one dot per person, with positions arbitrary. For anxiety and depression, “yes” means the condition began at or after the injury, as in the network; the other two pairs count a condition reported at any time. Dashed rings show how many people chance alone would put in each box. Only pairs whose four boxes all hold at least 11 people can be shown.</figcaption>
+  <figcaption>Recomputed data: real counts from the five-year mild TBI group, one dot per person, with positions arbitrary. Dashed rings show how many people chance alone would put in each box. Only pairs whose four boxes all hold at least 11 people can be shown.</figcaption>
 </figure>
 
 Nineteen people have both anxiety and depression. Is that a lot? It depends on how common each condition is. If a third of people had anxiety and a third had depression, and the two had nothing to do with each other, you would still expect about a ninth of people to have both, simply by chance. So the question is never "how many have both?" but "how many have both, compared with what we would expect if the two were independent?" For anxiety and depression here, the expected number is about six, and nineteen is about three times that.
@@ -469,8 +448,6 @@ $$
 $$
 
 The numerator is the heart of it. The product $ad$ grows when people tend to have both or neither (the two conditions agree), and $bc$ grows when people tend to have one without the other (they disagree). If the conditions are independent the two products balance, and $\varphi$ is zero. The denominator is the product of the four row and column totals, and it scales the result so that $\varphi$ runs from $-1$ (whenever one is present, the other is absent) to $+1$ (the two always occur together). For anxiety and depression, $\varphi = 0.48$, one of the strongest associations in the whole network and the value quoted in the BMC paper <d-cite key="mehta2025bmc"></d-cite>. For depression and hypertension it is 0.005. For cataracts and depression it is slightly negative, $-0.08$, with fewer people having both than chance would predict, plausibly because cataracts are a condition of older people and depression was reported more often by younger ones in this group.
-
-The onset rule from the previous section shows up here too. Because people who had anxiety or depression before their injury drop out, the anxiety and depression table holds 180 people rather than 220, and counting the two conditions regardless of when they began gives a larger $\varphi$ of 0.59. The rule shapes the network, and it is worth remembering that a different, equally reasonable rule would give a somewhat different one.
 
 ### Why not just compare with chance directly?
 
@@ -535,27 +512,14 @@ where $N$ is the number of people behind that pair, and compares it with Student
     <span><span class="tbi3-key" style="background: var(--tbi-metab)"></span>Not in it</span>
     <span><span class="tbi3-key" style="background: var(--tbi-cardio)"></span>Negative association</span>
   </div>
-  <figcaption>Recomputed data: φ, the number of people and a one-sided p-value for all 325 pairs, five-year mild TBI group, onset at or after the injury. Drag the slider (logarithmic) or choose a threshold; nodes keep their positions from the published network, and conditions with no edges fade. The last button is a Bonferroni correction for 325 tests.</figcaption>
+  <figcaption>Recomputed data: φ, the number of people and a one-sided p-value for all 325 pairs, five-year mild TBI group. Drag the slider (logarithmic) or choose a threshold; nodes keep their positions from the published network, and conditions with no edges fade. The last button is a Bonferroni correction for 325 tests.</figcaption>
 </figure>
 
-Play with the slider and two things become clear. The first is that the network depends on a choice as well as on the data. At 0.05 there are many more edges, including a few negative ones; at 0.001 the network thins to its strongest bonds. The second is the problem of many tests. The study tested 325 pairs. If none of them were truly related, a threshold of 0.01 would still let through about three edges by chance alone, and we have no way of knowing which three. The usual remedy, a Bonferroni correction, divides the threshold by the number of tests, and if you apply it here the network loses a good part of its edges but keeps its psychiatric core and its strongest links. Neither the thesis nor the papers corrected for multiple comparisons. I think the honest reading is that the strong edges are very unlikely to be flukes, and that any single weak edge (a $\varphi$ near 0.16, resting on a handful of shared people) should be held lightly.
+Play with the slider and two things become clear. The first is that the network depends on a choice as well as on the data. At 0.05 there are many more edges, including a few negative ones; at 0.001 the network thins to its strongest bonds. The second is the problem of many tests. The study tested 325 pairs. If none of them were truly related, a threshold of 0.01 would still let through about three edges by chance alone, and we have no way of knowing which three. The usual remedy, a Bonferroni correction, divides the threshold by the number of tests, and if you apply it here the network loses a good part of its edges but keeps its psychiatric core and its strongest links. I think the honest reading is that the strong edges are very unlikely to be flukes, and that any single weak edge (a $\varphi$ near 0.16, resting on a handful of shared people) should be held lightly.
 
 ### The thesis, and then the paper
 
-This is also the right place to explain why the network in my thesis and the network in the paper are not the same. The thesis network had 25 conditions (it did not include "other heart conditions"), 69 edges and a diameter of 5 <d-cite key="mehta2023thesis"></d-cite>. The paper's has 26 conditions, of which 25 have at least one edge, and 65 edges <d-cite key="mehta2025bmc"></d-cite>. The rebuild showed that both come from the same public-use release; apart from that one extra condition, they differ only in the rule for drawing an edge. The thesis used a fixed cut-off of $t \ge 2.920$, and its code computed $t$ with $2N$ in place of $N$ (it added up all four margins of the table rather than the number of people), which makes $t$ about 1.4 times larger than it should be and the rule looser than it reads. The paper used the textbook $t$ with a 1% threshold for each pair. Both rules are reproduced exactly by the rebuild. From here on I use the paper's network, which is the one that went through peer review.
-
-<div class="tbi3-scroll">
-<table class="tbi3-lineage">
-  <caption class="tbi3-sr">How the thesis and the papers relate</caption>
-  <thead><tr><th scope="col"></th><th scope="col">Thesis (2023)</th><th scope="col">Frontiers (2023)</th><th scope="col">Perspective (2024)</th><th scope="col">BMC Neurology (2025)</th></tr></thead>
-  <tbody>
-    <tr><th scope="row">Asks</th><td>What does the comorbidity network look like after mild TBI?</td><td>How common is each condition at five years, by age and sex?</td><td>Could comorbidity networks help TBI care?</td><td>The network for everyone, the young and the old, and its clusters</td></tr>
-    <tr><th scope="row">Conditions</th><td>25</td><td>26</td><td>none (argument)</td><td>26</td></tr>
-    <tr><th scope="row">Edge rule</th><td>$t \ge 2.920$, with $t$ computed from $2N$</td><td>none</td><td>none</td><td>one-sided $p &lt; 0.01$ per pair</td></tr>
-    <tr><th scope="row">Network</th><td>69 edges, diameter 5</td><td>none</td><td>none</td><td>65 edges, diameter 4 (computed here; the paper reports no global measures)</td></tr>
-  </tbody>
-</table>
-</div>
+A word on the thesis network, which was an earlier version of this analysis and is not quite the same as the paper’s. It had 25 conditions (it did not include “other heart conditions”), 69 edges and a diameter of 5 <d-cite key="mehta2023thesis"></d-cite>, and used a different threshold for drawing an edge. The paper’s has 26 conditions, of which 25 have at least one edge, and 65 edges <d-cite key="mehta2025bmc"></d-cite>. From here on I use the paper’s network, which is the one that went through peer review.
 
 ## The map
 
@@ -726,8 +690,6 @@ The threshold in the BMC paper was the median betweenness of the starting networ
 
 For everyone, the method finds six clusters, and they are the paper's six <d-cite key="mehta2025bmc"></d-cite>. The first is the psychiatric core (alcoholism, anxiety, depression, drug addiction, PTSD, panic attacks) with chronic pain and sleep disorder, plus five bridges put back in: attention deficit disorders, bipolar disorder, emphysema, liver disease and rheumatoid arthritis. The paper read it as reinforcing that psychiatric conditions are highly comorbid, and noted that emphysema's links were to depression, alcoholism and drug addiction. The second pairs diabetes and cataracts, with high cholesterol, liver disease and other heart conditions as bridges. The third is obsessive-compulsive disorder with attention deficit disorders and rheumatoid arthritis, notable because OCD is otherwise unconnected to the psychiatric core. The fourth is a heart and lung cluster around congestive heart failure, myocardial infarction and pneumonia, which is where bipolar disorder's cardiovascular links live. The fifth joins dementia, hypertension and movement disorders, and the sixth is osteoarthritis with high cholesterol.
 
-The rebuild also found a problem with my thesis. It published a table of six clusters, and that table is not what the algorithm returns. Each column in that table is one of the removed conditions together with all of its neighbours, its "ego network", rather than a cluster in the algorithm's sense. The thesis's clusters were therefore something closer to six overlapping neighbourhoods around its six bridges. I do not know how that happened in 2023 (the figure-making code did not survive), and the paper's clusters, which are what the algorithm actually produces, are the ones to trust.
-
 ## Younger and older
 
 The thesis stopped at one network. The question that drove the BMC paper was whether the network looks different depending on age, which matters for a condition like TBI because the people it happens to differ so much: a fall at 75 and a road accident at 25 happen to different bodies, with different conditions already waiting in the wings. The Frontiers paper had already found that, at five years, younger people reported depression more often and older people reported hypertension, high cholesterol, cataracts and osteoarthritis more often <d-cite key="sudhakar2023frontiers"></d-cite>, a pattern close to what an earlier TBIMS study found ten years after moderate and severe injuries <d-cite key="hammond2019"></d-cite>. So the paper split the 225 at age 50 and built a network for each group.
@@ -761,8 +723,6 @@ The paper's abstract leads with one difference: "bipolar disorder was seen as re
 
 I want to be honest about how much weight these can bear. The younger network rests on 91 people, and some of its conditions were reported by fewer than 11 of them. Stroke is a good example: in the younger network it has seven links and the second-highest betweenness, but fewer than 11 younger people reported it, so a few individuals with several conditions each can produce all of those edges. The bipolar–cardiovascular links in the young may be real, and they fit the literature, but they rest on small numbers, and I would treat them as a hypothesis worth testing in a larger cohort rather than as a finding to act on. The paper itself says the sample "could be even lower when considering patient subgroups" <d-cite key="mehta2025bmc"></d-cite>.
 
-Two more details came out of the rebuild. The supplement says the groups were split by age at the five-year follow-up, but only a split by age at injury reproduces the published networks and clusters, so that is what was done (and what is shown here). And in the younger group, alcoholism and drug addiction have $\varphi = 1$: every young person who reported one, with onset at or after the injury, reported the other. The $t$ statistic divides by $\sqrt{1 - \varphi^2}$, which is zero, so $t$ is infinite. The published network does not include that edge, and I suspect the infinity was dropped as an invalid number somewhere in the code rather than being treated as the strongest possible association. It is a perfect association between two rare conditions in a small group, which is exactly the situation where I would trust it least; I have left it out to match the paper, but I would rather say so than hide it.
-
 ## What it means, and what it does not
 
 ### The argument for using networks
@@ -779,15 +739,13 @@ That is what I hope these networks could become. What they show at the moment is
 
 **It cannot say the injury caused any of this.** There is no comparison group of similar people without a brain injury, so we cannot tell which associations are peculiar to TBI and which would appear in any group of people of the same age. Anxiety and depression go together in almost every population. The paper's answer is that the aim was to document the patterns in people with mild TBI regardless of their cause, since they matter for those people either way, and it also argues that choosing controls is complicated by evidence that brains age faster after TBI <d-cite key="mehta2025bmc,cole2015brainage"></d-cite>. I think both points are fair, and I also think a control group is the single thing that would most change what this network could claim.
 
-**The conditions are self-reported**, as diagnoses a doctor gave, with the person's own recollection of when each began. People who see doctors more get diagnosed with more things, and people may misremember timing. The onset rule, which only counts conditions that began at or after the injury, depends entirely on that recollection.
+**The conditions are self-reported**, as diagnoses a doctor gave, as the person recalls them. People who see doctors more get diagnosed with more things, and people may misremember what they were told or when.
 
 **The people are a particular slice of TBI.** They were hospitalised and then had inpatient rehabilitation in the United States, they survived five years, they were interviewed, and their interview fell between 2017 and 2019. The Frontiers paper warned that "sufficient caution should be exercised while generalizing the results of the study to the mild TBI population as a whole" <d-cite key="sudhakar2023frontiers"></d-cite>. And survivorship cuts both ways: people who died or dropped out are invisible, and if they were the sickest, the network shows a healthier picture than the reality.
 
-**The network depends on choices**: the 1% threshold, no correction for 325 tests, $\varphi$ rather than relative risk, the median threshold in the clustering. Each is defensible, and each could reasonably have been made differently, as the slider above shows.
+**The network depends on choices**: the 1% threshold, with 325 pairs tested and so some edges likely to be false positives, $\varphi$ rather than relative risk, the median threshold in the clustering. Each is defensible, and each could reasonably have been made differently, as the slider above shows.
 
 **The numbers are small**, especially in the age groups, and conditions reported by fewer than 11 people (several of them, in each group) can gain or lose edges from one or two individuals.
-
-**The text and the code disagree in places**, as described above: mild meant GCS 14–15 rather than 13–15, the age split was at injury rather than at follow-up, conditions only counted if they began at or after the injury, the thesis's $t$ was computed from $2N$, and the thesis's cluster table lists neighbourhoods rather than the algorithm's clusters. The published networks are what the code produced, so the figures here match the papers; what I have not done is rebuild every network under the definitions the papers describe, so I cannot say how much each difference would change. Each of them should have been stated in the papers.
 
 ## Beyond the paper
 
@@ -800,7 +758,7 @@ The thesis ended with a line I would still stand by: the choice of mild TBI at f
     <svg id="tbi3-beyond-big" role="img" aria-label="The chosen network, enlarged, with node size showing degree."></svg>
   </div>
   <div class="tbi-readout" id="tbi3-beyond-read" aria-live="polite"></div>
-  <figcaption>Recomputed data, exploratory and unpublished: networks built from the TBIMS public-use files with the thesis’s edge rule ($t \ge 2.920$, with $t$ from $2N$), so the mild five-year cell is the thesis network itself. Severity bands follow the original code: mild GCS 14–15, moderate 9–13, severe 3–8. Each cell is a different set of people, those who answered the health questions at that follow-up, so the row is not the same people followed over time. Choose a cell to enlarge it; node size is degree.</figcaption>
+  <figcaption>Recomputed data, exploratory and unpublished: networks built from the TBIMS public-use files with the thesis’s edge rule ($t \ge 2.920$), so the mild five-year cell is the thesis network itself. Severity bands follow the original analysis. Each cell is a different set of people, those who answered the health questions at that follow-up, so the row is not the same people followed over time. Choose a cell to enlarge it; node size is degree.</figcaption>
 </figure>
 
 It is tempting to read the rows as a story told over fifteen years, and that is precisely the reading the data does not support. Each cell is a cross-section of different people, of different sizes (from 53 to 384), so differences between cells mix the passage of time with who happened to be asked. What the grid does show is that the psychiatric core is not peculiar to mild injuries at five years: something like it appears in most cells, which makes me more inclined to believe it is a stable feature of life after TBI rather than an accident of one sample. The rest I would treat as a set of hypotheses.

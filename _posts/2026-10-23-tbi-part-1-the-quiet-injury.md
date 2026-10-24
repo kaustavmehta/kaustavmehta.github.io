@@ -427,7 +427,7 @@ I should be precise about the claim, because it is easy to overstate. There are 
 
 ## Counting consciousness
 
-The most widely used measure of how badly a brain is injured is the Glasgow Coma Scale, published by Graham Teasdale and Bryan Jennett in 1974 <d-cite key="teasdale1974,teasdale1976"></d-cite>. It asks three questions of a person who may not be able to answer you, and scores each: how readily do their eyes open, how well can they talk, and how well can they move on command. The three scores add up to a total between 3 and 15. My project, and both of the papers, describe sorting people by the total score recorded at admission into mild (13 to 15), moderate (9 to 12) and severe (3 to 8) <d-cite key="mehta2023thesis,sudhakar2023frontiers,mehta2025bmc"></d-cite>. (Rebuilding the analysis for this series showed that the code behind the networks in fact counted only 14 and 15 as mild; Part 3 goes through this.) Try it.
+The most widely used measure of how badly a brain is injured is the Glasgow Coma Scale, published by Graham Teasdale and Bryan Jennett in 1974 <d-cite key="teasdale1974,teasdale1976"></d-cite>. It asks three questions of a person who may not be able to answer you, and scores each: how readily do their eyes open, how well can they talk, and how well can they move on command. The three scores add up to a total between 3 and 15. My project, and both of the papers, describe sorting people by the total score recorded at admission into mild (13 to 15), moderate (9 to 12) and severe (3 to 8) <d-cite key="mehta2023thesis,sudhakar2023frontiers,mehta2025bmc"></d-cite>. Try it.
 
 <figure class="tbi-fig l-body-outset">
   <div class="tbi-kicker">The Glasgow Coma Scale</div>

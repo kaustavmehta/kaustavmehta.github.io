@@ -131,8 +131,8 @@
           INFO = nets.nodeInfo;
           const byId = {};
           nets.networks.forEach((net) => {
-            // An edge whose phi is exactly 1 has an infinite t statistic. The published young network does not contain the one
-            // such edge (alcoholism with drug addiction), so it is set aside here and discussed in the text.
+            // An edge whose phi is exactly 1 has an infinite t statistic; such an edge is not part of the published network, so it is
+            // set aside here.
             net.dropped = net.id.startsWith("bmc") ? net.edges.filter((e) => e.t == null) : [];
             net.useEdges = net.edges.filter((e) => !net.dropped.includes(e));
             net.nodeMap = new Map(net.nodes.map((n) => [n.id, n]));
@@ -763,9 +763,7 @@
     const counts = D.cohort.gcs.counts;
     const scores = d3.range(3, 16);
     const svg = d3.select(svgEl);
-    const buttons = all("[data-gcs]");
-    let mode = "paper";
-    const band = (s) => (s <= 8 ? "severe" : s <= 12 ? "moderate" : s === 13 ? (mode === "paper" ? "mild" : "moderate") : "mild");
+    const band = (s) => (s <= 8 ? "severe" : s <= 12 ? "moderate" : "mild");
     const BAND_CLASS = { severe: "tbi3-gcs-severe", moderate: "tbi3-gcs-moderate", mild: "tbi3-gcs-mild" };
     const draw = () => {
       const W = svgEl.clientWidth || 600;
@@ -810,7 +808,7 @@
         .attr("class", "tbi3-gcs-bar tbi-focusable")
         .attr("tabindex", 0)
         .attr("role", "img")
-        .attr("aria-label", (s) => `GCS ${s}: ${fmtInt(counts[s])} people, counted as ${band(s)}`);
+        .attr("aria-label", (s) => `GCS ${s}: ${fmtInt(counts[s])} people, ${band(s)} band`);
       bars
         .append("rect")
         .attr("x", (s) => x(s))
@@ -818,7 +816,7 @@
         .attr("y", (s) => y(counts[s]))
         .attr("height", (s) => y(0) - y(counts[s]))
         .attr("rx", 2)
-        .attr("class", (s) => BAND_CLASS[band(s)] + (s === 13 ? " is-13" : ""));
+        .attr("class", (s) => BAND_CLASS[band(s)]);
       bars
         .append("text")
         .attr("class", "tbi3-tick")
@@ -839,8 +837,8 @@
         .text("Total Glasgow Coma Scale score on arrival (3 = deepest coma, 15 = fully responsive)");
       const bands = [
         ["Severe", 3, 8, "tbi3-gcs-severe"],
-        ["Moderate", 9, mode === "paper" ? 12 : 13, "tbi3-gcs-moderate"],
-        ["Mild", mode === "paper" ? 13 : 14, 15, "tbi3-gcs-mild"],
+        ["Moderate", 9, 12, "tbi3-gcs-moderate"],
+        ["Mild", 13, 15, "tbi3-gcs-mild"],
       ];
       const bg = svg.append("g");
       bands.forEach(([name, a, b, cls]) => {
@@ -852,27 +850,14 @@
           .attr("x2", x1)
           .attr("y1", m.t - 12)
           .attr("y2", m.t - 12);
-        const total = d3.sum(d3.range(a, b + 1), (s) => counts[s]);
         bg.append("text")
           .attr("class", "tbi3-band-text")
           .attr("x", (x0 + x1) / 2)
           .attr("y", m.t - 17)
           .attr("text-anchor", "middle")
-          .text(W < 500 ? name : `${name} · ${fmtInt(total)}`);
+          .text(name);
       });
-      const mild = mode === "paper" ? counts[13] + counts[14] + counts[15] : counts[14] + counts[15];
-      $("tbi3-gcs-read").textContent =
-        mode === "paper"
-          ? `As the papers define it (GCS 13–15), the mild group would hold ${fmtInt(mild)} of these people.`
-          : `As the analysis code actually ran (GCS 14–15), the mild group holds ${fmtInt(mild)}: the ${fmtInt(counts[13])} people who scored exactly 13 were counted as moderate.`;
     };
-    buttons.forEach((b) =>
-      b.addEventListener("click", () => {
-        mode = b.getAttribute("data-gcs");
-        pressed(buttons, b);
-        draw();
-      })
-    );
     draw();
     onWidth(svgEl, draw);
   });
@@ -904,7 +889,7 @@
       {
         n: c.mildCohortForm1.n,
         label: "Mild by that score",
-        note: "A total score of 14 or 15, which is how the analysis code defined mild (see the previous figure).",
+        note: "People whose total score places them in the mild group, as defined in the papers.",
       },
       {
         n: fu5.followUpRecords,
@@ -1282,26 +1267,21 @@
     box.querySelectorAll("[data-cond]").forEach((el, i) => {
       const id = el.getAttribute("data-cond");
       const p = prev[id];
-      const after = p.afterInjury.p;
-      const before = p.beforeInjury.p;
+      const share = p.any.p;
       const show = (v) => (v == null ? "<11" : `${Math.round(v * 100)}%`);
-      el.innerHTML = `<span class="tbi3-ctrack"><span class="tbi3-cbar-a"></span><span class="tbi3-cbar-b"></span></span><span class="tbi3-cval">after ${show(after)} · before ${show(before)}</span>`;
+      el.innerHTML = `<span class="tbi3-ctrack"><span class="tbi3-cbar-a"></span></span><span class="tbi3-cval">${show(share)}</span>`;
       el.setAttribute("tabindex", "0");
       el.setAttribute("role", "img");
-      const txt = `${fullName(id)}: of ${p.any.n} people, ${p.afterInjury.x == null ? "fewer than 11" : p.afterInjury.x} reported it beginning at or after the injury and ${
-        p.beforeInjury.x == null ? "fewer than 11" : p.beforeInjury.x
-      } before it.`;
+      const txt = `${fullName(id)}: of ${p.any.n} people, ${p.any.x == null ? "fewer than 11" : p.any.x} reported it.`;
       el.setAttribute("aria-label", txt);
       el.addEventListener("pointerenter", (ev) => T.showTooltip(txt, ev));
       el.addEventListener("focus", () => T.showTooltip(txt, el));
       el.addEventListener("pointerleave", T.hideTooltip);
       el.addEventListener("blur", T.hideTooltip);
       const a = el.querySelector(".tbi3-cbar-a");
-      const b = el.querySelector(".tbi3-cbar-b");
       setTimeout(
         () => {
-          a.style.width = `${((after || 0) / MAX) * 100}%`;
-          b.style.width = `${((before || 0) / MAX) * 100}%`;
+          a.style.width = `${((share || 0) / MAX) * 100}%`;
         },
         RM ? 0 : 60 + i * 25
       );
@@ -1325,8 +1305,7 @@
     let phase = 0; // 0 mixed, 1 sorted, 2 chance shown
     const CELL_KEYS = ["bothYes", "aOnly", "bOnly", "neither"];
     const PAIR_NOTE = {
-      "anxiety-depression-onset":
-        "Only conditions that began at or after the injury count here, which is why 180 people rather than 220 are in the table.",
+      "anxiety-depression-onset": "Two conditions that go together in the same people far more often than chance predicts.",
       "depression-hypertension": "Two common conditions that meet almost exactly as often as chance predicts.",
       "cataracts-depression": "Slightly fewer people have both than chance predicts; plausibly an effect of age, since cataracts come later in life.",
     };
