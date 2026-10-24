@@ -132,8 +132,10 @@ _styles: >
   .tbi1-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
   .tbi1-routes { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1.25rem; align-items: center; }
   #tbi1-routes { aspect-ratio: 1 / 1; max-width: 26rem; }
-  .tbi1-routes-stats { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; margin-top: 0.8rem; font-size: 0.82rem; align-items: baseline; }
-  .tbi1-routes-stats .tbi1-big { font-family: "Newsreader", Georgia, serif; font-size: 1.7rem; font-weight: 300; color: var(--tbi-accent); font-variant-numeric: tabular-nums; text-align: right; }
+  .tbi1-routes-stats { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 0.9rem; margin-top: 0.8rem; font-size: 0.82rem; align-items: start; }
+  .tbi1-routes-stats > span { text-wrap: pretty; }
+  .tbi1-routes-stats .tbi1-sub { display: block; font-size: 0.74rem; color: var(--tbi-ink-2); }
+  .tbi1-routes-stats .tbi1-big { font-family: "Newsreader", Georgia, serif; font-size: 1.7rem; font-weight: 300; line-height: 1; min-width: 2.2rem; color: var(--tbi-accent); font-variant-numeric: tabular-nums; text-align: right; }
   .tbi1-families { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 0.9rem; margin: 1.5rem 0 2rem; }
   .tbi1-family { border: 1px solid var(--tbi-rule); border-top: 3px solid var(--fam); border-radius: 8px; padding: 0.75rem 0.9rem 0.6rem; }
   .tbi1-family h3 { font-size: 0.82rem !important; font-weight: 600; margin: 0 0 0.35rem; color: var(--fam); }

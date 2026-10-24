@@ -2421,7 +2421,7 @@
       const nB = people.filter((p) => p.B).length;
       const both = people.filter((p) => p.A && p.B).length;
       const exp = (nA * nB) / N;
-      let html = `<span class="tbi1-big">${both}</span><span>have both A and B</span><span class="tbi1-big">${exp.toFixed(0)}</span><span>would have both by chance alone (${nA} have A, ${nB} have B)</span>`;
+      let html = `<span class="tbi1-big">${both}</span><span>have both A and B</span><span class="tbi1-big">${exp.toFixed(0)}</span><span>would have both by chance alone<span class="tbi1-sub">${nA} have A, ${nB} have B</span></span>`;
       if (route.id === "risk") {
         const old = people.filter((p) => p.Z);
         const oA = old.filter((p) => p.A).length;

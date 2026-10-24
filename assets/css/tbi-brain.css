@@ -267,6 +267,9 @@ html[data-theme="dark"] .tbi-brain {
 .tbi-brain-sev {
   display: flex;
   width: 100%;
+  box-sizing: border-box;
+  gap: 0.5rem;
+  padding-right: 0.4rem;
   font-size: 0.72rem;
 }
 .tbi-brain-sev input[type="range"] {
@@ -279,6 +282,7 @@ html[data-theme="dark"] .tbi-brain {
   font-weight: 600;
   color: var(--global-text-color);
   min-width: 1.4rem;
+  flex: none;
   text-align: right;
 }
 

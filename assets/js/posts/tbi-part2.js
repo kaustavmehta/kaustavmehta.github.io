@@ -1377,7 +1377,7 @@
         for (let i = 0; i < n; i++)
           for (let j = i + 1; j < n; j++) {
             const on = M[i][j] || M[j][i];
-            if (m === "weighted") M[i][j] = M[j][i] = on ? defaultW[`${i}-${j}`] ?? 0.5 : 0;
+            if (m === "weighted") M[i][j] = M[j][i] = on ? (defaultW[`${i}-${j}`] ?? 0.5) : 0;
             else M[i][j] = M[j][i] = on ? 1 : 0;
           }
         mode = m;
