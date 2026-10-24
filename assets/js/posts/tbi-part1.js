@@ -629,7 +629,7 @@
       ctx = f.ctx;
       W = f.width;
       H = f.height;
-      scale = Math.min(W / 2.7, H / 2.05);
+      scale = Math.min(W / 2.9, H / 2.3);
       ox = W / 2;
       oy = H / 2 + scale * 0.05;
     };
@@ -832,17 +832,16 @@
       S.drag = null;
       if (kind === "front") {
         S.vx += 3.2;
-        S.vy += 0.3;
-        S.w += -2.2;
+        S.w += -0.6;
       } else if (kind === "fall") {
         // The head is already moving backwards with the body; the floor stops it in an instant.
         const v = 2.6;
         S.vx = v;
-        S.vy = 0.5;
+        S.vy = 0.1;
         S.w = 0;
         P.forEach((p) => {
           p.px = p.x - v * 0.004;
-          p.py = p.y - 0.5 * 0.004;
+          p.py = p.y - 0.1 * 0.004;
         });
         S.fall = 0.12;
       } else {
@@ -1609,7 +1608,7 @@
       const b = document.createElement("button");
       b.type = "button";
       b.className = "tbi-btn";
-      b.textContent = i === 0 ? "Rest" : s.title.split(" ").slice(0, 2).join(" ");
+      b.textContent = ["At rest", "Ion flux", "Energy crisis", "Slump", "Axons", "Chronic"][i];
       b.setAttribute("aria-pressed", "false");
       b.addEventListener("click", () => {
         playing = false;
@@ -2033,7 +2032,7 @@
       if (!narrow)
         svgEl(
           "text",
-          { x: x(7300) - 4, y: axisY - 12, "text-anchor": "end", class: "tbi1-svg-small" },
+          { x: x(7300), y: axisY + 42, "text-anchor": "end", class: "tbi1-svg-small" },
           svg,
           "outcomes still changing up to two decades on"
         );
@@ -2079,13 +2078,6 @@
           { cx: mx, cy: axisY, r: 6, fill: "var(--global-theme-color)", "fill-opacity": 0.25, stroke: "var(--global-bg-color)", "stroke-width": 2 },
           g
         );
-        if (!narrow || m.day === null || m.day >= 365)
-          svgEl(
-            "text",
-            { x: mx, y: axisY + 16, "text-anchor": "middle", class: "tbi1-svg-small" },
-            g,
-            narrow ? "" : m.when.replace("Over the long run", "")
-          );
         svgEl("circle", { cx: mx, cy: axisY, r: 14, fill: "transparent" }, g);
         const pick = () => {
           pinned = m;
@@ -2294,5 +2286,163 @@
     btn.addEventListener("click", reveal);
     build();
     onResize(svg, build);
+  })();
+  /* ---------------------------------------------------------------- six routes to comorbidity */
+  (() => {
+    const canvas = $("tbi1-routes");
+    if (!canvas) return;
+    const N = 400;
+    const ROUTES = [
+      {
+        id: "chance",
+        btn: "Chance",
+        title: "Plain chance",
+        text: "A and B are independent: each person gets each condition at random. Some people still have both, simply because both are common.",
+        gen: (r) => ({ A: r() < 0.25, B: r() < 0.25 }),
+      },
+      {
+        id: "cause",
+        btn: "One causes the other",
+        title: "A causes B",
+        text: "Having A makes B more likely (here, B is about three times as likely in people with A), as chronic pain can lead to depression.",
+        gen: (r) => {
+          const A = r() < 0.25;
+          return { A, B: A ? r() < 0.5 : r() < 0.15 };
+        },
+      },
+      {
+        id: "mech",
+        btn: "Shared mechanism",
+        title: "One process, two conditions",
+        text: "A hidden process, such as damage to the circuits that regulate emotion, produces both A and B. Neither causes the other, but they arrive together.",
+        gen: (r) => {
+          const M = r() < 0.2;
+          return { A: M ? r() < 0.7 : r() < 0.12, B: M ? r() < 0.7 : r() < 0.12 };
+        },
+      },
+      {
+        id: "risk",
+        btn: "Shared risk factor",
+        title: "A common cause outside both: age",
+        text: "Older people (shaded squares) are more likely to have both A and B, as with high blood pressure and cataracts. Look only within the older people, or only within the younger, and A and B are unrelated.",
+        extra: "Shaded square: older person",
+        gen: (r) => {
+          const Z = r() < 0.4;
+          return { Z, A: Z ? r() < 0.45 : r() < 0.1, B: Z ? r() < 0.45 : r() < 0.1 };
+        },
+      },
+      {
+        id: "treat",
+        btn: "Treatment side effect",
+        title: "The treatment for A brings on B",
+        text: "Most people with A are treated, and the treatment raises the risk of B. Remove the treatment and the link would disappear.",
+        gen: (r) => {
+          const A = r() < 0.25;
+          const T = A && r() < 0.7;
+          return { A, B: T ? r() < 0.45 : r() < 0.15 };
+        },
+      },
+      {
+        id: "detect",
+        btn: "Detection",
+        title: "Seen more because looked for more",
+        text: "A and B are truly independent here, but people already being treated for A see doctors more, so 90% of their B gets diagnosed, against 40% in everyone else. The link is in the records, not in the bodies.",
+        gen: (r) => {
+          const A = r() < 0.25;
+          const trueB = r() < 0.3;
+          return { A, B: trueB && (A ? r() < 0.9 : r() < 0.4) };
+        },
+      },
+    ];
+    let seed = 11;
+    const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+    let people = [];
+    let route = ROUTES[0];
+    let ctx;
+    let W;
+    let H;
+    const draw = () => {
+      const f = T.fitCanvas(canvas);
+      ctx = f.ctx;
+      W = f.width;
+      H = f.height;
+      const cols = 20;
+      const cell = Math.min(W, H) / cols;
+      const r = cell * 0.36;
+      const a = T.cssVar("--tbi-psych");
+      const b = T.cssVar("--tbi-cardio");
+      const ink = T.cssVar("--global-text-color");
+      const faint = T.cssVar("--tbi1-faint");
+      const soft = T.cssVar("--tbi-rule");
+      ctx.clearRect(0, 0, W, H);
+      people.forEach((p, i) => {
+        const x = ((i % cols) + 0.5) * cell;
+        const y = (Math.floor(i / cols) + 0.5) * cell;
+        if (p.Z) {
+          ctx.fillStyle = soft;
+          ctx.fillRect(x - cell / 2 + 0.5, y - cell / 2 + 0.5, cell - 1, cell - 1);
+        }
+        ctx.beginPath();
+        ctx.arc(x, y, r, Math.PI / 2, (Math.PI * 3) / 2);
+        ctx.fillStyle = p.A ? a : faint;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, r, -Math.PI / 2, Math.PI / 2);
+        ctx.fillStyle = p.B ? b : faint;
+        ctx.fill();
+        if (p.A && p.B) {
+          ctx.beginPath();
+          ctx.arc(x, y, r + 1.6, 0, Math.PI * 2);
+          ctx.strokeStyle = ink;
+          ctx.lineWidth = 1.6;
+          ctx.stroke();
+        }
+      });
+    };
+    const stats = () => {
+      const nA = people.filter((p) => p.A).length;
+      const nB = people.filter((p) => p.B).length;
+      const both = people.filter((p) => p.A && p.B).length;
+      const exp = (nA * nB) / N;
+      let html = `<span class="tbi1-big">${both}</span><span>have both A and B</span><span class="tbi1-big">${exp.toFixed(0)}</span><span>would have both by chance alone (${nA} have A, ${nB} have B)</span>`;
+      if (route.id === "risk") {
+        const old = people.filter((p) => p.Z);
+        const oA = old.filter((p) => p.A).length;
+        const oB = old.filter((p) => p.B).length;
+        const oBoth = old.filter((p) => p.A && p.B).length;
+        html += `<span class="tbi1-big">${oBoth}</span><span>have both among the ${old.length} older people, against ${((oA * oB) / old.length).toFixed(0)} expected by chance within that group</span>`;
+      }
+      $("tbi1-routes-stats").innerHTML = html;
+    };
+    const select = (rt) => {
+      route = rt;
+      people = Array.from({ length: N }, () => rt.gen(rand));
+      $("tbi1-routes-title").textContent = rt.title;
+      $("tbi1-routes-text").textContent = rt.text;
+      $("tbi1-routes-extra").textContent = rt.extra || "";
+      document.querySelectorAll("#tbi1-routes-btns .tbi-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.r === rt.id)));
+      draw();
+      stats();
+      const both = people.filter((p) => p.A && p.B).length;
+      canvas.setAttribute("aria-label", `${N} simulated people under the route “${rt.title}”: ${both} have both conditions.`);
+    };
+    const bar = $("tbi1-routes-btns");
+    ROUTES.forEach((rt) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "tbi-btn";
+      b.dataset.r = rt.id;
+      b.textContent = rt.btn;
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", () => select(rt));
+      bar.appendChild(b);
+    });
+    select(ROUTES[0]);
+    let rt = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(rt);
+      rt = setTimeout(draw, 150);
+    });
+    T.onThemeChange(draw);
   })();
 })();

@@ -36,7 +36,7 @@ _styles: >
   html[data-theme="dark"] { --tbi1-bone: #4a443b; --tbi1-bone-edge: #6d6455; --tbi1-csf: #1d3442; --tbi1-tissue: #8d5a55; --tbi1-tissue-edge: #c48a80; --tbi1-faint: rgba(255,255,255,0.2); }
   .tbi1-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .tbi1-since { display: flex; align-items: baseline; gap: 0.9rem; flex-wrap: wrap; margin: 1.6rem 0 0.4rem; }
-  .tbi1-since .tbi-stat-num { font-size: 2.6rem; min-width: 6.5ch; }
+  .tbi1-since .tbi-stat-num { font-size: 2.6rem; }
   .tbi1-since .tbi-stat-label { font-size: 0.9rem; color: var(--tbi-ink-2); }
   .tbi1-canvas-wrap { position: relative; width: 100%; }
   .tbi1-canvas-wrap canvas { width: 100%; display: block; touch-action: pan-y; }
@@ -130,8 +130,22 @@ _styles: >
   .tbi1-link.is-hot { stroke: var(--tbi-accent); }
   .tbi1-brain-fig .tbi-brain { margin-top: 0.25rem; }
   .tbi1-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+  .tbi1-routes { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 1.25rem; align-items: center; }
+  #tbi1-routes { aspect-ratio: 1 / 1; max-width: 26rem; }
+  .tbi1-routes-stats { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; margin-top: 0.8rem; font-size: 0.82rem; align-items: baseline; }
+  .tbi1-routes-stats .tbi1-big { font-family: "Newsreader", Georgia, serif; font-size: 1.7rem; font-weight: 300; color: var(--tbi-accent); font-variant-numeric: tabular-nums; text-align: right; }
+  .tbi1-families { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 0.9rem; margin: 1.5rem 0 2rem; }
+  .tbi1-family { border: 1px solid var(--tbi-rule); border-top: 3px solid var(--fam); border-radius: 8px; padding: 0.75rem 0.9rem 0.6rem; }
+  .tbi1-family h3 { font-size: 0.82rem !important; font-weight: 600; margin: 0 0 0.35rem; color: var(--fam); }
+  .tbi1-family p { font-size: 0.84rem; line-height: 1.5; margin: 0; }
+  .tbi1-condlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0.9rem 1.2rem; }
+  .tbi1-condgroup h3 { font-size: 0.7rem !important; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; margin: 0 0 0.35rem; padding-bottom: 0.25rem; border-bottom: 2px solid var(--fam); color: var(--tbi-ink); }
+  .tbi1-condgroup ul { list-style: none; padding: 0; margin: 0; }
+  .tbi1-condgroup li { font-size: 0.8rem; line-height: 1.35; padding: 0.12rem 0 0.12rem 0.9rem; position: relative; }
+  .tbi1-condgroup li::before { content: ""; position: absolute; left: 0; top: 0.5em; width: 7px; height: 7px; border-radius: 50%; background: var(--fam); }
   @media (max-width: 760px) {
-    .tbi1-cascade, .tbi1-trials, .tbi1-waffle-wrap, .tbi1-two { grid-template-columns: 1fr; }
+    .tbi1-cascade, .tbi1-trials, .tbi1-waffle-wrap, .tbi1-two, .tbi1-routes { grid-template-columns: 1fr; }
+    #tbi1-routes { margin: 0 auto; }
     .tbi1-gcs { grid-template-columns: 1fr; }
     .tbi1-waffle { max-width: 15rem; }
   }
@@ -506,11 +520,11 @@ With that in hand, here is what is known, and what is suspected, about the condi
 <div class="tbi1-families">
   <div class="tbi1-family" style="--fam: var(--tbi-psych)">
     <h3>Psychiatric</h3>
-    <p>Depression, anxiety, post-traumatic stress disorder and panic attacks are the commonest conditions five years after a mild TBI in the database I used <d-cite key="sudhakar2023frontiers"></d-cite>, and probable PTSD or major depression was about twice as common after mild TBI as after an orthopaedic injury at three and six months <d-cite key="stein2019jamapsych"></d-cite>. Two routes are usually proposed and probably both operate: damage to the frontal and temporal regions that regulate emotion <d-cite key="bigler2007"></d-cite>, and the disruption to work, money and relationships that any serious injury brings.</p>
+    <p>Depression, anxiety, post-traumatic stress disorder and panic attacks are the commonest conditions five years after a mild TBI in the database I used <d-cite key="sudhakar2023frontiers"></d-cite>, and probable PTSD or major depression was more than twice as common after mild TBI as after an orthopaedic injury at three months, and still more common at six <d-cite key="stein2019jamapsych"></d-cite>. Two routes are usually proposed and probably both operate: damage to the frontal and temporal regions that regulate emotion <d-cite key="bigler2007"></d-cite>, and the disruption to work, money and relationships that any serious injury brings.</p>
   </div>
   <div class="tbi1-family" style="--fam: var(--tbi-subst)">
     <h3>Substance use</h3>
-    <p>Here the arrow often points the other way. Alcohol is involved in 15 to 20% of TBIs in India <d-cite key="gururaj2002"></d-cite> and was a contributing factor for a quarter of patients in CENTER-TBI <d-cite key="steyerberg2019centertbi"></d-cite>, so drinking is as much a cause of injury as a consequence, which is the shared-risk-factor route in action. Accidental drug poisoning is one of the leading causes of excess death after TBI <d-cite key="harrisonfelix2015"></d-cite>.</p>
+    <p>Here the arrow often points the other way. Alcohol is involved in 15 to 20% of TBIs in India <d-cite key="gururaj2002"></d-cite> and was a contributing factor for a quarter of patients in CENTER-TBI <d-cite key="steyerberg2019centertbi"></d-cite>, so drinking is as much a cause of injury as a consequence, which is the shared-risk-factor route in action. Accidental poisoning is among the causes of death with the highest excess risk after TBI <d-cite key="harrisonfelix2015"></d-cite>.</p>
   </div>
   <div class="tbi1-family" style="--fam: var(--tbi-cardio)">
     <h3>Heart, blood vessels and metabolism</h3>
@@ -536,6 +550,23 @@ None of these families sits in isolation. Pain disturbs sleep, poor sleep worsen
 
 This is where my project begins. The first paper that came out of it asked a simple question of the TBI Model Systems (TBIMS) database, which is the largest longitudinal TBI dataset in the world and has followed some participants for 35 years <d-cite key="tbims2020infosheet,msktc2023brochure"></d-cite>: five years after a mild TBI, how many people have been diagnosed with each of 26 medical and psychiatric conditions since their injury <d-cite key="sudhakar2023frontiers"></d-cite>? Of the 10,564 people in the database whose admission GCS was recorded, 4,915 (46.5%) had a score in the mild range. A caveat that runs through the whole series is that these are not typical concussions. Everyone in TBIMS was admitted for inpatient rehabilitation, which fewer than one in ten hospitalised TBI patients receives <d-cite key="tbims_lifelong"></d-cite>, and the mild cases there were “typically characterized by the presence of intracranial pathology and/or PTA” (post-traumatic amnesia, a stretch of time after the injury the person cannot remember) <d-cite key="sudhakar2023frontiers"></d-cite>. Only 223 to 228 of them answered the questions about other conditions at the five-year follow-up.
 
+<figure class="tbi-fig l-body-outset">
+  <div class="tbi-kicker">The 26 conditions the TBIMS follow-up asks about</div>
+  <div class="tbi1-condlist">
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-psych)"><h3>Psychiatric</h3><ul><li>Depression</li><li>Anxiety</li><li>Post-traumatic stress disorder</li><li>Panic attacks</li><li>Bipolar disorder</li><li>Obsessive-compulsive disorder</li><li>ADD / ADHD</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-subst)"><h3>Substance use</h3><ul><li>Alcoholism</li><li>Drug addiction</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-cardio)"><h3>Cardiovascular</h3><ul><li>Hypertension</li><li>High blood cholesterol</li><li>Stroke</li><li>Myocardial infarction</li><li>Congestive heart failure</li><li>Other heart conditions</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-metab)"><h3>Endocrine</h3><ul><li>Diabetes</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-neuro)"><h3>Neurologic</h3><ul><li>Sleep disorder</li><li>Dementia</li><li>Movement disorder</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-musc)"><h3>Musculoskeletal and pain</h3><ul><li>Chronic pain</li><li>Osteoarthritis</li><li>Rheumatoid arthritis</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-resp)"><h3>Respiratory</h3><ul><li>Emphysema</li><li>Pneumonia</li></ul></div>
+    <div class="tbi1-condgroup" style="--fam: var(--tbi-other)"><h3>Eyes and liver</h3><ul><li>Cataracts</li><li>Liver disease</li></ul></div>
+  </div>
+  <figcaption>The conditions in the public TBIMS dataset, grouped by organ system as in Sudhakar et al. 2023 (Table 1), except that I have split substance use from the other psychiatric conditions <d-cite key="sudhakar2023frontiers"></d-cite>. My thesis used 25 of them, leaving out “other heart conditions”; the <em>BMC Neurology</em> paper used all 26 <d-cite key="mehta2023thesis,mehta2025bmc"></d-cite>. Only diagnoses by a doctor or other healthcare professional were recorded. Part 3 explains exactly how they are asked about and counted.</figcaption>
+</figure>
+
+Of the 26, ten stand out by how common they were.
+
 <figure class="tbi-fig l-body-outset tbi1-links" data-src="{{ '/assets/data/tbi/part1/top10-links.json' | relative_url }}">
   <div class="tbi-kicker">Five years after a mild TBI: the ten most common new conditions</div>
   <svg id="tbi1-links" viewBox="0 0 640 400" role="group" aria-label="Ten conditions drawn as circles sized by how common they were five years after a mild TBI"></svg>
@@ -555,7 +586,7 @@ This is where my project begins. The first paper that came out of it asked a sim
 
 Anxiety (16.1%), depression (15.7%), chronic pain (15.7%), high blood pressure (14.0%) and post-traumatic stress disorder (11.2%) top the list <d-cite key="sudhakar2023frontiers"></d-cite>. The younger people (50 or under at the follow-up) had more depression than the older ones, and the older ones more high blood pressure, high cholesterol, cataracts and osteoarthritis, which is roughly what you would expect from age alone; post-traumatic stress disorder was more common in women. The paper concluded that “individuals who have sustained mild TBI could develop serious long-term medical and psychiatric comorbidities which could affect their pace of recovery” <d-cite key="sudhakar2023frontiers"></d-cite>, and it said nothing about cause, deliberately.
 
-A list of percentages, though, treats each condition as if it lived alone, and people do not have conditions one at a time. Someone with depression after a brain injury is also more likely to have anxiety, panic attacks and trouble sleeping, and the press of a button above shows that those overlaps are not small. Once you start drawing the lines, the list turns into a tangle, and the question my capstone was really about is how you see the structure of a tangle like that. Which conditions sit at the centre, which ones bridge otherwise separate groups, and does the shape of the tangle change with age? Could a condition that is rare be important because of where it sits, rather than how often it occurs? And if it could, what would a doctor do differently with that knowledge?
+A list of percentages, though, treats each condition as if it lived alone, and the previous section was about why that is wrong. Someone with depression after a brain injury is also more likely to have anxiety, panic attacks and trouble sleeping, and the press of a button above shows that those overlaps are not small. Once you start drawing the lines, the list turns into a tangle, and the question my capstone was really about is how you see the structure of a tangle like that. Which conditions sit at the centre, which ones bridge otherwise separate groups, and does the shape of the tangle change with age? Could a condition that is rare be important because of where it sits, rather than how often it occurs? And if it could, what would a doctor do differently with that knowledge?
 
 Answering those questions needs a way of thinking about connections that most people (and I, at the start of the project) have never been taught. That is what Part 2 is for.
 
