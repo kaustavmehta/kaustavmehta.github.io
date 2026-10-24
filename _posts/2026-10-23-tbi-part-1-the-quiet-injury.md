@@ -28,6 +28,7 @@ toc:
   - name: Counting consciousness
   - name: Mild is not minor
   - name: A process, not an event
+  - name: Illnesses that travel together
   - name: Tangles
 
 _styles: >
@@ -471,6 +472,65 @@ The figure below lays some of the evidence along a timeline. It is not one perso
 A few of these deserve a sentence each. In a study of 2.79 million Danes, people with any TBI had about 1.24 times the risk of dementia of people without one, rising with the number of injuries, and the excess was largest in the first six months <d-cite key="fann2018lancetpsych"></d-cite>. In 7.4 million Danes, the suicide rate was about twice as high after TBI, and still about 1.8 times as high after mild TBI alone <d-cite key="madsen2018suicide"></d-cite>. And in a US study that matched 4,351 people with mild TBI to 4,351 unexposed people and followed them for up to ten years, mild TBI was associated with about 2.5 times the risk of developing high blood pressure, 1.9 times the risk of diabetes and 2.2 times the risk of stroke, with new conditions appearing at a median of three and a half years after injury <d-cite key="izzy2022"></d-cite>. In people aged 18 to 40 with mild TBI, the hazard ratio for high blood pressure was 5.9. The authors called for “a targeted screening program for multisystem diseases after TBI” <d-cite key="izzy2022"></d-cite>. For the people in the US database I used, who had more severe injuries on average, life expectancy was about nine years shorter than for comparable people in the general population <d-cite key="harrisonfelix2015"></d-cite>.
 
 Some of these associations will be causal and some will not. People who fall over are not a random sample of people, and neither are people who crash motorbikes; conditions that were already there can make an injury more likely, and the same habits or circumstances can raise the risk of both. Most of these studies adjust for what they can, and none of them can adjust for everything. I come back to this in Part 3, because it applies just as much to my own work.
+
+## Illnesses that travel together
+
+The word for what that timeline is circling is _comorbidity_, and since the rest of the series hangs on it, I want to pin it down. Comorbidity means two or more conditions in the same person, whether at the same time or one after the other. It says nothing, by itself, about why. Two neighbouring words do carry a claim about cause, and it helps to keep them apart. A _complication_ is something the injury or its treatment directly brings about, usually soon after (a seizure in the first week, an infection in hospital). A _sequela_ is a lasting consequence of the injury (memory problems from a damaged temporal lobe). Comorbidity is the broader, more agnostic term, and it is the honest one for the kind of data my project used, because a survey that records which conditions a person has can tell you that two things go together without telling you how.
+
+So why do conditions go together? This was the question I found most interesting in the project, and also the one my data could answer least. There are at least six routes, and they leave very similar footprints in data.
+
+<figure class="tbi-fig l-body-outset">
+  <div class="tbi-kicker">Six ways two conditions end up in the same people (an illustration)</div>
+  <div class="tbi1-chips" role="group" aria-label="Choose a route" id="tbi1-routes-btns"></div>
+  <div class="tbi1-routes">
+    <div class="tbi1-canvas-wrap"><canvas id="tbi1-routes" role="img" aria-label="Four hundred simulated people, each drawn as a dot split into two halves for condition A and condition B"></canvas></div>
+    <div>
+      <h3 class="tbi1-stage-title" id="tbi1-routes-title"></h3>
+      <p class="tbi1-stage-text" id="tbi1-routes-text"></p>
+      <div class="tbi1-routes-stats" id="tbi1-routes-stats" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="tbi-legend">
+    <span><span class="tbi-swatch" style="background: var(--tbi-psych)"></span>Has condition A</span>
+    <span><span class="tbi-swatch" style="background: var(--tbi-cardio)"></span>Has condition B</span>
+    <span><span class="tbi-swatch" style="border: 2px solid var(--global-text-color)"></span>Has both</span>
+    <span id="tbi1-routes-extra"></span>
+  </div>
+  <figcaption>An illustration, not data: 400 simulated people for each route, generated from simple probabilities I chose so that conditions A and B are each fairly common. “Expected by chance” is what you would see if A and B were independent: the share with A times the share with B times 400. Every route except the first produces more people with both than chance would, and from the counts alone they look alike. Choose a route; the population is redrawn each time.</figcaption>
+</figure>
+
+The first route is plain chance. If high blood pressure affects a lot of older people and so do cataracts, plenty of people will have both without either having anything to do with the other, and a common condition will turn up alongside almost everything. The second is the one people usually assume: one condition causes the other, as when chronic pain wears a person down into depression. The third is a shared mechanism, a single underlying process that produces both, as when the same damage to frontal and limbic circuits could make someone both more anxious and more prone to low mood. The fourth is a shared risk factor, sometimes called a confounder: age raises the risk of high blood pressure, high cholesterol, cataracts and osteoarthritis all at once, and alcohol, poverty or a dangerous job can do the same for other sets of conditions. The fifth is treatment, where a medicine for one condition brings on another. The sixth is detection: a person who is already under a doctor’s care for one condition gets examined, asked about and diagnosed more, so conditions look more connected among patients than they are in life. My project could not tell these apart, and I say so again in Part 3, but knowing they exist changes how you read every line in a comorbidity network.
+
+With that in hand, here is what is known, and what is suspected, about the conditions that follow a brain injury, family by family.
+
+<div class="tbi1-families">
+  <div class="tbi1-family" style="--fam: var(--tbi-psych)">
+    <h3>Psychiatric</h3>
+    <p>Depression, anxiety, post-traumatic stress disorder and panic attacks are the commonest conditions five years after a mild TBI in the database I used <d-cite key="sudhakar2023frontiers"></d-cite>, and probable PTSD or major depression was about twice as common after mild TBI as after an orthopaedic injury at three and six months <d-cite key="stein2019jamapsych"></d-cite>. Two routes are usually proposed and probably both operate: damage to the frontal and temporal regions that regulate emotion <d-cite key="bigler2007"></d-cite>, and the disruption to work, money and relationships that any serious injury brings.</p>
+  </div>
+  <div class="tbi1-family" style="--fam: var(--tbi-subst)">
+    <h3>Substance use</h3>
+    <p>Here the arrow often points the other way. Alcohol is involved in 15 to 20% of TBIs in India <d-cite key="gururaj2002"></d-cite> and was a contributing factor for a quarter of patients in CENTER-TBI <d-cite key="steyerberg2019centertbi"></d-cite>, so drinking is as much a cause of injury as a consequence, which is the shared-risk-factor route in action. Accidental drug poisoning is one of the leading causes of excess death after TBI <d-cite key="harrisonfelix2015"></d-cite>.</p>
+  </div>
+  <div class="tbi1-family" style="--fam: var(--tbi-cardio)">
+    <h3>Heart, blood vessels and metabolism</h3>
+    <p>After mild TBI, high blood pressure, diabetes and stroke all became more likely over the following decade, even in people aged 18 to 40 <d-cite key="izzy2022"></d-cite>. Why is not settled. Masel and DeWitt list neuroendocrine and systemic metabolic dysregulation among TBI’s long-term effects <d-cite key="masel2010"></d-cite>; reduced activity, sleep problems and stress are other plausible contributors, and I would treat all of these as proposed routes rather than established ones.</p>
+  </div>
+  <div class="tbi1-family" style="--fam: var(--tbi-metab)">
+    <h3>Hormones</h3>
+    <p>The hypothalamus and pituitary, which run most of the body’s hormone systems, sit at the base of the brain just above the skull floor described earlier, and neuroendocrine dysregulation is one of the long-term consequences Masel and DeWitt name <d-cite key="masel2010"></d-cite>. Injury to that region is the usual proposed route.</p>
+  </div>
+  <div class="tbi1-family" style="--fam: var(--tbi-neuro)">
+    <h3>Neurological</h3>
+    <p>Seizures, sleep disorders and neurodegenerative disease are all associated with TBI <d-cite key="masel2010"></d-cite>, and TBI is a risk factor for epilepsy, stroke and neurodegeneration <d-cite key="wilson2017lancetneurol"></d-cite>. The dementia risk rises with the number of injuries <d-cite key="fann2018lancetpsych"></d-cite>, and continuing axonal degeneration is one proposed link <d-cite key="johnson2013axonal"></d-cite>.</p>
+  </div>
+  <div class="tbi1-family" style="--fam: var(--tbi-musc)">
+    <h3>Pain and the body</h3>
+    <p>Chronic pain was as common as depression five years after mild TBI <d-cite key="sudhakar2023frontiers"></d-cite>, and back pain topped the list ten years after moderate and severe TBI <d-cite key="hammond2019"></d-cite>. The accident that injures the brain often injures the rest of the body too, which is the most direct route of all, and age adds osteoarthritis on top.</p>
+  </div>
+</div>
+
+None of these families sits in isolation. Pain disturbs sleep, poor sleep worsens mood, low mood makes it harder to stay active, inactivity raises blood pressure, and so on around the circle. If I had to name the reason I became interested in looking at these conditions as a network rather than as a list, it would be that circle.
 
 ## Tangles
 
