@@ -548,10 +548,10 @@
       sim?.stop();
       sim = d3
         .forceSimulation(nodes)
-        .force("link", d3.forceLink(links).distance(26).strength(0.5))
-        .force("charge", d3.forceManyBody().strength(-70))
-        .force("x", d3.forceX(st.w / 2).strength(0.06))
-        .force("y", d3.forceY(st.h / 2).strength(0.09))
+        .force("link", d3.forceLink(links).distance(38).strength(0.45))
+        .force("charge", d3.forceManyBody().strength(-150))
+        .force("x", d3.forceX(st.w / 2).strength(0.05))
+        .force("y", d3.forceY(st.h / 2).strength(0.08))
         .force("collide", d3.forceCollide(8))
         .alphaDecay(0.035)
         .on("tick", () => {
@@ -646,14 +646,16 @@
     let morph = 0; // 0 = map, 1 = graph
 
     const root = d3.select(svg);
-    const gMap = root.append("g").attr("class", "tbi2-kb-map").attr("aria-hidden", "true");
+    const clipId = "tbi2-kb-clip";
+    root.append("defs").append("clipPath").attr("id", clipId).append("rect").attr("width", W).attr("height", H).attr("rx", 10);
+    const gMap = root.append("g").attr("class", "tbi2-kb-map").attr("aria-hidden", "true").attr("clip-path", `url(#${clipId})`);
     gMap.append("rect").attr("class", "tbi2-land").attr("width", W).attr("height", H).attr("rx", 10);
     gMap.append("path").attr("class", "tbi2-water-s").attr("d", "M -20 200 L 160 200");
     gMap.append("ellipse").attr("class", "tbi2-water-f").attr("cx", 230).attr("cy", 200).attr("rx", 125).attr("ry", 100);
     gMap.append("path").attr("class", "tbi2-water-s").attr("d", "M 320 150 C 400 110, 500 92, 680 88");
     gMap.append("path").attr("class", "tbi2-water-s").attr("d", "M 320 250 C 400 290, 500 308, 680 312");
     gMap.append("ellipse").attr("class", "tbi2-land").attr("cx", 228).attr("cy", 200).attr("rx", 82).attr("ry", 42);
-    gMap.append("text").attr("class", "tbi2-kb-river").attr("x", 40).attr("y", 236).text("Pregel");
+    gMap.append("text").attr("class", "tbi2-kb-river").attr("x", 28).attr("y", 204).text("Pregel");
     const gEdges = root.append("g");
     const gBridges = root.append("g");
     const gNodes = root.append("g");
@@ -719,7 +721,10 @@
           return g;
         })
         .attr("transform", (b) => `translate(${b.x},${b.y}) rotate(${b.a})`)
-        .attr("aria-label", (b, i) => `Bridge ${b.name}, between ${lands[b.u].long} and ${lands[b.v].long}${used.includes(i) ? ", already crossed" : ""}`)
+        .attr(
+          "aria-label",
+          (b, i) => `Bridge ${b.name}, between ${lands[b.u].long} and ${lands[b.v].long}${used.includes(i) ? ", already crossed" : ""}`
+        )
         .classed("is-used", (b, i) => used.includes(i))
         .style("opacity", 1 - t)
         .style("pointer-events", mode === "map" ? null : "none")
@@ -810,7 +815,9 @@
         .call((g) =>
           g
             .select(".tbi2-kb-name")
-            .attr("y", (d) => (d.y > 300 ? -36 : 36) * t)
+            .attr("x", (d) => (d.id === 3 ? 0 : -32 * t))
+            .attr("y", (d) => (d.id === 3 ? 40 * t : 0))
+            .attr("text-anchor", (d) => (t < 0.5 || d.id === 3 ? "middle" : "end"))
             .text((d) => d.name)
         )
         .call((g) =>
@@ -824,7 +831,7 @@
             }
             d3.select(this)
               .attr("x", -bw / 2)
-              .attr("y", -13 + (d.y > 300 ? -36 : 36) * t)
+              .attr("y", -13)
               .attr("width", bw)
               .attr("height", 26)
               .style("opacity", 1 - t);
@@ -854,6 +861,8 @@
         },
         () => {
           walking = false;
+          const end = forward ? e.v : e.u;
+          if (mode === "map") walker.attr("cx", lands[end].x).attr("cy", lands[end].y + (lands[end].y > 300 ? -24 : 24));
           done();
         }
       );
@@ -912,7 +921,9 @@
         if (!left.length) say("All seven crossed. (If you are reading this, please tell me how.)");
         else if (!exits.length)
           say(
-            `Stuck on ${landName(pos)} after ${used.length} of 7 bridges, with ${left.map((j) => bridges[j].name).join(", ")} still uncrossed. <button class="tbi-btn" type="button" data-kb="again">Try again</button>`
+            `Stuck on ${landName(pos)} after ${used.length} of 7 bridges, with ${left
+              .map((j) => bridges[j].name)
+              .join(", ")} still uncrossed. <button class="tbi-btn" type="button" data-kb="again">Try again</button>`
           );
         else say(`${used.length} of 7 crossed. You are on ${landName(pos)}.`);
         render();
@@ -944,8 +955,10 @@
       if (!edges.length) msg = "No bridges at all. Click two land masses to build one.";
       else if (!connected) msg = "The bridges now fall into separate pieces, so no single walk can reach them all.";
       else if (odd.length === 0) msg = "Every land mass touches an even number of bridges, so a walk exists, and it can finish where it started.";
-      else if (odd.length === 2) msg = `Exactly two land masses are odd (${names}), so a walk exists: it must start on one of them and finish on the other.`;
-      else msg = `${odd.length} land masses touch an odd number of bridges (${names}). A walk can have at most two, its start and its end, so no walk crosses every bridge once.`;
+      else if (odd.length === 2)
+        msg = `Exactly two land masses are odd (${names}), so a walk exists: it must start on one of them and finish on the other.`;
+      else
+        msg = `${odd.length} land masses touch an odd number of bridges (${names}). A walk can have at most two, its start and its end, so no walk crosses every bridge once.`;
       say(msg);
       if (btnSolve) btnSolve.disabled = !(connected && edges.length && (odd.length === 0 || odd.length === 2));
     };
@@ -1023,10 +1036,7 @@
       render();
       let at = res.start;
       let k = 0;
-      walker
-        .attr("cx", lands[at].x)
-        .attr("cy", lands[at].y)
-        .style("opacity", 1);
+      walker.attr("cx", lands[at].x).attr("cy", lands[at].y).style("opacity", 1);
       const next = () => {
         if (k >= res.trail.length) {
           say(`One walk that crosses every bridge exactly once, starting at ${lands[res.start].name} and finishing at ${lands[at].name}.`);
@@ -1124,7 +1134,9 @@
         [0.9, 0.2],
         [0.9, 0.8],
       ],
-      d3.range(n).map((i) => [0.5 + 0.42 * Math.cos((i / n) * 2 * Math.PI - Math.PI / 2), 0.5 + 0.45 * Math.sin((i / n) * 2 * Math.PI - Math.PI / 2)]),
+      d3
+        .range(n)
+        .map((i) => [0.5 + 0.42 * Math.cos((i / n) * 2 * Math.PI - Math.PI / 2), 0.5 + 0.45 * Math.sin((i / n) * 2 * Math.PI - Math.PI / 2)]),
       [
         [0.85, 0.85],
         [0.5, 0.1],
@@ -1168,7 +1180,9 @@
     // Build the table once
     const thead = document.createElement("thead");
     const hr = document.createElement("tr");
-    hr.innerHTML = `<th scope="col"><span class="tbi2-sr">Row to column</span></th>${names.map((nm) => `<th scope="col">${nm[0]}</th>`).join("")}<th scope="col" class="tbi2-mx-sum" id="tbi2-mx-sumhead">Sum</th>`;
+    hr.innerHTML = `<th scope="col"><span class="tbi2-sr">Row to column</span></th>${names
+      .map((nm) => `<th scope="col">${nm[0]}</th>`)
+      .join("")}<th scope="col" class="tbi2-mx-sum" id="tbi2-mx-sumhead">Sum</th>`;
     thead.appendChild(hr);
     const tbody = document.createElement("tbody");
     const cells = [];
@@ -1222,7 +1236,10 @@
           : M[i][j]
             ? `${names[i]} and ${names[j]} are now connected${mode === "weighted" ? ` with weight ${fmtW(M[i][j])}` : ""}`
             : `${names[i]} and ${names[j]} are no longer connected`;
-      setText(read, `${verb}. ${mode === "directed" ? "Only one cell changed." : "Both cells changed, because the matrix of an undirected graph is symmetric."}`);
+      setText(
+        read,
+        `${verb}. ${mode === "directed" ? "Only one cell changed." : "Both cells changed, because the matrix of an undirected graph is symmetric."}`
+      );
       render();
     };
 
@@ -1284,7 +1301,8 @@
         .classed("is-hot", isHotEdge)
         .each(function (e) {
           const p = geo(e);
-          const d = mode === "directed" ? `M ${p.x1} ${p.y1} Q ${p.cx} ${p.cy} ${p.ex} ${p.ey}` : `M ${p.x1} ${p.y1} Q ${p.cx} ${p.cy} ${p.x2} ${p.y2}`;
+          const d =
+            mode === "directed" ? `M ${p.x1} ${p.y1} Q ${p.cx} ${p.cy} ${p.ex} ${p.ey}` : `M ${p.x1} ${p.y1} Q ${p.cx} ${p.cy} ${p.x2} ${p.y2}`;
           const g = d3.select(this);
           g.selectAll(".tbi2-mx-hit, .tbi2-mx-line").attr("d", d);
           g.select(".tbi2-mx-line").attr("stroke-width", mode === "weighted" ? 1 + e.w * 7 : 2);
@@ -1293,7 +1311,9 @@
             .attr(
               "d",
               mode === "directed"
-                ? `M ${p.ex} ${p.ey} L ${p.ex - p.ux * a - p.uy * a * 0.55} ${p.ey - p.uy * a + p.ux * a * 0.55} L ${p.ex - p.ux * a + p.uy * a * 0.55} ${p.ey - p.uy * a - p.ux * a * 0.55} Z`
+                ? `M ${p.ex} ${p.ey} L ${p.ex - p.ux * a - p.uy * a * 0.55} ${p.ey - p.uy * a + p.ux * a * 0.55} L ${
+                    p.ex - p.ux * a + p.uy * a * 0.55
+                  } ${p.ey - p.uy * a - p.ux * a * 0.55} Z`
                 : ""
             )
             .style("display", mode === "directed" ? null : "none");
@@ -1318,7 +1338,8 @@
           b.textContent = i === j ? "–" : v ? fmtW(v) : "0";
           b.classList.toggle("is-on", v > 0);
           b.style.setProperty("--w", mode === "weighted" ? String(0.25 + v * 0.75) : v ? "1" : "0");
-          const lit = hot && ((hot.u === i && hot.v === j) || (mode !== "directed" && hot.u === j && hot.v === i) || hot.node === i || hot.node === j);
+          const lit =
+            hot && ((hot.u === i && hot.v === j) || (mode !== "directed" && hot.u === j && hot.v === i) || hot.node === i || hot.node === j);
           b.classList.toggle("is-hot", !!lit);
           b.setAttribute(
             "aria-label",
@@ -1334,21 +1355,20 @@
       setText($("#tbi2-mx-sumhead"), mode === "directed" ? "Out" : mode === "weighted" ? "Strength" : "Degree");
     };
 
-    interactive(
-      L.nodes.selectAll("g.tbi2-node").data(nodes).join("g").attr("class", "tbi2-node tbi-focusable"),
-      st,
-      {
-        label: (d) => d.label,
-        onMove: (d, x, y) => {
-          d.x = x;
-          d.y = y;
-          setText(read, `You moved ${d.label}. The matrix has not changed, because the graph has not changed.`);
-          render();
-        },
-        onClick: (d) => setHot(hot && hot.node === d.i ? null : { node: d.i }),
-      }
-    );
-    L.nodes.selectAll("g.tbi2-node").on("pointerenter", (ev, d) => ev.pointerType === "mouse" && setHot({ node: d.i })).on("pointerleave", () => setHot(null));
+    interactive(L.nodes.selectAll("g.tbi2-node").data(nodes).join("g").attr("class", "tbi2-node tbi-focusable"), st, {
+      label: (d) => d.label,
+      onMove: (d, x, y) => {
+        d.x = x;
+        d.y = y;
+        setText(read, `You moved ${d.label}. The matrix has not changed, because the graph has not changed.`);
+        render();
+      },
+      onClick: (d) => setHot(hot && hot.node === d.i ? null : { node: d.i }),
+    });
+    L.nodes
+      .selectAll("g.tbi2-node")
+      .on("pointerenter", (ev, d) => ev.pointerType === "mouse" && setHot({ node: d.i }))
+      .on("pointerleave", () => setHot(null));
 
     modeBtns.forEach((b) =>
       b.addEventListener("click", () => {
@@ -1357,7 +1377,7 @@
         for (let i = 0; i < n; i++)
           for (let j = i + 1; j < n; j++) {
             const on = M[i][j] || M[j][i];
-            if (m === "weighted") M[i][j] = M[j][i] = on ? (defaultW[`${i}-${j}`] ?? 0.5) : 0;
+            if (m === "weighted") M[i][j] = M[j][i] = on ? defaultW[`${i}-${j}`] ?? 0.5 : 0;
             else M[i][j] = M[j][i] = on ? 1 : 0;
           }
         mode = m;
@@ -1451,7 +1471,10 @@
         .classed("is-warm", (d) => paradox && k[d.i] < nbrMean[d.i])
         .attr(
           "aria-label",
-          (d) => `${d.label}: ${k[d.i]} friends, total strength ${s[d.i].toFixed(2)}${paradox ? `, friends have ${nbrMean[d.i].toFixed(1)} friends on average` : ""}`
+          (d) =>
+            `${d.label}: ${k[d.i]} friends, total strength ${s[d.i].toFixed(2)}${
+              paradox ? `, friends have ${nbrMean[d.i].toFixed(1)} friends on average` : ""
+            }`
         );
       nodeSel.select(".tbi2-node-label").text((d) => (paradox ? `${d.label} ${k[d.i]}·${nbrMean[d.i].toFixed(1)}` : d.label));
       const rows = nodes
@@ -1472,7 +1495,9 @@
         if (sel != null)
           setText(
             read,
-            `<strong>${d.label}</strong> has degree ${k[d.i]} and weighted degree ${s[d.i].toFixed(2)} (${g.adj[d.i].map((j) => g.weight.get(algo.key(d.i, j)).toFixed(2)).join(" + ")}).`
+            `<strong>${d.label}</strong> has degree ${k[d.i]} and weighted degree ${s[d.i].toFixed(2)} (${g.adj[d.i]
+              .map((j) => g.weight.get(algo.key(d.i, j)).toFixed(2))
+              .join(" + ")}).`
           );
         render();
       },
@@ -1485,7 +1510,7 @@
           read,
           mode === "k"
             ? "Counting friends: Ravi, with six, is the most connected."
-            : "Weighing friendships: Mina’s four strong ties add up to more than Ravi’s six weak ones."
+            : "Weighing friendships: Mina’s four ties, three of them close, add up to far more than Ravi’s six acquaintances."
         );
         render();
       })
@@ -1500,7 +1525,11 @@
       setText(
         read,
         paradox
-          ? `Each label now reads <em>own friends · friends’ average</em>. The average person has ${meanK.toFixed(1)} friends, but ${fewer} of the ${nodes.length} have fewer friends than their friends do, on average. Pick a friendship at random and look at either end, and that person has ${edgeMean.toFixed(1)} friends on average.`
+          ? `Each label now reads <em>own friends · friends’ average</em>. The average person has ${meanK.toFixed(1)} friends, but ${fewer} of the ${
+              nodes.length
+            } have fewer friends than their friends do, on average. Pick a friendship at random and look at either end, and that person has ${edgeMean.toFixed(
+              1
+            )} friends on average.`
           : ""
       );
       render();
@@ -1543,7 +1572,9 @@
       const cx = st.w / 2;
       const cy = st.h / 2;
       const R = Math.min(st.w, st.h) / 2 - 26;
-      const pos = d3.range(n).map((i) => [cx + R * Math.cos((i / n) * 2 * Math.PI - Math.PI / 2), cy + R * Math.sin((i / n) * 2 * Math.PI - Math.PI / 2)]);
+      const pos = d3
+        .range(n)
+        .map((i) => [cx + R * Math.cos((i / n) * 2 * Math.PI - Math.PI / 2), cy + R * Math.sin((i / n) * 2 * Math.PI - Math.PI / 2)]);
       L.edges
         .selectAll("line")
         .data(pairs)
@@ -1564,7 +1595,9 @@
       const dens = maxE ? E / maxE : 0;
       setText(
         read,
-        `<em>V</em> = ${n} nodes could share <em>V</em>(<em>V</em>&minus;1)/2 = ${maxE} edges, and <em>E</em> = ${E} of them are present. Density = 2<em>E</em> / <em>V</em>(<em>V</em>&minus;1) = 2&times;${E} / (${n}&times;${n - 1}) = <strong>${dens.toFixed(2)}</strong>`
+        `<em>V</em> = ${n} nodes could share <em>V</em>(<em>V</em>&minus;1)/2 = ${maxE} edges, and <em>E</em> = ${E} of them are present. Density = 2<em>E</em> / <em>V</em>(<em>V</em>&minus;1) = 2&times;${E} / (${n}&times;${
+          n - 1
+        }) = <strong>${dens.toFixed(2)}</strong>`
       );
       if (fill) fill.style.width = `${dens * 100}%`;
       svg.setAttribute("aria-label", `${n} nodes arranged in a circle, ${E} of ${maxE} possible edges drawn. Density ${dens.toFixed(2)}.`);
@@ -1602,7 +1635,7 @@
         if (c < cols - 1) base.push([i, i + 1]);
         if (r < rows - 1) base.push([i, i + cols]);
       }
-    const drop = new Set(["1-7", "8-14", "3-4", "10-11", "15-16", "4-10"]);
+    const drop = new Set(["1-7", "8-14", "15-16", "4-10", "9-15"]);
     const baseEdges = base.filter(([u, v]) => !drop.has(`${u}-${v}`));
     baseEdges.push([7, 14]);
     let edges = baseEdges.slice();
@@ -1644,7 +1677,10 @@
       const { edgeSel, nodeSel } = nodeLink(st, L, nodes, links, { r: () => 12, labelPos: "inside" });
       edgeSel
         .classed("is-path", (l) => onPath.has(algo.key(l.u, l.v)))
-        .classed("is-reached", (l) => info && info.dist[l.u] >= 0 && Math.max(info.dist[l.u], info.dist[l.v]) <= reveal && Math.abs(info.dist[l.u] - info.dist[l.v]) === 1)
+        .classed(
+          "is-reached",
+          (l) => info && info.dist[l.u] >= 0 && Math.max(info.dist[l.u], info.dist[l.v]) <= reveal && Math.abs(info.dist[l.u] - info.dist[l.v]) === 1
+        )
         .classed("is-shortcut", (l) => l.short);
       nodeSel
         .classed("is-source", (d) => d.i === src)
@@ -1657,7 +1693,7 @@
           const maxD = info ? Math.max(...info.dist) : 1;
           d3.select(this)
             .select(".tbi2-node-dot")
-            .style("fill", reached ? d3.interpolateRgb(P.accent, P.bg)(0.15 + (0.7 * dist) / Math.max(1, maxD)) : null);
+            .style("fill", reached ? d3.interpolateRgb(P.accent, P.bg)(0.05 + (0.42 * dist) / Math.max(1, maxD)) : null);
           d3.select(this)
             .select(".tbi2-node-label")
             .text(reached && d.i !== src ? dist : d.label);
@@ -1736,7 +1772,9 @@
         .text("steps");
       hist.setAttribute(
         "aria-label",
-        `Histogram of the shortest-path length between every pair of the ${nodes.length} nodes: ${counts.map((c, i) => `${c} pairs at distance ${i + 1}`).join(", ")}. Average path length ${stats.avg.toFixed(2)}, diameter ${stats.diameter}.`
+        `Histogram of the shortest-path length between every pair of the ${nodes.length} nodes: ${counts
+          .map((c, i) => `${c} pairs at distance ${i + 1}`)
+          .join(", ")}. Average path length ${stats.avg.toFixed(2)}, diameter ${stats.diameter}.`
       );
       return { info, stats };
     };
@@ -1767,7 +1805,9 @@
         const mean = d3.mean(info.dist.filter((x) => x > 0));
         setText(
           read,
-          `From <strong>${d.label}</strong>, the wave reaches everyone in ${ecc} steps; the average distance from ${d.label} is ${mean.toFixed(2)}. Now choose a second node.`
+          `From <strong>${d.label}</strong>, the wave reaches everyone in ${ecc} steps; the average distance from ${d.label} is ${mean.toFixed(
+            2
+          )}. Now choose a second node.`
         );
       } else if (d.i === src) {
         src = null;
@@ -1778,7 +1818,9 @@
         const info = render().info;
         setText(
           read,
-          `${nodes[src].label} to ${d.label}: ${info.dist[dst]} steps, along ${info.sigma[dst]} different shortest path${info.sigma[dst] > 1 ? "s" : ""}. Choose another node to start again.`
+          `${nodes[src].label} to ${d.label}: ${info.dist[dst]} steps, along ${info.sigma[dst]} different shortest path${
+            info.sigma[dst] > 1 ? "s" : ""
+          }. Choose another node to start again.`
         );
       }
       render();
@@ -1802,7 +1844,9 @@
       const after = render().stats;
       setText(
         read,
-        `One shortcut added. Average path length ${before.avg.toFixed(2)} &rarr; ${after.avg.toFixed(2)}; diameter ${before.diameter} &rarr; ${after.diameter}.`
+        `One shortcut added. Average path length ${before.avg.toFixed(2)} &rarr; ${after.avg.toFixed(2)}; diameter ${before.diameter} &rarr; ${
+          after.diameter
+        }.`
       );
       if (shortcuts >= shortcutPool.length) btnShort.disabled = true;
     });
@@ -1882,7 +1926,12 @@
               .append("path")
               .attr("class", "tbi2-tri")
               .style("opacity", 0)
-              .call((e) => e.transition().duration(reduceMotion ? 0 : 500).style("opacity", 1)),
+              .call((e) =>
+                e
+                  .transition()
+                  .duration(reduceMotion ? 0 : 500)
+                  .style("opacity", 1)
+              ),
           (update) => update,
           (exit) => exit.remove()
         )
@@ -1919,7 +1968,9 @@
         })
         .classed("is-real", ([a, b]) => has(a, b))
         .attr("aria-label", ([a, b]) =>
-          has(a, b) ? `${nodes[a].label} and ${nodes[b].label} are friends. Press to remove.` : `${nodes[a].label} and ${nodes[b].label} are not friends. Press to introduce them.`
+          has(a, b)
+            ? `${nodes[a].label} and ${nodes[b].label} are friends. Press to remove.`
+            : `${nodes[a].label} and ${nodes[b].label} are not friends. Press to introduce them.`
         )
         .each(function ([a, b]) {
           const [x1, y1] = pt(a);
@@ -1931,9 +1982,13 @@
       const possible = (k * (k - 1)) / 2;
       setText(
         read,
-        `<strong>${nodes[focus].label}</strong> has <em>k</em> = ${k} friends, who could share ${possible} friendships among themselves; ${E} exist${E === 1 ? "s" : ""}. ` +
+        `<strong>${nodes[focus].label}</strong> has <em>k</em> = ${k} friends, who could share ${possible} friendships among themselves; ${E} exist${
+          E === 1 ? "s" : ""
+        }. ` +
           (k > 1
-            ? `<em>C</em> = 2&times;${E} / (${k}&times;${k - 1}) = <strong>${cc[focus].toFixed(2)}</strong>, and ${nodes[focus].label} sits in ${tri[focus]} triangle${tri[focus] === 1 ? "" : "s"}.`
+            ? `<em>C</em> = 2&times;${E} / (${k}&times;${k - 1}) = <strong>${cc[focus].toFixed(2)}</strong>, and ${nodes[focus].label} sits in ${
+                tri[focus]
+              } triangle${tri[focus] === 1 ? "" : "s"}.`
             : "With fewer than two friends there is nothing to close, so <em>C</em> is set to 0.") +
           ` Average clustering of the whole network: ${algo.averageClustering(g).toFixed(2)}.`
       );
@@ -1984,7 +2039,7 @@
     const read = $("#tbi2-asr-read");
     const st = stage(svg, { ratio: 0.75, minH: 280, maxH: 360, mobileRatio: 0.9, pad: 16 });
     const ss = stage(scatter, { ratio: 0.75, minH: 240, maxH: 360, mobileRatio: 0.8, pad: 0 });
-    const ls = stage(line, { ratio: 0.14, minH: 104, maxH: 110, mobileRatio: 0.3, pad: 0 });
+    const ls = stage(line, { ratio: 0.1, minH: 104, maxH: 104, mobileRatio: 0.3, pad: 0 });
     const n = 40;
     const rand = algo.rng(2024);
     const initial = algo.preferential(n, 2, rand);
@@ -2036,8 +2091,8 @@
     };
     const sim = d3
       .forceSimulation(nodes)
-      .force("link", d3.forceLink(linkData()).distance(30).strength(0.4))
-      .force("charge", d3.forceManyBody().strength(-60))
+      .force("link", d3.forceLink(linkData()).distance(36).strength(0.35))
+      .force("charge", d3.forceManyBody().strength(-110))
       .force("x", d3.forceX(() => st.w / 2).strength(0.08))
       .force("y", d3.forceY(() => st.h / 2).strength(0.1))
       .alphaDecay(0.04)
@@ -2092,6 +2147,14 @@
         .attr("cx", (d) => sx(d.a))
         .attr("cy", (d) => sy(d.b))
         .attr("r", (d) => 2.2 + 2.2 * Math.sqrt(d.c));
+      sg.selectAll("text.tbi2-asr-tick")
+        .data([2, maxDeg])
+        .join("text")
+        .attr("class", "tbi2-asr-tick")
+        .attr("text-anchor", "middle")
+        .attr("x", (v) => sx(v))
+        .attr("y", ss.h - pad + 13)
+        .text((v) => v);
       sg.selectAll("text.tbi2-asr-ax")
         .data(["degree at one end", "degree at the other end"])
         .join("text")
@@ -2102,24 +2165,23 @@
     };
     // Real networks from Newman (2002), Table I.
     const refs = [
-      { r: 0.363, name: "Physics co-authors", side: 1 },
-      { r: 0.276, name: "Company directors", side: -1 },
-      { r: 0.208, name: "Film actors", side: 1 },
-      { r: -0.156, name: "Yeast proteins", side: 1 },
-      { r: -0.163, name: "C. elegans neurons", side: -1 },
-      { r: -0.189, name: "Internet", side: 1 },
-      { r: -0.276, name: "Food web", side: -1 },
+      { r: 0.363, name: "Physics co-authors", short: "Physics", row: 3 },
+      { r: 0.276, name: "Company directors", short: "Directors", row: 2 },
+      { r: 0.208, name: "Film actors", short: "Actors", row: 1 },
+      { r: -0.163, name: "C. elegans neurons", short: "Neurons", row: 1 },
+      { r: -0.189, name: "Internet", short: "Internet", row: 2 },
+      { r: -0.276, name: "Food web", short: "Food web", row: 3 },
     ];
     const drawLine = () => {
-      const x = d3.scaleLinear([-0.6, 0.6], [16, ls.w - 16]);
-      const y = ls.h / 2;
+      const x = d3.scaleLinear([-0.9, 0.9], [16, ls.w - 16]);
+      const y = 38;
       const Lg = d3.select(line);
       Lg.selectAll("line.tbi2-asr-axis")
         .data([0])
         .join("line")
         .attr("class", "tbi2-asr-axis")
-        .attr("x1", x(-0.6))
-        .attr("x2", x(0.6))
+        .attr("x1", x(-0.9))
+        .attr("x2", x(0.9))
         .attr("y1", y)
         .attr("y2", y);
       Lg.selectAll("text.tbi2-asr-tick")
@@ -2128,8 +2190,7 @@
         .attr("class", "tbi2-asr-tick")
         .attr("text-anchor", "middle")
         .attr("x", (v) => x(v))
-        .attr("y", y + 4)
-        .attr("dy", "0.35em")
+        .attr("y", y - 10)
         .text((v) => (v === 0 ? "0" : v > 0 ? "+0.5" : "−0.5"));
       const narrow = ls.w < 520;
       const g = Lg.selectAll("g.tbi2-asr-ref")
@@ -2139,7 +2200,9 @@
           gg.append("line");
           gg.append("circle").attr("r", 4.5);
           gg.append("text").attr("text-anchor", "middle");
-          gg.on("pointerenter focus", (ev, d) => showTooltip(`<strong>${d.name}</strong><br>r = ${d.r.toFixed(3)} (Newman 2002)`, ev.type === "focus" ? ev.currentTarget : ev));
+          gg.on("pointerenter focus", (ev, d) =>
+            showTooltip(`<strong>${d.name}</strong><br>r = ${d.r.toFixed(3)} (Newman 2002)`, ev.type === "focus" ? ev.currentTarget : ev)
+          );
           gg.on("pointerleave blur", hideTooltip);
           return gg;
         })
@@ -2147,11 +2210,10 @@
         .attr("transform", (d) => `translate(${x(d.r)},${y})`);
       g.select("line")
         .attr("y1", 0)
-        .attr("y2", (d) => d.side * 22);
+        .attr("y2", (d) => 6 + d.row * 14);
       g.select("text")
-        .attr("y", (d) => d.side * 22 + (d.side > 0 ? 12 : -5))
-        .style("display", (d, i) => (narrow && i % 2 ? "none" : null))
-        .text((d) => (narrow ? d.name.split(" ")[0] : d.name));
+        .attr("y", (d) => 16 + d.row * 14)
+        .text((d) => (narrow ? d.short : d.name));
       Lg.selectAll("g.tbi2-asr-me")
         .data([0])
         .join((enter) => {
@@ -2160,8 +2222,10 @@
           gg.append("text").attr("text-anchor", "middle").attr("y", -31);
           return gg;
         })
-        .attr("transform", `translate(${x(clamp(rOf(S), -0.6, 0.6))},${y})`)
+        .attr("transform", `translate(${x(clamp(rOf(S), -0.9, 0.9))},${y})`)
         .select("text")
+        .attr("text-anchor", x(rOf(S)) < 70 ? "start" : x(rOf(S)) > ls.w - 70 ? "end" : "middle")
+        .attr("x", x(rOf(S)) < 70 ? -8 : x(rOf(S)) > ls.w - 70 ? 8 : 0)
         .text(`this network ${rOf(S) >= 0 ? "+" : "−"}${Math.abs(rOf(S)).toFixed(2)}`);
     };
     let target = rOf(S);
@@ -2206,7 +2270,9 @@
       drawLine();
       setText(
         read,
-        `<em>r</em> = <strong>${rOf(S) >= 0 ? "+" : "−"}${Math.abs(rOf(S)).toFixed(2)}</strong>. Every node still has exactly the degree it started with; only who is attached to whom has changed.`
+        `<em>r</em> = <strong>${rOf(S) >= 0 ? "+" : "−"}${Math.abs(rOf(S)).toFixed(
+          2
+        )}</strong>. Every node still has exactly the degree it started with; only who is attached to whom has changed.`
       );
       if (Math.abs(rOf(S) - target) < 0.005 || stale > 25) {
         running = false;
@@ -2386,7 +2452,11 @@
           : guess === 7
             ? "Yes: it is Bea. "
             : `You chose ${names[guess]}, who comes ${rank === 1 ? "first" : `${rank}${rank === 2 ? "nd" : rank === 3 ? "rd" : "th"}`}. `) +
-          `Bea has only ${deg[7]} connections, fewer than Hal or Rosa with ${deg[0]} each, yet ${(bc[7] * 100).toFixed(0)}% of all the shortest paths between other pairs run through her (betweenness ${bc[7].toFixed(2)}, against ${bc[0].toFixed(2)} for each hub).`
+          `Bea has only ${deg[7]} connections, fewer than Hal or Rosa with ${deg[0]} each, yet ${(bc[7] * 100).toFixed(
+            0
+          )}% of all the shortest paths between other pairs run through her (betweenness ${bc[7].toFixed(2)}, against ${bc[0].toFixed(
+            2
+          )} for each hub).`
       );
       render();
     };
@@ -2456,7 +2526,7 @@
           if (p.seg >= p.path.length - 1) {
             particles.splice(i, 1);
             travellers++;
-            if (p.path.includes(7)) throughBea++;
+            if (p.path.slice(1, -1).includes(7)) throughBea++;
             continue;
           }
           counts[p.path[p.seg]]++;
@@ -2477,7 +2547,9 @@
         if (travellers)
           setText(
             read,
-            `${travellers} journeys completed${removed.size ? "" : `; ${Math.round((100 * throughBea) / travellers)}% of them passed through Bea`}. The glow around each person grows with the traffic through them.`
+            `${travellers} journeys completed${
+              removed.size ? "" : `; ${Math.round((100 * throughBea) / travellers)}% of them passed through Bea`
+            }. The glow around each person grows with the traffic through them.`
           );
       }
       raf = requestAnimationFrame(tick);
@@ -2503,7 +2575,7 @@
           if (!path) continue;
           path.slice(1, -1).forEach((v) => counts[v]++);
           travellers++;
-          if (path.includes(7)) throughBea++;
+          if (path.slice(1, -1).includes(7)) throughBea++;
         }
         render();
         setText(read, `${travellers} journeys routed; ${Math.round((100 * throughBea) / travellers)}% passed through Bea.`);
@@ -2532,7 +2604,9 @@
       setText(
         read,
         closing
-          ? `With Bea gone the network falls into ${algo.components(g).count} islands, and ${stats.unreachable} of the ${stats.pairs + stats.unreachable} remaining pairs can no longer reach each other at all. Hal and Rosa have lost nothing but their link to the other side.`
+          ? `With Bea gone the network falls into ${algo.components(g).count} islands, and ${stats.unreachable} of the ${
+              stats.pairs + stats.unreachable
+            } remaining pairs can no longer reach each other at all. Hal and Rosa have lost nothing but their link to the other side.`
           : "Bea is back, and the two halves are joined again."
       );
       render();
@@ -2596,7 +2670,7 @@
     const C = layersFor(chart);
 
     const render = () => {
-      const r = (d) => 6 + 16 * Math.sqrt(x[d.i]);
+      const r = (d) => 4 + 13 * Math.sqrt(x[d.i]);
       const { nodeSel } = nodeLink(
         st,
         L,
@@ -2628,7 +2702,12 @@
         .join("text")
         .attr("class", "tbi2-ev-lab")
         .attr("x", (s) => s.pts[s.pts.length - 1][0] + 6)
-        .attr("y", (s) => s.pts[s.pts.length - 1][1])
+        .attr("y", (s) => {
+          const y = s.pts[s.pts.length - 1][1];
+          const other = series[s.d.i === 5 ? 6 : 5].pts;
+          const oy = other[other.length - 1][1];
+          return Math.abs(y - oy) < 12 ? y + (s.d.i === 6 ? 7 : -7) : y;
+        })
         .attr("dy", "0.35em")
         .text((s) => s.d.label);
       C.back
@@ -2884,7 +2963,8 @@
         .join("text")
         .attr("class", (d, i) => `tbi2-ws-name ${i ? "is-l" : "is-c"}`)
         .attr("x", (d) => (d[1] ? d[1][0] : 0))
-        .attr("y", (d, i) => (d[1] ? d[1][1] + (i ? -10 : 16) : -99))
+        .attr("y", (d, i) => (d[1] ? d[1][1] + (i ? -10 : 16) : 0))
+        .style("display", (d) => (d[1] ? null : "none"))
         .attr("text-anchor", (d, i) => (i ? "start" : "middle"))
         .text((d) => d[0]);
       // the reader's own graph
@@ -2911,7 +2991,9 @@
         .attr("cy", (d) => sy(Math.min(1.02, d[1])));
       plot.setAttribute(
         "aria-label",
-        `Normalised clustering and path length against rewiring probability, averaged over ${REAL} random draws at each of ${ps.length} values of p${job < ps.length * REAL ? " (still computing)" : ""}. Your graph: clustering ${(current.C / base.C).toFixed(2)}, path length ${(current.L / base.L).toFixed(2)} of the lattice values.`
+        `Normalised clustering and path length against rewiring probability, averaged over ${REAL} random draws at each of ${ps.length} values of p${
+          job < ps.length * REAL ? " (still computing)" : ""
+        }. Your graph: clustering ${(current.C / base.C).toFixed(2)}, path length ${(current.L / base.L).toFixed(2)} of the lattice values.`
       );
     };
 
@@ -2939,8 +3021,10 @@
         if (re) return;
         const [x1, y1] = at(u);
         const [x2, y2] = at(v);
+        const span = Math.min(Math.abs(u - v), N - Math.abs(u - v));
+        const pull = 1 - 0.07 * span;
         ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
+        ctx.quadraticCurveTo(c + ((x1 + x2) / 2 - c) * pull, c + ((y1 + y2) / 2 - c) * pull, x2, y2);
       });
       ctx.stroke();
       ctx.globalAlpha = 0.75;
@@ -2976,7 +3060,9 @@
       slider.setAttribute("aria-valuetext", `p = ${p === 0 ? 0 : p.toPrecision(2)}, ${re} edges rewired`);
       setText(
         read,
-        `${re} of ${edges.length} edges rewired. Clustering is ${((100 * current.C) / base.C).toFixed(0)}% of the lattice’s (${current.C.toFixed(2)}); average path length is ${((100 * current.L) / base.L).toFixed(0)}% of it (${current.L.toFixed(2)} steps).`
+        `${re} of ${edges.length} edges rewired. Clustering is ${((100 * current.C) / base.C).toFixed(0)}% of the lattice’s (${current.C.toFixed(
+          2
+        )}); average path length is ${((100 * current.L) / base.L).toFixed(0)}% of it (${current.L.toFixed(2)} steps).`
       );
     };
     slider.addEventListener("input", update);
@@ -3013,19 +3099,18 @@
     const centres = [
       [0.18, 0.3],
       [0.82, 0.3],
-      [0.5, 0.86],
+      [0.5, 0.84],
     ];
     const nodes = [];
     centres.forEach(([cx, cy], c) => {
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * 2 * Math.PI + c;
-        nodes.push({ i: nodes.length, c, label: "", x: cx + 0.15 * Math.cos(a), y: cy + 0.22 * Math.sin(a) });
+        nodes.push({ i: nodes.length, c, label: "", x: cx + 0.13 * Math.cos(a), y: cy + 0.16 * Math.sin(a) });
       }
     });
     const start = [];
     for (let c = 0; c < 3; c++)
-      for (let i = 0; i < 6; i++)
-        for (let j = i + 1; j < 6; j++) if (rand() < 0.62 || j === i + 1) start.push([c * 6 + i, c * 6 + j]);
+      for (let i = 0; i < 6; i++) for (let j = i + 1; j < 6; j++) if (rand() < 0.62 || j === i + 1) start.push([c * 6 + i, c * 6 + j]);
     start.push([1, 9], [4, 14], [10, 17], [5, 12]);
     let edges = start.slice();
     let stepNo = 0;
@@ -3050,7 +3135,12 @@
         this.querySelector(".tbi2-node-dot").style.fill = count > 1 ? P.groups[(count <= 3 ? major[comp[d.i]] : comp[d.i]) % P.groups.length] : "";
       });
       nodeSel.attr("tabindex", null).attr("role", null);
-      svg.setAttribute("aria-label", `A network of ${nodes.length} nodes and ${edges.length} edges, now in ${count} connected piece${count > 1 ? "s" : ""}. Edge thickness shows edge betweenness.`);
+      svg.setAttribute(
+        "aria-label",
+        `A network of ${nodes.length} nodes and ${edges.length} edges, now in ${count} connected piece${
+          count > 1 ? "s" : ""
+        }. Edge thickness shows edge betweenness.`
+      );
       return { g, eb, count };
     };
     const step = () => {
@@ -3072,7 +3162,9 @@
           const { count } = render();
           setText(
             read,
-            `Step ${stepNo}: removed the edge carrying the most shortest paths (${best[1].toFixed(1)} of them). ${count === 1 ? "Still one piece." : `Now ${count} pieces.`}${count === 3 && stepNo <= 6 ? " These are the three groups I planted when I made the network." : ""}`
+            `Step ${stepNo}: removed the edge carrying the most shortest paths (${best[1].toFixed(1)} of them). ${
+              count === 1 ? "Still one piece." : `Now ${count} pieces.`
+            }${count === 3 && stepNo <= 6 ? " These are the three groups I planted when I made the network." : ""}`
           );
           if (!edges.length) btnStep.disabled = true;
         },
@@ -3119,7 +3211,31 @@
       [0.38, 0.9],
     ];
     const nodes = pos.map(([x, y], i) => ({ i, label: String.fromCharCode(65 + i), x, y }));
-    const E = [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 4], [3, 4], [2, 3], [1, 3], [4, 12], [2, 5], [5, 6], [5, 11], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [7, 8], [5, 12], [8, 9], [9, 10], [10, 11]];
+    const E = [
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [0, 4],
+      [1, 2],
+      [2, 4],
+      [3, 4],
+      [2, 3],
+      [1, 3],
+      [4, 12],
+      [2, 5],
+      [5, 6],
+      [5, 11],
+      [6, 7],
+      [6, 8],
+      [6, 9],
+      [6, 10],
+      [6, 11],
+      [7, 8],
+      [5, 12],
+      [8, 9],
+      [9, 10],
+      [10, 11],
+    ];
     const g = algo.build(nodes.length, E);
     const k = algo.degree(g);
     const measures = {
@@ -3137,38 +3253,41 @@
     };
     const text = {
       friends: {
-        degree: "The most popular person: the one with the most friends. Popularity is easy to see from the inside, which is not true of the other measures.",
+        degree:
+          "The most popular person: the one with the most friends. Popularity is easy to see from the inside, which is not true of the other measures.",
         betweenness:
-          "The person who introduces two circles that would otherwise never meet. In Milgram’s letter-passing study, 16 of the 64 chains that reached their target got there through the same man, a clothing merchant in the target’s home town <span class=\"tbi2-cite\">(Travers and Milgram, 1969)</span>.",
+          'The person who introduces two circles that would otherwise never meet. In Milgram’s letter-passing study, 16 of the 64 chains that reached their target got there through the same man, a clothing merchant in the target’s home town <span class="tbi2-cite">(Travers and Milgram, 1969)</span>.',
         eigenvector: "Influence by association: someone whose friends are themselves well connected, even if they have only a handful of friends.",
         clustering: "How tight-knit a person’s circle is: whether their friends also know one another. Social networks tend to be full of triangles.",
       },
       flights: {
         degree: "The airport with the most direct routes, which is what airlines mean by a hub.",
         betweenness:
-          "A connecting airport that a great many journeys have to pass through. In the worldwide air network the most connected cities are not necessarily the most central ones <span class=\"tbi2-cite\">(Guimerà and colleagues, 2005)</span>, which is exactly the gap between degree and betweenness.",
+          'A connecting airport that a great many journeys have to pass through. In the worldwide air network the most connected cities are not necessarily the most central ones <span class="tbi2-cite">(Guimerà and colleagues, 2005)</span>, which is exactly the gap between degree and betweenness.',
         eigenvector: "An airport whose routes lead to other big airports, so that its importance is borrowed from where you can go next.",
-        clustering: "Whether an airport’s destinations also fly to each other, as they do in a dense regional network, rather than only through the hub.",
+        clustering:
+          "Whether an airport’s destinations also fly to each other, as they do in a dense regional network, rather than only through the hub.",
       },
       power: {
         degree: "A substation with many lines in and out.",
         betweenness:
-          "A choke point between regions of the grid. If it fails, the load has to find another way round, and if there is none, part of the network is cut off. Networks with a few critical nodes can shrug off random failures yet be fragile to the loss of exactly those nodes <span class=\"tbi2-cite\">(Albert, Jeong and Barabási, 2000)</span>.",
+          'A choke point between regions of the grid. If it fails, the load has to find another way round, and if there is none, part of the network is cut off. Networks with a few critical nodes can shrug off random failures yet be fragile to the loss of exactly those nodes <span class="tbi2-cite">(Albert, Jeong and Barabási, 2000)</span>.',
         eigenvector: "Part of the grid’s well-connected core, rather than a long spur running out to the edge.",
         clustering:
-          "Local redundancy: whether there is a triangle of lines around a substation. For the western United States grid Watts and Strogatz measured a clustering of 0.08, against 0.005 for a random graph of the same size <span class=\"tbi2-cite\">(Watts and Strogatz, 1998)</span>.",
+          'Local redundancy: whether there is a triangle of lines around a substation. For the western United States grid Watts and Strogatz measured a clustering of 0.08, against 0.005 for a random graph of the same size <span class="tbi2-cite">(Watts and Strogatz, 1998)</span>.',
       },
       brain: {
         degree: "A region wired directly to many others; in connectome studies such regions are called hubs.",
         betweenness: "A relay: a region that sits on many of the shortest routes between others.",
         eigenvector: "A region inside the densely interconnected core, connected to other well-connected regions.",
         clustering:
-          "Local wiring. In the nervous system of the worm <em>C. elegans</em>, 282 neurons in Watts and Strogatz’s version <span class=\"tbi2-cite\">(mapped by White and colleagues, 1986)</span>, clustering is 0.28 against 0.05 for a comparable random graph <span class=\"tbi2-cite\">(Watts and Strogatz, 1998)</span>.",
+          'Local wiring. In the nervous system of the worm <em>C. elegans</em>, 282 neurons in Watts and Strogatz’s version <span class="tbi2-cite">(mapped by White and colleagues, 1986)</span>, clustering is 0.28 against 0.05 for a comparable random graph <span class="tbi2-cite">(Watts and Strogatz, 1998)</span>.',
       },
       disease: {
         degree:
-          "A condition that co-occurs, more often than chance would suggest, with many others. In a network built from the records of more than 30 million patients, people diagnosed with more highly connected diseases tended to die sooner <span class=\"tbi2-cite\">(Hidalgo and colleagues, 2009)</span>.",
-        betweenness: "A condition that links two groups of conditions which otherwise rarely meet in the same person. This is the measure the study in Part 3 leans on most.",
+          'A condition that co-occurs, more often than chance would suggest, with many others. In a network built from the records of more than 30 million patients, people diagnosed with more highly connected diseases tended to die sooner <span class="tbi2-cite">(Hidalgo and colleagues, 2009)</span>.',
+        betweenness:
+          "A condition that links two groups of conditions which otherwise rarely meet in the same person. This is the measure the study in Part 3 leans on most.",
         eigenvector: "A condition embedded among other highly connected conditions, at the centre of a dense knot of comorbidity.",
         clustering: "Whether the conditions that come with one condition also come with each other: triangles of conditions.",
       },
@@ -3197,7 +3316,7 @@
         "aria-label",
         `The same 13-node network, node size showing ${m.name.toLowerCase()}. Highest: ${nodes[top].label} with ${max.toFixed(m.digits)}.`
       );
-      panel.innerHTML = `<div class="tbi-kicker">${m.name}, when the nodes are ${worlds[world]}</div><p>${text[world][measure]}</p>`;
+      panel.innerHTML = `<p class="tbi2-gal-head"><strong>${m.name}</strong>, when the nodes are ${worlds[world]}</p><p>${text[world][measure]}</p>`;
     };
     worldBtns.forEach((b) =>
       b.addEventListener("click", () => {
@@ -3237,18 +3356,7 @@
       { name: "High cholesterol", v: "--tbi-metab" },
       { name: "Alcohol misuse", v: "--tbi-subst" },
     ];
-    const people = [
-      [0, 1, 3],
-      [5, 6],
-      [0, 2, 1, 7],
-      [4, 0, 3],
-      [5, 6, 3],
-      [1, 2],
-      [7, 0],
-      [4, 5],
-      [0, 1],
-      [],
-    ];
+    const people = [[0, 1, 3], [5, 6], [0, 2, 1, 7], [4, 0, 3], [5, 6, 3], [1, 2], [7, 0], [4, 5], [0, 1], []];
     const on = new Array(people.length).fill(false);
     const nodes = conds.map((c, i) => ({
       i,
@@ -3262,7 +3370,9 @@
       b.className = "tbi2-person";
       b.setAttribute("aria-pressed", "false");
       b.innerHTML = `<span class="tbi2-person-name">Person ${p + 1}</span>${
-        cs.length ? cs.map((c) => `<span class="tbi2-chip" style="--c: var(${conds[c].v})">${conds[c].name}</span>`).join("") : '<span class="tbi2-chip is-none">none recorded</span>'
+        cs.length
+          ? cs.map((c) => `<span class="tbi2-chip" style="--c: var(${conds[c].v})">${conds[c].name}</span>`).join("")
+          : '<span class="tbi2-chip is-none">none recorded</span>'
       }`;
       b.addEventListener("click", () => toggle(p));
       host.appendChild(b);
@@ -3271,6 +3381,12 @@
     const L = layersFor(svg);
     let flash = null;
     const render = () => {
+      const narrow = st.w < 560;
+      nodes.forEach((d) => {
+        const a = (d.i / conds.length) * 2 * Math.PI - Math.PI / 2;
+        d.x = 0.5 + (narrow ? 0.34 : 0.5) * Math.cos(a);
+        d.y = 0.5 + 0.5 * Math.sin(a);
+      });
       const w = new Map();
       const count = new Array(conds.length).fill(0);
       people.forEach((cs, p) => {
@@ -3291,8 +3407,13 @@
         dot.style.fill = cssVar(conds[d.i].v);
         dot.style.opacity = count[d.i] ? 1 : 0.25;
         const lab = this.querySelector(".tbi2-node-label");
-        const [x] = st.place(d.x, d.y);
-        lab.setAttribute("text-anchor", x < st.w * 0.3 ? "start" : x > st.w * 0.7 ? "end" : "middle");
+        const cx = Math.cos((d.i / conds.length) * 2 * Math.PI - Math.PI / 2);
+        const cy = Math.sin((d.i / conds.length) * 2 * Math.PI - Math.PI / 2);
+        const rr = 5 + 4 * count[d.i] + 6;
+        const side = st.w >= 560 && Math.abs(cx) > 0.3;
+        lab.setAttribute("text-anchor", side ? (cx > 0 ? "start" : "end") : "middle");
+        lab.setAttribute("x", side ? (cx > 0 ? rr : -rr) : 0);
+        lab.setAttribute("dy", side ? "0.35em" : cy < 0 ? -rr : rr + 10);
       });
       nodeSel.select(".tbi2-node-label").text((d) => `${d.label}${count[d.i] ? ` (${count[d.i]})` : ""}`);
       buttons.forEach((b, p) => b.setAttribute("aria-pressed", String(on[p])));
@@ -3301,14 +3422,21 @@
       w.forEach((c, kk) => {
         if (!best || c > best[1]) best = [kk, c];
       });
-      svg.setAttribute("aria-label", `Disease network built from ${n} people: ${links.map((l) => `${conds[l.u].name}–${conds[l.v].name} ${l.w}`).join(", ") || "no edges yet"}.`);
+      svg.setAttribute(
+        "aria-label",
+        `Disease network built from ${n} people: ${links.map((l) => `${conds[l.u].name}–${conds[l.v].name} ${l.w}`).join(", ") || "no edges yet"}.`
+      );
       if (!n) setText(read, "No one added yet: eight conditions, no edges.");
       else
         setText(
           read,
           `${n} ${n === 1 ? "person" : "people"} added, ${links.length} edges.` +
-            (best ? ` The thickest edge, ${conds[Math.floor(best[0] / 65536)].name}–${conds[best[0] % 65536].name}, means ${best[1]} of them have both.` : "") +
-            (on[9] ? " Person 10 added nothing to the drawing, though, as Part 3 will show, people with none of the conditions matter to the statistics." : "")
+            (best
+              ? ` The thickest edge, ${conds[Math.floor(best[0] / 65536)].name}–${conds[best[0] % 65536].name}, means ${best[1]} of them have both.`
+              : "") +
+            (on[9]
+              ? " Person 10 added nothing to the drawing, though, as Part 3 will show, people with none of the conditions matter to the statistics."
+              : "")
         );
     };
     const toggle = (p) => {

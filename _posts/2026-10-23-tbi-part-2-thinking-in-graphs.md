@@ -155,7 +155,7 @@ _styles: >
   .tbi2-ev-lab { font-size: 12px; font-weight: 600; }
   .tbi2-ev-ax { font-size: 11px; fill: var(--tbi-ink-2) !important; }
   .tbi2-ev-base { stroke: var(--tbi-rule); }
-  #tbi2-ev .tbi2-node.is-source .tbi2-node-dot { fill: var(--tbi-accent); }
+  #tbi2-ev .tbi2-node-dot { fill: var(--tbi-ink-2); fill-opacity: 0.6; } #tbi2-ev .tbi2-node.is-source .tbi2-node-dot, #tbi2-ev .tbi2-node.is-target .tbi2-node-dot { fill-opacity: 1; } #tbi2-ev .tbi2-node.is-source .tbi2-node-dot { fill: var(--tbi-accent); }
   #tbi2-ev .tbi2-node.is-target .tbi2-node-dot { fill: var(--tbi-metab); stroke: var(--global-bg-color); stroke-width: 2; }
   .tbi2-ws-wrap { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 1.25rem; align-items: center; }
   .tbi2-ws-wrap canvas { margin: 0 auto; display: block; }
@@ -174,7 +174,8 @@ _styles: >
   .tbi2-ws-me.is-l { fill: var(--tbi-metab); }
   .tbi2-legend-line { display: inline-block; width: 16px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 0.35rem; }
   .tbi2-gal-panel { min-height: 9rem; }
-  .tbi2-gal-panel p { font-size: 0.92rem; line-height: 1.55; margin: 0; }
+  .tbi2-gal-panel p { font-size: 0.92rem; line-height: 1.55; margin: 0 0 0.5rem; }
+  .tbi2-gal-head { color: var(--tbi-ink-2); font-size: 0.85rem !important; }
   .tbi2-cite { color: var(--tbi-ink-2); font-size: 0.85em; }
   .tbi2-people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem; }
   .tbi2-person { text-align: left; font: inherit; font-size: 0.72rem; line-height: 1.3; padding: 0.45rem 0.55rem; border-radius: 8px; border: 1px solid var(--tbi-rule); background: transparent; color: var(--tbi-ink); cursor: pointer; transition: border-color 0.2s, background 0.2s; }
@@ -363,7 +364,7 @@ Two nodes that are not joined directly may still be joined through others. The *
 Two numbers summarise all the distances in a connected network. The **average path length** is the mean over every pair,
 
 $$
-\bar{\delta} = \frac{2}{V(V-1)} \sum_{i<j} \delta(v_i, v_j),
+\bar{\delta} = \frac{2}{V(V-1)} \sum_{i \lt j} \delta(v_i, v_j),
 $$
 
 and the **diameter** is the largest distance between any pair, $D = \max_{i,j} \delta(v_i, v_j)$: the furthest apart two nodes can be. In the histogram the average is the dashed line and the diameter is the right-most bar.
@@ -431,7 +432,7 @@ Newman found that social networks tend to be assortative and technological and b
 
 “Which node is most important?” is the question people most want a network to answer, and it does not have one answer. It has several, each a different way of making “important” precise, and they are known collectively as **centralities**. My research used three.
 
-**Degree centrality** is the simplest: a node matters if it has many connections. It is the degree, usually divided by $n-1$ so that a node connected to everyone scores 1. The thesis wrote it via the neighbourhood $N(u) = \lbrace v \in V : uv \in E \rbrace$, with degree centrality $|N(u)|$ before normalising.
+**Degree centrality** is the simplest: a node matters if it has many connections. It is the degree, usually divided by $n-1$ so that a node connected to everyone scores 1. The thesis wrote it via the neighbourhood $N(u) = \lbrace v \in V : uv \in E \rbrace$, the set of nodes joined to $u$, whose size is the degree.
 
 **Betweenness centrality** asks a different question: how much of the traffic in the network has to pass through this node? Picture everyone sending a message to everyone else along the shortest route available. A node that sits on many of those routes is a toll booth, a broker, a bridge between parts of the network that would otherwise have to go a long way round. Make a guess before anything is revealed.
 

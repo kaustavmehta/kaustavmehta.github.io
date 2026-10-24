@@ -7,10 +7,12 @@
 // see assets/data/tbi/README.md. The mechanics are an illustration, not a finite-element model.
 import * as THREE from "../vendor/three.module.min.js";
 import { OrbitControls } from "../vendor/OrbitControls.js";
+import { SCENARIOS, SCENARIO_ORDER, SIM, simulate } from "./tbi-brain-sim.js";
+export { SIM, simulate };
 
-const DATA_JSON = new URL("../../data/tbi/brain.json", import.meta.url);
-const DATA_BIN = new URL("../../data/tbi/brain.bin", import.meta.url);
-const DATA_HI = new URL("../../data/tbi/brain-hi.bin", import.meta.url);
+const DATA_JSON = new URL("../../data/tbi/brain/brain.json", import.meta.url);
+const DATA_BIN = new URL("../../data/tbi/brain/brain.bin", import.meta.url);
+const DATA_HI = new URL("../../data/tbi/brain/brain-hi.bin", import.meta.url);
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -29,7 +31,8 @@ const watchVisibility =
     if (!("IntersectionObserver" in window)) return cb(true);
     new IntersectionObserver((es) => es.forEach((e) => cb(e.isIntersecting))).observe(el);
   });
-const onThemeChange = T.onThemeChange || ((cb) => new MutationObserver(cb).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }));
+const onThemeChange =
+  T.onThemeChange || ((cb) => new MutationObserver(cb).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] }));
 const isDark = () => document.documentElement.getAttribute("data-theme") === "dark";
 
 const h = (tag, attrs = {}, children = []) => {
@@ -78,13 +81,15 @@ const REGIONS = {
     name: "Frontal pole",
     where: "The very front tip of each hemisphere, just behind the forehead.",
     does: "Planning ahead, juggling several goals at once and thinking about the future.",
-    injury: "Strikes the frontal bone in blows to the forehead, and in contrecoup when the back of the head is hit. Contributes to problems with planning, motivation and multitasking.",
+    injury:
+      "Strikes the frontal bone in blows to the forehead, and in contrecoup when the back of the head is hit. Contributes to problems with planning, motivation and multitasking.",
   },
   2: {
     name: "Prefrontal cortex",
     where: "The front and top of the frontal lobes, above the orbitofrontal cortex.",
     does: "Executive function: holding information in mind, organising, switching between tasks and sustaining attention.",
-    injury: "Slowed thinking, distractibility, trouble organising and starting tasks, and apathy are among the most common lasting complaints after TBI.",
+    injury:
+      "Slowed thinking, distractibility, trouble organising and starting tasks, and apathy are among the most common lasting complaints after TBI.",
   },
   3: {
     name: "Inferior frontal gyrus",
@@ -151,19 +156,22 @@ const REGIONS = {
     name: "Hippocampus",
     where: "Curled inside the medial temporal lobe, on both sides.",
     does: "Turns experiences into lasting memories of facts and events, and helps with navigation.",
-    injury: "Post-traumatic amnesia, and lasting difficulty learning new information. After moderate and severe TBI the hippocampus can shrink over the following months.",
+    injury:
+      "Post-traumatic amnesia, and lasting difficulty learning new information. After moderate and severe TBI the hippocampus can shrink over the following months.",
   },
   14: {
     name: "Amygdala",
     where: "An almond-shaped cluster in front of the hippocampus.",
     does: "Detects threat and tags memories with emotional weight.",
-    injury: "Changes in fear and emotional responses; the amygdala is implicated in the anxiety and post-traumatic stress symptoms that often follow TBI.",
+    injury:
+      "Changes in fear and emotional responses; the amygdala is implicated in the anxiety and post-traumatic stress symptoms that often follow TBI.",
   },
   15: {
     name: "Thalamus",
     where: "Two egg-shaped masses at the centre of the brain.",
     does: "Relays almost all sensory information to the cortex and helps regulate arousal, sleep and attention.",
-    injury: "Fatigue, slowed processing and disturbed sleep. The thalamus is often affected in diffuse injury because so many fibres pass through it.",
+    injury:
+      "Fatigue, slowed processing and disturbed sleep. The thalamus is often affected in diffuse injury because so many fibres pass through it.",
   },
   16: {
     name: "Basal ganglia",
@@ -189,84 +197,82 @@ const REGIONS = {
     name: "Cerebellum",
     where: "Tucked under the back of the brain, in the posterior cranial fossa.",
     does: "Coordination, balance and timing of movement; it also contributes to thinking.",
-    injury: "Unsteadiness and poor coordination. (Dizziness after concussion is common, though often it comes from the inner ear rather than the cerebellum.)",
+    injury:
+      "Unsteadiness and poor coordination. (Dizziness after concussion is common, though often it comes from the inner ear rather than the cerebellum.)",
   },
   20: {
     name: "Ventricles",
     where: "Fluid-filled cavities in the middle of the brain.",
     does: "Make cerebrospinal fluid (CSF), which surrounds the brain so that it floats: roughly 1.4 kg in air, it weighs only tens of grams in CSF.",
-    injury: "Floating cushions everyday jolts, but it also leaves the brain free to lag behind the skull when the head is suddenly accelerated. Blood in the ventricles, or swelling that squeezes them, are signs on a CT scan.",
+    injury:
+      "Floating cushions everyday jolts, but it also leaves the brain free to lag behind the skull when the head is suddenly accelerated. Blood in the ventricles, or swelling that squeezes them, are signs on a CT scan.",
   },
 };
 const CORTEX_ORDER = [21, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const DEEP_ORDER = [17, 18, 15, 13, 14, 16, 19, 20];
 const DEEP = new Set(DEEP_ORDER);
 
-const SCENARIOS = {
-  front: {
-    label: "Forehead",
-    blurb: "A blow to the front of the head, or the forehead hitting something hard.",
-    site: [0, 0.25, -1],
-    lin: [0, 0, 1],
-    rot: [0.18, 0, 0],
-    cut: "sagittal",
-    impactor: true,
-  },
-  back: {
-    label: "Back of head",
-    blurb: "The back of the head hits something, as in a fall backwards onto a hard floor.",
-    site: [0, 0.1, 1],
-    lin: [0, 0, -1],
-    rot: [-0.18, 0, 0],
-    cut: "sagittal",
-    impactor: true,
-  },
-  side: {
-    label: "Side",
-    blurb: "A blow to the side of the head, or the temple hitting a door frame or window.",
-    site: [-1, 0.15, 0],
-    lin: [1, 0, 0],
-    rot: [0, 0, -0.22],
-    cut: "coronal",
-    impactor: true,
-  },
-  hook: {
-    label: "Hook to the jaw",
-    blurb: "A glancing blow to the side of the jaw, which spins the head sideways about the neck.",
-    site: [-1, -0.9, -0.6],
-    lin: [0.25, 0, 0],
-    rot: [0, -1, 0],
-    cut: "coronal",
-    impactor: false,
-  },
-  uppercut: {
-    label: "Uppercut",
-    blurb: "A blow under the chin that snaps the head backwards.",
-    site: [0, -1, -0.8],
-    lin: [0, 0.3, 0],
-    rot: [0.85, 0, 0],
-    cut: "sagittal",
-    impactor: false,
-  },
-  whiplash: {
-    label: "Whiplash",
-    blurb: "No blow to the head at all: the body is thrown forward, the head lags and then whips back and forth on the neck.",
-    site: [0, -1, 0.4],
-    lin: [0, 0, -0.35],
-    rot: [0.7, 0, 0],
-    cut: "sagittal",
-    impactor: false,
-    whiplash: true,
-  },
-};
-const SCENARIO_ORDER = ["front", "back", "side", "hook", "uppercut", "whiplash"];
+
+/* ------------------------------------------------------------------ simulation (worker when possible) */
+
+let worker = null;
+let workerFailed = false;
+let jobId = 0;
+const pending = new Map();
+const V = (o) => new THREE.Vector3(o.x, o.y, o.z);
+function getWorker(data) {
+  if (worker || workerFailed) return worker;
+  try {
+    worker = new Worker(new URL("./tbi-brain-worker.js", import.meta.url), { type: "module" });
+    worker.onmessage = (e) => {
+      const p = pending.get(e.data.id);
+      if (!p) return;
+      pending.delete(e.data.id);
+      const res = e.data.res;
+      res.frames.forEach((f) => {
+        f.u = V(f.u);
+        f.th = V(f.th);
+        f.ph = V(f.ph);
+        f.sp = V(f.sp);
+        f.sr = V(f.sr);
+      });
+      res.axis = V(res.axis);
+      res.linDir = V(res.linDir);
+      p.resolve(res);
+    };
+    worker.onerror = () => {
+      workerFailed = true;
+      worker = null;
+      pending.forEach((p) => p.fallback());
+      pending.clear();
+    };
+    const c = data.contact;
+    worker.postMessage({ type: "init", pivot: { x: data.pivot.x, y: data.pivot.y, z: data.pivot.z }, contact: c });
+  } catch (e) {
+    workerFailed = true;
+    worker = null;
+  }
+  return worker;
+}
+function runSimulation(data, scenario, severity) {
+  const w = getWorker(data);
+  const sync = () => simulate(data, scenario, severity);
+  if (!w) return Promise.resolve(sync());
+  return new Promise((resolve) => {
+    const id = ++jobId;
+    pending.set(id, { resolve, fallback: () => resolve(sync()) });
+    w.postMessage({ type: "run", id, scenario, severity });
+  });
+}
 
 /* ------------------------------------------------------------------ data */
 
 let dataPromise = null;
 const loadData = () => {
   if (!dataPromise) {
-    dataPromise = Promise.all([fetch(DATA_JSON).then((r) => r.json()), fetch(DATA_BIN).then((r) => r.arrayBuffer())]).then(([m, buf]) => decode(m, buf));
+    dataPromise = Promise.all([fetch(DATA_JSON).then((r) => r.json()), fetch(DATA_BIN).then((r) => r.arrayBuffer())]).then(([m, buf]) =>
+      decode(m, buf)
+    );
   }
   return dataPromise;
 };
@@ -286,7 +292,10 @@ export const wantHighDetail = (el) => {
 
 let hiPromise = null;
 const loadHi = (data) => {
-  if (!hiPromise) hiPromise = fetch(DATA_HI).then((r) => r.arrayBuffer()).then((buf) => decodeHi(data, buf));
+  if (!hiPromise)
+    hiPromise = fetch(DATA_HI)
+      .then((r) => r.arrayBuffer())
+      .then((buf) => decodeHi(data, buf));
   return hiPromise;
 };
 
@@ -400,7 +409,7 @@ function decode(m, buf) {
     // Orientation: everything faces outward except the inner table of the skull, which faces the brain.
     const vol = signedVolume(pos, idx);
     const wantInward = e.kind === "skull_inner";
-    const flipped = (vol < 0) !== wantInward;
+    const flipped = vol < 0 !== wantInward;
     if (flipped) for (let t = 0; t < idx.length; t += 3) [idx[t + 1], idx[t + 2]] = [idx[t + 2], idx[t + 1]];
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
@@ -463,7 +472,7 @@ function decode(m, buf) {
           dy = mesh.pos[i * 3 + 1] - c.y,
           dz = mesh.pos[i * 3 + 2] - c.z;
         const d = dx * dx + dy * dy + dz * dz;
-        if (d < bd) (bd = d), (best = i);
+        if (d < bd) ((bd = d), (best = i));
       }
       (anchors[r] = anchors[r] || []).push({ mesh: mesh.name, p: new THREE.Vector3().fromArray(mesh.pos, best * 3) });
     }
@@ -517,8 +526,10 @@ function buildContacts(meshes) {
   const list = [];
   for (const name of CONTACT_MESHES) {
     const m = meshes[name];
-    for (let i = 0; i < m.count; i++) if (m.gap[i] < 7.5) list.push([name, i]);
+    for (let i = 0; i < m.count; i++) if (m.gap[i] < 5.5) list.push([name, i]);
   }
+  // sorted by gap, so the simulation can stop early at vertices that cannot be touching
+  list.sort((a, b) => meshes[a[0]].gap[a[1]] - meshes[b[0]].gap[b[1]]);
   const N = list.length;
   const r = new Float32Array(N * 3),
     n = new Float32Array(N * 3),
@@ -537,188 +548,6 @@ function buildContacts(meshes) {
     target[k] = offsets[name] + i;
   });
   return { N, r, n, g, rough, hw, target, offsets, total };
-}
-
-/* ------------------------------------------------------------------ the toy mechanics */
-// Brain = rigid body on a damped spring inside the skull (a few mm of CSF), plus a "deep core" that lags
-// the brain's outer layers in rotation (a stand-in for shear between structures of different stiffness).
-// Everything is in the skull's frame: the skull's acceleration appears as an opposite pseudo-force.
-export const SIM = {
-  dt: 0.05, // ms
-  duration: 90, // ms
-  frameEvery: 5, // record every 0.25 ms
-  keyEvery: 6, // heat snapshot every 6 frames
-  t0: 6, // pulse start (ms)
-  pulse: 8, // ms, half-sine
-  k: 0.11, // tethering spring (1/ms^2)  -> period ~19 ms
-  c: 0.05,
-  kRot: 0.07,
-  cRot: 0.1,
-  kCore: 0.16,
-  cCore: 0.16,
-  coreFromShell: 0.15,
-  kContact: 0.01, // per contacting vertex
-  cContact: 0.0002,
-  invI: 1 / 2200, // 1 / (I/m), mm^-2
-  sag: -1.1, // mm: buoyant in CSF, the brain still settles a little onto the skull base
-  suction: 0.22,
-  crush: 2.5,
-  scrape: 4.5,
-  linPerSev: 0.11, // mm/ms^2 per severity step (~11 g)
-  rotPerSev: 0.0008, // rad/ms^2 per severity step
-};
-
-export function simulate(data, scenarioKey, severity) {
-  const S = SCENARIOS[scenarioKey];
-  const { contact } = data;
-  const { N, r, n, g, rough, hw, target, total } = contact;
-  const heat = new Float32Array(total);
-  const dt = SIM.dt;
-  const steps = Math.round(SIM.duration / dt);
-  const lin = new THREE.Vector3(...S.lin);
-  const rot = new THREE.Vector3(...S.rot);
-  const A = SIM.linPerSev * severity;
-  const Al = SIM.rotPerSev * severity;
-  const pivot = data.pivot;
-  // state
-  const u = new THREE.Vector3(0, SIM.sag, 0),
-    v = new THREE.Vector3(),
-    th = new THREE.Vector3(),
-    w = new THREE.Vector3(),
-    ph = new THREE.Vector3(),
-    pw = new THREE.Vector3();
-  // skull (display only): position and rotation about the neck pivot, with a soft "neck" restoring them
-  const sp = new THREE.Vector3(),
-    sv = new THREE.Vector3(),
-    sr = new THREE.Vector3(),
-    sw = new THREE.Vector3();
-  const frames = [];
-  const keys = [];
-  const F = new THREE.Vector3(),
-    Tq = new THREE.Vector3(),
-    aS = new THREE.Vector3(),
-    alS = new THREE.Vector3(),
-    tmp = new THREE.Vector3();
-  let maxPhi = 0,
-    maxPen = 0,
-    contactNow = 0;
-  const pulseAt = (t) => {
-    if (S.whiplash) {
-      // body thrown forward: head lags (extension) then rebounds (flexion), over a longer window
-      const tt = t - SIM.t0;
-      const D = 34;
-      if (tt < 0 || tt > D) return [0, 0];
-      const s = Math.sin((Math.PI * tt) / D);
-      return [s, Math.sin((2 * Math.PI * tt) / D) * 1.15];
-    }
-    const tt = t - SIM.t0;
-    if (tt < 0 || tt > SIM.pulse) return [0, 0];
-    const s = Math.sin((Math.PI * tt) / SIM.pulse);
-    return [s, s];
-  };
-  for (let step = 0; step <= steps; step++) {
-    const t = step * dt;
-    const [pl, pr] = pulseAt(t);
-    aS.copy(lin).multiplyScalar(A * pl);
-    alS.copy(rot).multiplyScalar(Al * pr);
-    // rotation about the neck pivot also accelerates the brain's centre: alpha x (c - pivot)
-    tmp.copy(pivot).negate();
-    aS.add(alS.clone().cross(tmp));
-    // contact forces
-    F.set(0, 0, 0);
-    Tq.set(0, 0, 0);
-    contactNow = 0;
-    for (let i = 0; i < N; i++) {
-      const i3 = i * 3;
-      const rx = r[i3],
-        ry = r[i3 + 1],
-        rz = r[i3 + 2];
-      const nx = n[i3],
-        ny = n[i3 + 1],
-        nz = n[i3 + 2];
-      const dx = u.x + th.y * rz - th.z * ry;
-      const dy = u.y + th.z * rx - th.x * rz;
-      const dz = u.z + th.x * ry - th.y * rx;
-      const dn = dx * nx + dy * ny + dz * nz;
-      const p = dn - g[i];
-      // contrecoup by tension: while the skull is being accelerated, the far side of the brain is pulled
-      // away from the bone, and the pressure there drops (cavitation in the classic accounts)
-      if (dn < -0.8 && pl > 0.05) heat[target[i]] += SIM.suction * (dn + 0.8) * (dn + 0.8) * pl * dt * hw[i] * (g[i] < 4 ? 1 : 0.3);
-      if (p < -2) continue;
-      const vx = v.x + w.y * rz - w.z * ry;
-      const vy = v.y + w.z * rx - w.x * rz;
-      const vz = v.z + w.x * ry - w.y * rx;
-      const vn = vx * nx + vy * ny + vz * nz;
-      const tx = vx - vn * nx,
-        ty = vy - vn * ny,
-        tz = vz - vn * nz;
-      const vt = Math.sqrt(tx * tx + ty * ty + tz * tz);
-      const prox = Math.max(0, Math.min(1, 1 + p / 1.6));
-      // scraping along a rough floor (skull base) while close to it
-      let dh = rough[i] * rough[i] * prox * prox * vt * SIM.scrape;
-      if (p > 0) {
-        contactNow++;
-        const f = SIM.kContact * p + SIM.cContact * Math.max(vn, 0);
-        F.x -= f * nx;
-        F.y -= f * ny;
-        F.z -= f * nz;
-        // torque r x (-f n)
-        Tq.x -= f * (ry * nz - rz * ny);
-        Tq.y -= f * (rz * nx - rx * nz);
-        Tq.z -= f * (rx * ny - ry * nx);
-        dh += SIM.crush * (p * p * 1.6 + p * Math.max(vn, 0) * 3);
-        if (p > maxPen) maxPen = p;
-      }
-      heat[target[i]] += dh * dt * hw[i];
-    }
-    // integrate brain translation and rotation (semi-implicit Euler)
-    const ax = -aS.x - SIM.k * u.x - SIM.c * v.x + F.x;
-    const ay = -aS.y - SIM.k * (u.y - SIM.sag) - SIM.c * v.y + F.y;
-    const az = -aS.z - SIM.k * u.z - SIM.c * v.z + F.z;
-    v.x += ax * dt;
-    v.y += ay * dt;
-    v.z += az * dt;
-    u.addScaledVector(v, dt);
-    const bx = -alS.x - SIM.kRot * th.x - SIM.cRot * w.x + Tq.x * SIM.invI;
-    const by = -alS.y - SIM.kRot * th.y - SIM.cRot * w.y + Tq.y * SIM.invI;
-    const bz = -alS.z - SIM.kRot * th.z - SIM.cRot * w.z + Tq.z * SIM.invI;
-    w.x += bx * dt;
-    w.y += by * dt;
-    w.z += bz * dt;
-    th.addScaledVector(w, dt);
-    // deep core lags the brain's outer layers: driven by their total angular acceleration
-    // (contact torques jolt the outer brain too, but only a fraction of that reaches the core as shear)
-    const cx = -(alS.x + SIM.coreFromShell * bx) - SIM.kCore * ph.x - SIM.cCore * pw.x;
-    const cy = -(alS.y + SIM.coreFromShell * by) - SIM.kCore * ph.y - SIM.cCore * pw.y;
-    const cz = -(alS.z + SIM.coreFromShell * bz) - SIM.kCore * ph.z - SIM.cCore * pw.z;
-    pw.x += cx * dt;
-    pw.y += cy * dt;
-    pw.z += cz * dt;
-    ph.addScaledVector(pw, dt);
-    maxPhi = Math.max(maxPhi, ph.length());
-    // skull display motion: real heads move centimetres; we keep it small and pull it back with a soft neck
-    sv.addScaledVector(aS, dt).addScaledVector(sp, -0.004 * dt).multiplyScalar(1 - 0.03 * dt);
-    sp.addScaledVector(sv, dt);
-    sw.addScaledVector(alS, dt).addScaledVector(sr, -0.006 * dt).multiplyScalar(1 - 0.04 * dt);
-    sr.addScaledVector(sw, dt);
-    if (step % SIM.frameEvery === 0) {
-      frames.push({
-        t,
-        u: u.clone(),
-        th: th.clone(),
-        ph: ph.clone(),
-        sp: sp.clone(),
-        sr: sr.clone(),
-        maxPhi,
-        maxPen,
-        contact: contactNow,
-        load: Math.max(Math.abs(pl), Math.abs(pr)),
-      });
-      if ((frames.length - 1) % SIM.keyEvery === 0) keys.push(heat.slice());
-    }
-  }
-  keys.push(heat.slice());
-  return { scenario: scenarioKey, severity, frames, keys, maxPhi, maxPen, axis: rot.clone().normalize(), linDir: lin.clone().normalize() };
 }
 
 // Turn accumulated "heat" into a 0..1 bruise value, smoothed over the surface so bruises read as patches.
@@ -791,16 +620,19 @@ const TISSUE_FRAG = /* glsl */ `
 #include <clipping_planes_pars_fragment>
 uniform vec3 uGyrus; uniform vec3 uSulcus; uniform vec3 uCut; uniform vec3 uTheme; uniform vec3 uInjury; uniform vec3 uRim; uniform vec3 uSSS;
 uniform vec3 uTint; uniform float uTintMix; uniform float uSel; uniform float uHov; uniform float uGhost; uniform float uOpacity;
-uniform float uFolia; uniform vec3 uFoliaC; uniform float uShearAll; uniform float uDark; uniform float uSulcAmt;
+uniform float uFolia; uniform vec3 uFoliaC; uniform float uShearAll; uniform float uDark; uniform float uSulcAmt; uniform float uHideMedial;
 varying vec3 vN; varying vec3 vV; varying vec3 vPos; varying float vRegion; varying float vSulc; varying float vHeat; varying float vShear;
 ${NOISE}
 void main(){
   #include <clipping_planes_fragment>
   float sel = 1.0 - step(0.5, abs(vRegion - uSel));
   float hov = 1.0 - step(0.5, abs(vRegion - uHov));
+  if (uHideMedial > 0.5 && vRegion < 0.5) discard;
   if (!gl_FrontFacing) {
     // cut face of a clipped structure
-    vec3 cc = mix(uCut, uTheme, sel*0.45);
+    vec3 cc = mix(uCut, uTint, uTintMix * 0.7);
+    cc = mix(cc, uTheme, sel * 0.45);
+    cc = mix(cc, uInjury * 0.9, specks(vPos, clamp(vShear + uShearAll, 0.0, 1.0) * 0.55, 2.6));
     gl_FragColor = vec4(cc * (0.92 + 0.08*vnoise(vPos*0.6)), uGhost > 0.5 ? 0.5 : 1.0);
     return;
   }
@@ -809,8 +641,8 @@ void main(){
   vec3 base = mix(uGyrus, uSulcus, s);
   base = mix(base, uTint, uTintMix);
   if (uFolia > 0.5) {
-    float f = sin(length(vPos - uFoliaC) * 2.6 + vnoise(vPos * 0.12) * 3.0 + vnoise(vPos * 0.5));
-    base *= 0.9 + 0.1 * smoothstep(-0.8, 0.8, f);
+    float f = sin(length(vPos - uFoliaC) * 3.4 + vnoise(vPos * 0.12) * 4.0 + vnoise(vPos * 0.5));
+    base *= 0.92 + 0.08 * smoothstep(-0.8, 0.8, f);
   }
   base *= 0.95 + 0.05 * vnoise(vPos * 0.45);
   base = mix(base, uTheme, sel * 0.62 + hov * 0.28);
@@ -822,7 +654,7 @@ void main(){
   base = mix(base, bruiseCol, bruise * 0.92);
   // diffuse axonal injury: punctate microhaemorrhages
   float shear = clamp(vShear + uShearAll, 0.0, 1.0);
-  float dots = specks(vPos, shear * 0.55, 2.6);
+  float dots = specks(vPos, shear * 0.4, 2.6);
   base = mix(base, uInjury * 0.9, dots);
   // lighting in view space
   vec3 L1 = normalize(vec3(-0.45, 0.7, 0.55));
@@ -840,7 +672,7 @@ void main(){
   col += uRim * fr * (0.35 + 0.35 * uDark);
   float a = uOpacity;
   if (uGhost > 0.5) {
-    a = clamp(0.035 + 0.42 * fr + sel * 0.45 + bruise * 0.5 + dots * 0.6, 0.0, 1.0) * uOpacity;
+    a = clamp(0.02 + 0.3 * fr + sel * 0.45 + bruise * 0.5 + dots * 0.35, 0.0, 1.0) * uOpacity;
     col = mix(col, uRim, fr * 0.4 * (1.0 - bruise));
   }
   gl_FragColor = vec4(col, a);
@@ -863,7 +695,7 @@ void main(){
 const GLASS_FRAG = /* glsl */ `
 #include <common>
 #include <clipping_planes_pars_fragment>
-uniform vec3 uGlass; uniform vec3 uEdge; uniform vec3 uBone; uniform vec3 uInjury; uniform float uOpacity; uniform float uInner;
+uniform vec3 uGlass; uniform vec3 uEdge; uniform vec3 uBone; uniform vec3 uCSF; uniform vec3 uInjury; uniform float uOpacity; uniform float uInner;
 uniform vec3 uHit; uniform float uRing; uniform float uRingA; uniform float uSolid; uniform float uDark;
 varying vec3 vN; varying vec3 vV; varying vec3 vPos; varying float vRough;
 ${NOISE}
@@ -879,8 +711,8 @@ void main(){
     if (!gl_FrontFacing) { gl_FragColor = vec4(uBone * (0.9 + 0.1 * vnoise(vPos * 0.8)), 1.0); return; }
     vec3 L = normalize(vec3(-0.4, 0.7, 0.6));
     float rough = vRough * (0.6 + 0.4 * vnoise(vPos * 0.45));
-    vec3 base = mix(uEdge, uBone * 0.82, uInner);
-    base = mix(base, uBone * 0.62, rough * uInner * 0.7);
+    vec3 base = mix(uBone * 0.9, mix(uBone, uCSF, 0.45), uInner);
+    base = mix(base, uBone * 0.7, rough * uInner * 0.6);
     vec3 col = base * (0.45 + 0.55 * max(0.0, (dot(n, L) + 0.3) / 1.3));
     col += uInjury * ring;
     gl_FragColor = vec4(col, 1.0);
@@ -1060,13 +892,39 @@ class BrainView {
 
     const side = h("div", { class: "tbi-brain-side" });
     // view toggles
-    this.btnSkull = h("button", { type: "button", class: "tbi-btn", "aria-pressed": String(this.skullOn), text: "Skull", onclick: () => this.setSkull(!this.skullOn) });
-    this.btnGhost = h("button", { type: "button", class: "tbi-btn", "aria-pressed": String(this.ghost), text: "See-through", onclick: () => this.setGhost(!this.ghost) });
-    this.btnCut = h("button", { type: "button", class: "tbi-btn", "aria-pressed": String(this.cut), text: "Cutaway", onclick: () => this.setCut(!this.cut) });
-    const toolbar = h("div", { class: "tbi-brain-toolbar", role: "group", "aria-label": "View options" }, [this.btnSkull, this.btnGhost, this.btnCut]);
+    this.btnSkull = h("button", {
+      type: "button",
+      class: "tbi-btn",
+      "aria-pressed": String(this.skullOn),
+      text: "Skull",
+      onclick: () => this.setSkull(!this.skullOn),
+    });
+    this.btnGhost = h("button", {
+      type: "button",
+      class: "tbi-btn",
+      "aria-pressed": String(this.ghost),
+      text: "See-through",
+      onclick: () => this.setGhost(!this.ghost),
+    });
+    this.btnCut = h("button", {
+      type: "button",
+      class: "tbi-btn",
+      "aria-pressed": String(this.cut),
+      text: "Cutaway",
+      onclick: () => this.setCut(!this.cut),
+    });
+    const toolbar = h("div", { class: "tbi-brain-toolbar", role: "group", "aria-label": "View options" }, [
+      this.btnSkull,
+      this.btnGhost,
+      this.btnCut,
+    ]);
 
     if (mode === "explore") {
-      this.select = h("select", { class: "tbi-brain-select-input", id: `${this.id}-select`, onchange: (e) => this.selectRegion(+e.target.value, true) });
+      this.select = h("select", {
+        class: "tbi-brain-select-input",
+        id: `${this.id}-select`,
+        onchange: (e) => this.selectRegion(+e.target.value, true),
+      });
       this.select.append(h("option", { value: "0", text: "Choose a region…" }));
       const g1 = h("optgroup", { label: "Cortex (the surface)" });
       CORTEX_ORDER.forEach((r) => g1.append(h("option", { value: r, text: REGIONS[r].name })));
@@ -1106,8 +964,18 @@ class BrainView {
           this.sevOut.textContent = String(this.severity);
         },
       });
-      const sevRow = h("label", { class: "tbi-range tbi-brain-sev" }, [h("span", { text: "Gentle" }), this.sev, h("span", { text: "Severe" }), this.sevOut]);
-      this.strikeBtn = h("button", { type: "button", class: "tbi-btn tbi-brain-strike", text: mode === "shear" ? "Rotate" : "Strike", onclick: () => this.strike() });
+      const sevRow = h("label", { class: "tbi-range tbi-brain-sev" }, [
+        h("span", { text: "Gentle" }),
+        this.sev,
+        h("span", { text: "Severe" }),
+        this.sevOut,
+      ]);
+      this.strikeBtn = h("button", {
+        type: "button",
+        class: "tbi-btn tbi-brain-strike",
+        text: mode === "shear" ? "Rotate" : "Strike",
+        onclick: () => this.strike(),
+      });
       this.resetBtn = h("button", { type: "button", class: "tbi-btn", text: "Reset", onclick: () => this.resetSim() });
       this.readout = h("div", { class: "tbi-brain-readout", "aria-live": "polite" });
       side.append(
@@ -1121,7 +989,13 @@ class BrainView {
         toolbar
       );
       // timeline over the canvas
-      this.playBtn = h("button", { type: "button", class: "tbi-brain-iconbtn", "aria-label": "Play", html: "&#9654;", onclick: () => this.togglePlay() });
+      this.playBtn = h("button", {
+        type: "button",
+        class: "tbi-brain-iconbtn",
+        "aria-label": "Play",
+        html: "&#9654;",
+        onclick: () => this.togglePlay(),
+      });
       this.scrub = h("input", {
         type: "range",
         min: "0",
@@ -1150,7 +1024,10 @@ class BrainView {
       );
       if (mode === "shear") legend.append(h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-fibre" }), "Axon bundles (stylised)"]));
     } else {
-      legend.append(h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-sel" }), "Selected region"]), h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-skull" }), "Skull base (anterior and middle fossae)"]));
+      legend.append(
+        h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-sel" }), "Selected region"]),
+        h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-skull" }), "Skull base (anterior and middle fossae)"])
+      );
     }
     const main = h("div", { class: "tbi-brain-main" }, [this.canvasWrap, legend]);
     el.append(main, side);
@@ -1249,6 +1126,12 @@ class BrainView {
     this.visible = true;
     this.updateAria();
     this.applyCut();
+    if (this.impactor) {
+      // compile every shader up front so the first strike does not stutter
+      this.impactor.visible = this.arc.visible = true;
+      this.renderer.compile(this.scene, this.camera);
+      this.impactor.visible = this.arc.visible = false;
+    }
     this.loop();
   }
 
@@ -1282,6 +1165,7 @@ class BrainView {
         uShearAll: { value: 0 },
         uDark: { value: 0 },
         uSulcAmt: { value: opts.sulcAmt ?? 1 },
+        uHideMedial: { value: 0 },
       },
       clipping: true,
       side: THREE.DoubleSide,
@@ -1303,8 +1187,14 @@ class BrainView {
       g.setIndex(m.geometry.index);
       g.boundingSphere = m.geometry.boundingSphere;
       const off = this.data.contact.offsets[m.name];
-      const heat = off !== undefined ? new THREE.BufferAttribute(this.heat.subarray(off, off + m.count), 1) : new THREE.BufferAttribute(new Float32Array(m.count), 1);
-      const shear = off !== undefined ? new THREE.BufferAttribute(this.shearV.subarray(off, off + m.count), 1) : new THREE.BufferAttribute(new Float32Array(m.count), 1);
+      const heat =
+        off !== undefined
+          ? new THREE.BufferAttribute(this.heat.subarray(off, off + m.count), 1)
+          : new THREE.BufferAttribute(new Float32Array(m.count), 1);
+      const shear =
+        off !== undefined
+          ? new THREE.BufferAttribute(this.shearV.subarray(off, off + m.count), 1)
+          : new THREE.BufferAttribute(new Float32Array(m.count), 1);
       heat.setUsage(THREE.DynamicDrawUsage);
       shear.setUsage(THREE.DynamicDrawUsage);
       g.setAttribute("aHeat", heat);
@@ -1350,7 +1240,13 @@ class BrainView {
     for (const name of ["corpus_callosum", "thalamus", "basal_ganglia", "hippocampus", "amygdala", "ventricles", "brainstem", "cerebellum"]) {
       const m = meshes[name];
       const rid = m.geometry.getAttribute("aRegion").array[0];
-      const mat = this.tissueMaterial({ tint: TINTS[rid], tintMix: name === "cerebellum" ? 0.15 : name === "brainstem" ? 0.35 : 0.55, folia: name === "cerebellum", foliaC: cerebC, sulcAmt: 0 });
+      const mat = this.tissueMaterial({
+        tint: TINTS[rid],
+        tintMix: name === "cerebellum" ? 0.15 : name === "brainstem" ? 0.35 : 0.55,
+        folia: name === "cerebellum",
+        foliaC: cerebC,
+        sulcAmt: 0,
+      });
       const mesh = new THREE.Mesh(makeGeom(m), mat);
       mesh.userData = { name, region: rid, deep: name !== "cerebellum" && name !== "brainstem" };
       mesh.renderOrder = 1;
@@ -1368,6 +1264,7 @@ class BrainView {
           uGlass: { value: new THREE.Vector3() },
           uEdge: { value: new THREE.Vector3() },
           uBone: { value: new THREE.Vector3() },
+          uCSF: { value: new THREE.Vector3() },
           uInjury: { value: new THREE.Vector3() },
           uOpacity: { value: 1 },
           uInner: { value: inner ? 1 : 0 },
@@ -1460,7 +1357,8 @@ class BrainView {
     const rng = mulberry32(11);
     this.fibreInfo = fibres.map((f) => ({
       kind: f.kind,
-      jitter: Math.exp((rng() - 0.5) * 1.1), // spread of individual thresholds, ~0.58x to 1.73x
+      // individual axons differ: most need well over the onset level before they fail
+      jitter: 0.8 + 2.4 * Math.pow(rng(), 1.6),
       tb: 0.3 + rng() * 0.4,
       mid: f.pts[Math.floor(f.pts.length / 2)],
     }));
@@ -1494,8 +1392,11 @@ class BrainView {
   }
 
   buildImpactor() {
-    const mat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.0, depthWrite: false });
-    this.impactor = new THREE.Mesh(new THREE.SphereGeometry(22, 32, 20), mat);
+    const mat = new THREE.MeshStandardMaterial({ transparent: true, opacity: 0.0, roughness: 0.55, metalness: 0.0 });
+    this.impactor = new THREE.Mesh(new THREE.SphereGeometry(22, 40, 24), mat);
+    const key = new THREE.DirectionalLight(0xffffff, 2.2);
+    key.position.set(-1, 2, 1.5);
+    this.scene.add(key, new THREE.HemisphereLight(0xffffff, 0x666677, 1.1));
     this.impactor.visible = false;
     this.scene.add(this.impactor);
     // curved arrow showing rotation
@@ -1534,6 +1435,7 @@ class BrainView {
       u.uGlass.value.copy(P.glass);
       u.uEdge.value.copy(P.edge);
       u.uBone.value.copy(P.bone);
+      u.uCSF.value.copy(P.csf);
       u.uInjury.value.copy(P.injury);
       u.uDark.value = P.dark ? 1 : 0;
     }
@@ -1545,8 +1447,8 @@ class BrainView {
       u.uInjury.value.copy(P.injury);
     }
     if (this.impactor) {
-      this.impactor.material.color.setRGB(P.text.x, P.text.y, P.text.z);
-      this.arcMat.color.setRGB(P.injury.x, P.injury.y, P.injury.z);
+      this.impactor.material.color.setRGB(P.theme.x, P.theme.y, P.theme.z, THREE.SRGBColorSpace);
+      this.arcMat.color.setRGB(P.injury.x, P.injury.y, P.injury.z, THREE.SRGBColorSpace);
     }
     this.dirty = true;
   }
@@ -1616,13 +1518,23 @@ class BrainView {
     }
     const planes = this.cut ? [this.clipPlane] : [];
     const clipCortex = this.cut && kind === "coronal";
-    for (const m of this.tissue) m.material.clippingPlanes = m.userData.cortex && !clipCortex ? [] : planes;
+    for (const m of this.tissue) {
+      m.material.clippingPlanes = m.userData.cortex && !clipCortex ? [] : planes;
+      // in a sagittal cut, open the medial wall (the cut through the corpus callosum and midbrain)
+      m.material.uniforms.uHideMedial.value = this.cut && kind === "sagittal" && m.userData.cortex ? 1 : 0;
+    }
     for (const mat of this.skullMats) {
       mat.clippingPlanes = planes;
       mat.uniforms.uSolid.value = this.cut ? 1 : 0;
       mat.transparent = !this.cut;
       mat.depthWrite = this.cut;
-      mat.side = this.cut ? THREE.DoubleSide : mat === this.skullBack.material ? THREE.BackSide : mat === this.skullFront.material ? THREE.FrontSide : THREE.DoubleSide;
+      mat.side = this.cut
+        ? THREE.DoubleSide
+        : mat === this.skullBack.material
+          ? THREE.BackSide
+          : mat === this.skullFront.material
+            ? THREE.FrontSide
+            : THREE.DoubleSide;
       mat.needsUpdate = true;
     }
     if (this.cut) this.skullBack.visible = false;
@@ -1746,7 +1658,9 @@ class BrainView {
         const reg = m.geometry.getAttribute("aRegion").array;
         const f = hit.face;
         const votes = [reg[f.a], reg[f.b], reg[f.c]];
-        return votes[0] === votes[1] || votes[0] === votes[2] ? votes[0] : votes[1];
+        const rr = votes[0] === votes[1] || votes[0] === votes[2] ? votes[0] : votes[1];
+        if (!rr) continue; // medial wall: look through it
+        return rr;
       }
       return 0;
     };
@@ -1784,8 +1698,8 @@ class BrainView {
       else if (e.key === "ArrowRight") sph.theta += step;
       else if (e.key === "ArrowUp") sph.phi = clamp(sph.phi - step, 0.1, Math.PI - 0.1);
       else if (e.key === "ArrowDown") sph.phi = clamp(sph.phi + step, 0.1, Math.PI - 0.1);
-      else if (e.key === "+" || e.key === "=") return this.zoom(0.88), e.preventDefault();
-      else if (e.key === "-" || e.key === "_") return this.zoom(1.12), e.preventDefault();
+      else if (e.key === "+" || e.key === "=") return (this.zoom(0.88), e.preventDefault());
+      else if (e.key === "-" || e.key === "_") return (this.zoom(1.12), e.preventDefault());
       else handled = false;
       if (!handled) return;
       e.preventDefault();
@@ -1848,7 +1762,7 @@ class BrainView {
     this.markHeat();
     for (const m of this.tissue) m.material.uniforms.uShearAll.value = 0;
     if (this.fibreState) {
-      for (let i = 0; i < this.fibreInfo.length; i++) (this.fibreState[i * 4] = 0), (this.fibreState[i * 4 + 1] = 0);
+      for (let i = 0; i < this.fibreInfo.length; i++) ((this.fibreState[i * 4] = 0), (this.fibreState[i * 4 + 1] = 0));
       this.fibreTex.needsUpdate = true;
       this.fibres.material.uniforms.uPhi.value.set(0, 0, 0);
     }
@@ -1856,7 +1770,7 @@ class BrainView {
     this.head.rotation.set(0, 0, 0);
     this.brain.position.set(0, 0, 0);
     this.brain.rotation.set(0, 0, 0);
-    if (this.impactor) (this.impactor.visible = false), (this.arc.visible = false);
+    if (this.impactor) ((this.impactor.visible = false), (this.arc.visible = false));
     for (const m of this.skullMats) m.uniforms.uRingA.value = 0;
     this.timeline.hidden = true;
     this.renderReadout();
@@ -1864,10 +1778,21 @@ class BrainView {
     this.dirty = true;
   }
 
-  strike() {
-    if (!this.data) return;
+  async strike() {
+    if (!this.data || this.busy) return;
+    this.busy = true;
+    const label = this.strikeBtn.textContent;
+    this.strikeBtn.textContent = "Simulating\u2026";
+    this.strikeBtn.disabled = true;
+    let res;
+    try {
+      res = await runSimulation(this.data, this.scenario, this.severity);
+    } finally {
+      this.busy = false;
+      this.strikeBtn.textContent = label;
+      this.strikeBtn.disabled = false;
+    }
     this.resetSim();
-    const res = simulate(this.data, this.scenario, this.severity);
     this.result = res;
     // bruise snapshots, shear sensitivity
     res.bruiseKeys = [];
@@ -1884,7 +1809,7 @@ class BrainView {
     const hit = new THREE.Vector3();
     for (let i = 0; i < pos.length; i += 3) {
       const d = pos[i] * dir.x + pos[i + 1] * dir.y + pos[i + 2] * dir.z;
-      if (d > best) (best = d), hit.set(pos[i], pos[i + 1], pos[i + 2]);
+      if (d > best) ((best = d), hit.set(pos[i], pos[i + 1], pos[i + 2]));
     }
     if (!S.impactor) hit.copy(dir).multiplyScalar(best + 12);
     res.hit = hit;
@@ -1893,7 +1818,6 @@ class BrainView {
       this.setTime(SIM.duration);
       this.playing = false;
     } else {
-      this.playStart = performance.now();
       this.playT = 0;
       this.playing = true;
     }
@@ -1920,7 +1844,11 @@ class BrainView {
       const p = new THREE.Vector3();
       for (let i = 0; i < m.count; i++) {
         p.fromArray(m.pos, i * 3);
-        res.vertSens[off + i] = name.startsWith("cortex") ? W[0] * lever(p) * (0.75 + 0.5 * rng()) : name === "brainstem" ? W[2] : W[0] * 0.8 * lever(p);
+        res.vertSens[off + i] = name.startsWith("cortex")
+          ? W[0] * lever(p) * (0.75 + 0.5 * rng())
+          : name === "brainstem"
+            ? W[2]
+            : W[0] * 0.8 * lever(p);
       }
     }
     // structure-level shear (corpus callosum, brainstem)
@@ -1980,7 +1908,6 @@ class BrainView {
     if (this.playing) this.playing = false;
     else {
       if (this.playT >= SIM.duration - 0.01) this.playT = 0;
-      this.playStart = performance.now() - this.playT * this.msPerSimMs();
       this.playing = true;
     }
     this.updatePlayBtn();
@@ -2070,7 +1997,8 @@ class BrainView {
     const bs = clamp(phi * res.bsSens - 1, 0, 1) * 1.4;
     for (const m of this.tissue) {
       const nm = m.userData.name;
-      m.material.uniforms.uShearAll.value = nm === "corpus_callosum" ? cc : nm === "brainstem" ? bs : nm === "thalamus" || nm === "basal_ganglia" ? cc * 0.5 : 0;
+      m.material.uniforms.uShearAll.value =
+        nm === "corpus_callosum" ? cc : nm === "brainstem" ? bs : nm === "thalamus" || nm === "basal_ganglia" ? cc * 0.5 : 0;
     }
     this.markHeat();
     // fibres
@@ -2095,7 +2023,7 @@ class BrainView {
         const after = clamp((t - SIM.t0 - SIM.pulse) / 30, 0, 1);
         const gap = 22 + approach * 120 + after * 60;
         this.impactor.position.copy(res.hit).add(this.head.position).addScaledVector(site, gap);
-        this.impactor.material.opacity = (this.palette.dark ? 0.32 : 0.22) * (1 - after);
+        this.impactor.material.opacity = 0.85 * (1 - after);
       }
       const rotOn = !S.impactor;
       this.arc.visible = rotOn;
@@ -2136,8 +2064,12 @@ class BrainView {
     const ro = this.readout;
     ro.innerHTML = "";
     const bar = (label, val, ticks, cls) => {
-      const track = h("div", { class: "tbi-brain-bar" }, [h("div", { class: `tbi-brain-bar-fill ${cls}`, style: `width:${clamp(val, 0, 1) * 100}%` })]);
-      (ticks || []).forEach(([x, name]) => track.append(h("span", { class: "tbi-brain-tick", style: `left:${x * 100}%`, title: name, "data-label": name })));
+      const track = h("div", { class: "tbi-brain-bar" }, [
+        h("div", { class: `tbi-brain-bar-fill ${cls}`, style: `width:${clamp(val, 0, 1) * 100}%` }),
+      ]);
+      (ticks || []).forEach(([x, name]) =>
+        track.append(h("span", { class: "tbi-brain-tick", style: `left:${x * 100}%`, title: name, "data-label": name }))
+      );
       return h("div", { class: "tbi-brain-barrow" }, [h("div", { class: "tbi-brain-barlabel", text: label }), track]);
     };
     const W = SHEAR_W;
@@ -2148,14 +2080,30 @@ class BrainView {
       [1 / W[2] / SHEAR_MAX, "brainstem"],
     ];
     if (!sum && !frame) {
-      ro.append(h("p", { class: "tbi-brain-status", html: `<strong>Skull:</strong> intact` }), h("p", { class: "tbi-brain-empty", text: "Choose where the force comes from and how hard, then press " + (this.mode === "shear" ? "Rotate." : "Strike.") }));
+      ro.append(
+        h("p", { class: "tbi-brain-status", html: `<strong>Skull:</strong> intact` }),
+        h("p", {
+          class: "tbi-brain-empty",
+          text: "Choose where the force comes from and how hard, then press " + (this.mode === "shear" ? "Rotate." : "Strike."),
+        })
+      );
       ro.append(bar("Compression against bone", 0, null, "is-bruise"), bar("Rotational shear", 0, ticks, "is-shear"));
       return;
     }
     if (frame) {
-      const phase = frame.t < SIM.t0 ? "Before the blow" : frame.load > 0.02 ? "Skull accelerating" : frame.contact > 0 ? "Brain striking the skull" : "Brain moving in its fluid";
+      const phase =
+        frame.t < SIM.t0
+          ? "Before the blow"
+          : frame.load > 0.02
+            ? "Skull accelerating"
+            : frame.contact > 0
+              ? "Brain striking the skull"
+              : "Brain moving in its fluid";
       ro.append(h("p", { class: "tbi-brain-status", html: `<strong>Skull:</strong> intact · <span class="tbi-brain-phase">${phase}</span>` }));
-      ro.append(bar("Compression against bone", Math.min(1, frame.maxPen / 2.2), null, "is-bruise"), bar("Rotational shear", (frame.maxPhi * res.phiScale) / SHEAR_MAX, ticks, "is-shear"));
+      ro.append(
+        bar("Compression against bone", Math.min(1, frame.maxPen / 3.5), null, "is-bruise"),
+        bar("Rotational shear", (frame.maxPhi * res.phiScale) / SHEAR_MAX, ticks, "is-shear")
+      );
       return;
     }
     const nm = (b) => `${b.side ? b.side + " " : ""}${REGIONS[b.region].name.toLowerCase()}`;
@@ -2167,8 +2115,10 @@ class BrainView {
       return `<li><button type="button" class="tbi-brain-linkbtn" data-region="${b.region}">${nm(b)}</button>${tag}</li>`;
     });
     ro.append(h("p", { class: "tbi-brain-status", html: `<strong>Skull:</strong> intact, no fracture` }));
-    if (bl.length) ro.append(h("div", { class: "tbi-brain-label", text: "Bruised (contusions)" }), h("ul", { class: "tbi-brain-list", html: bl.join("") }));
-    else ro.append(h("p", { class: "tbi-brain-empty", text: "No contusions: the brain moved, but not far or fast enough to bruise against the bone." }));
+    if (bl.length)
+      ro.append(h("div", { class: "tbi-brain-label", text: "Bruised (contusions)" }), h("ul", { class: "tbi-brain-list", html: bl.join("") }));
+    else
+      ro.append(h("p", { class: "tbi-brain-empty", text: "No contusions: the brain moved, but not far or fast enough to bruise against the bone." }));
     const L = sum.levels;
     const shearTxt = L.bs
       ? "grey–white junction, corpus callosum and brainstem"
@@ -2177,8 +2127,14 @@ class BrainView {
         : L.gwj
           ? "grey–white junction"
           : "";
-    ro.append(h("div", { class: "tbi-brain-label", text: "Sheared axons (diffuse axonal injury)" }), h("p", { class: "tbi-brain-shear", text: shearTxt ? `Reached the ${shearTxt}.` : "Below the toy threshold." }));
-    ro.append(bar("Compression against bone", Math.min(1, sum.pen / 2.2), null, "is-bruise"), bar("Rotational shear", sum.phi / SHEAR_MAX, ticks, "is-shear"));
+    ro.append(
+      h("div", { class: "tbi-brain-label", text: "Sheared axons (diffuse axonal injury)" }),
+      h("p", { class: "tbi-brain-shear", text: shearTxt ? `Reached the ${shearTxt}.` : "Below the toy threshold." })
+    );
+    ro.append(
+      bar("Compression against bone", Math.min(1, sum.pen / 3.5), null, "is-bruise"),
+      bar("Rotational shear", sum.phi / SHEAR_MAX, ticks, "is-shear")
+    );
     if (this.fibreInfo) {
       const torn = this.result.fibreSens.filter((s) => sum.phi * s >= 1).length;
       ro.append(h("p", { class: "tbi-brain-count", text: `${torn} of ${this.fibreInfo.length} stylised axon bundles torn.` }));
@@ -2189,10 +2145,18 @@ class BrainView {
   updateAria() {
     if (!this.canvas) return;
     let label;
-    const views = [this.skullOn ? "inside a translucent skull" : "with the skull hidden", this.ghost ? "cortex see-through" : "", this.cut ? `cut away (${this.cutPlaneKind()} section)` : ""].filter(Boolean).join(", ");
+    const views = [
+      this.skullOn ? "inside a translucent skull" : "with the skull hidden",
+      this.ghost ? "cortex see-through" : "",
+      this.cut ? `cut away (${this.cutPlaneKind()} section)` : "",
+    ]
+      .filter(Boolean)
+      .join(", ");
     if (this.mode === "explore") {
       label = `Interactive 3D model of a human brain built from MRI-derived anatomy, ${views}. `;
-      label += this.selected ? `Selected: ${REGIONS[this.selected].name}. ${REGIONS[this.selected].does}` : "No region selected; use the region list or click the model.";
+      label += this.selected
+        ? `Selected: ${REGIONS[this.selected].name}. ${REGIONS[this.selected].does}`
+        : "No region selected; use the region list or click the model.";
     } else {
       const S = SCENARIOS[this.scenario];
       label = `Interactive 3D simulation of a brain inside the skull, ${views}. `;
@@ -2201,7 +2165,9 @@ class BrainView {
         const names = sum.bruised.slice(0, 5).map((b) => `${b.side ? b.side + " " : ""}${REGIONS[b.region].name}`);
         label += `After a ${S.label.toLowerCase()} at severity ${this.result.severity} of 10, the skull is intact. `;
         label += names.length ? `Contusions at the ${names.join(", ")}. ` : "No contusions. ";
-        label += sum.levels.gwj ? `Shearing reached the ${sum.levels.bs ? "brainstem" : sum.levels.cc ? "corpus callosum" : "grey-white junction"}.` : "No shearing above threshold.";
+        label += sum.levels.gwj
+          ? `Shearing reached the ${sum.levels.bs ? "brainstem" : sum.levels.cc ? "corpus callosum" : "grey-white junction"}.`
+          : "No shearing above threshold.";
       } else label += `Selected motion: ${S.label}. Press ${this.mode === "shear" ? "Rotate" : "Strike"} to run.`;
     }
     this.canvas.setAttribute("aria-label", label);
@@ -2212,7 +2178,10 @@ class BrainView {
     if (this._raf) return;
     const frame = (now) => {
       this._raf = 0;
-      if (!this.visible || document.hidden) return;
+      if (!this.visible || document.hidden) {
+        this._lastNow = 0;
+        return;
+      }
       this.stepTween(now);
       if (this.autoRotate) {
         const off = this.camera.position.clone().sub(this.controls.target);
@@ -2221,13 +2190,16 @@ class BrainView {
         this.dirty = true;
       }
       if (this.playing && this.result) {
-        const t = (now - this.playStart) / this.msPerSimMs();
+        // advance by real frame time, capped, so a slow frame never skips the event
+        const step = Math.min(50, now - (this._lastNow || now));
+        const t = this.playT + step / this.msPerSimMs();
         if (t >= SIM.duration) {
           this.playing = false;
           this.updatePlayBtn();
         }
         this.setTime(Math.min(t, SIM.duration));
       }
+      this._lastNow = now;
       if (this.controls.update()) this.dirty = true;
       const S = this.tissue[0].material.uniforms;
       const sel = this.selected || -1;
@@ -2243,6 +2215,10 @@ class BrainView {
         this.dirty = false;
         this.renderer.render(this.scene, this.camera);
         this.updateTag();
+        if (!this.el.dataset.ready) {
+          this.el.dataset.ready = "1";
+          if (performance.mark) performance.mark(`tbi-brain-first-frame:${this.id}`);
+        }
       }
       this._raf = requestAnimationFrame(frame);
     };
@@ -2265,7 +2241,7 @@ class BrainView {
       const mesh = this.meshByName[a.mesh];
       if (mesh && !mesh.visible) continue;
       const d = a.p.distanceTo(cam);
-      if (d < bd) (bd = d), (best = a);
+      if (d < bd) ((bd = d), (best = a));
     }
     if (!best) {
       this.tag.classList.remove("is-on");
