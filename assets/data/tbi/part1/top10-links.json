@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "source": "Subset of assets/data/tbi/networks.json, network bmc-all-y5 (Mehta & Sudhakar 2025, BMC Neurology; recomputed from TBIMS public-use files, reproduces the published network). Only edges between the ten most prevalent post-injury conditions in Sudhakar et al. 2023 (Frontiers, Table 2) are kept. Aggregates only: phi coefficients, no counts.",
+    "generated": "2026-10-23",
+    "edgeRule": "phi from 2x2 tables of onset at/after injury, kept when the one-tailed t-test is significant at p < 0.01 (N-2 df)"
+  },
+  "edges": [
+    {
+      "source": "Anxiety",
+      "target": "PanicAttacks",
+      "phi": 0.56
+    },
+    {
+      "source": "Depression",
+      "target": "PanicAttacks",
+      "phi": 0.487
+    },
+    {
+      "source": "Anxiety",
+      "target": "Depression",
+      "phi": 0.48
+    },
+    {
+      "source": "PTSD",
+      "target": "PanicAttacks",
+      "phi": 0.393
+    },
+    {
+      "source": "Depression",
+      "target": "PTSD",
+      "phi": 0.37
+    },
+    {
+      "source": "Anxiety",
+      "target": "PTSD",
+      "phi": 0.343
+    },
+    {
+      "source": "HighBloodCholesterol",
+      "target": "Hypertension",
+      "phi": 0.32
+    },
+    {
+      "source": "ChronicPain",
+      "target": "PanicAttacks",
+      "phi": 0.309
+    },
+    {
+      "source": "ChronicPain",
+      "target": "Depression",
+      "phi": 0.275
+    },
+    {
+      "source": "HighBloodCholesterol",
+      "target": "Osteoarthritis",
+      "phi": 0.268
+    },
+    {
+      "source": "Anxiety",
+      "target": "SleepDisorder",
+      "phi": 0.252
+    },
+    {
+      "source": "Anxiety",
+      "target": "ChronicPain",
+      "phi": 0.213
+    },
+    {
+      "source": "ChronicPain",
+      "target": "PTSD",
+      "phi": 0.205
+    },
+    {
+      "source": "PanicAttacks",
+      "target": "SleepDisorder",
+      "phi": 0.202
+    },
+    {
+      "source": "ChronicPain",
+      "target": "SleepDisorder",
+      "phi": 0.177
+    }
+  ]
+}
