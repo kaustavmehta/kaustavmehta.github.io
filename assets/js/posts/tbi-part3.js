@@ -536,7 +536,7 @@
     let H = 0;
     let narrow = false;
     let pos = new Map();
-    const api = { svg: svgEl, zoomG };
+    const api = { svg: svgEl, zoomG: zoomG.node() };
 
     const radius = (v) => o.minR + (o.maxR - o.minR) * Math.sqrt(Math.max(0, Math.min(1, v)));
     const ew = d3.scaleLinear().domain([0.15, 0.7]).range([0.8, 5]).clamp(true);
@@ -555,18 +555,21 @@
       const ck = `${state.key}|${W}`;
       let p = cache.get(ck);
       if (!p) {
-        const sim = state.nodes
-          .filter((n) => !n.iso)
-          .map((n) => {
-            const tx = pad + n.ux * (W - 2 * pad);
-            const ty = pad + n.uy * (H - trayH - 2 * pad);
-            return { id: n.id, x: tx, y: ty, tx, ty, r: rad(state.size(n.id)) };
-          });
-        const label = narrow ? 9 : 13;
+        const live = state.nodes.filter((n) => !n.iso);
+        const ex = d3.extent(live, (n) => n.ux);
+        const ey = d3.extent(live, (n) => n.uy);
+        const nx = (v) => (ex[1] - ex[0] > 0.05 ? (v - ex[0]) / (ex[1] - ex[0]) : 0.5);
+        const ny = (v) => (ey[1] - ey[0] > 0.05 ? (v - ey[0]) / (ey[1] - ey[0]) : 0.5);
+        const sim = live.map((n) => {
+          const tx = pad + 8 + nx(n.ux) * (W - 2 * pad - 16);
+          const ty = pad + 6 + ny(n.uy) * (H - trayH - 2 * pad - 12);
+          return { id: n.id, x: tx, y: ty, tx, ty, r: rad(state.size(n.id)) };
+        });
+        const lab = (id) => Math.min(narrow ? 16 : 26, 5 + String(o.label(id, narrow) || "").length * (narrow ? 1.6 : 2.2));
         d3.forceSimulation(sim)
           .force("x", d3.forceX((d) => d.tx).strength(0.35))
           .force("y", d3.forceY((d) => d.ty).strength(0.35))
-          .force("c", d3.forceCollide((d) => d.r + label).strength(0.9))
+          .force("c", d3.forceCollide((d) => d.r + lab(d.id)).strength(0.9))
           .stop()
           .tick(90);
         p = new Map();
@@ -1321,6 +1324,12 @@
     let pair = pairs["anxiety-depression-onset"];
     let phase = 0; // 0 mixed, 1 sorted, 2 chance shown
     const CELL_KEYS = ["bothYes", "aOnly", "bOnly", "neither"];
+    const PAIR_NOTE = {
+      "anxiety-depression-onset":
+        "Only conditions that began at or after the injury count here, which is why 180 people rather than 220 are in the table.",
+      "depression-hypertension": "Two common conditions that meet almost exactly as often as chance predicts.",
+      "cataracts-depression": "Slightly fewer people have both than chance predicts; plausibly an effect of age, since cataracts come later in life.",
+    };
     const CELL_CLASS = { bothYes: "tbi3-p-both", aOnly: "tbi3-p-a", bOnly: "tbi3-p-b", neither: "tbi3-p-none" };
     const rng = (seed) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
 
@@ -1348,12 +1357,13 @@
       const t = pair.table;
       const perRow = narrow ? 13 : 16;
       const labelH = 34;
+      const headH = narrow && phase === 2 ? 36 : 22;
       const colW = perRow * gap + 16;
       const leftW = narrow ? 0 : 92;
       const rowsOf = (k) => Math.ceil(t[k] / perRow);
       const rowTop = labelH + 4;
-      const h0 = Math.max(rowsOf("bothYes"), rowsOf("aOnly")) * gap + 30;
-      const h1 = Math.max(rowsOf("bOnly"), rowsOf("neither")) * gap + 30;
+      const h0 = Math.max(rowsOf("bothYes"), rowsOf("aOnly")) * gap + headH + 8;
+      const h1 = Math.max(rowsOf("bOnly"), rowsOf("neither")) * gap + headH + 8;
       const boxW = Math.min(colW, (W - leftW - 12) / 2);
       const ox = leftW + (W - leftW - 2 * boxW - 10) / 2;
       const cellXY = {
@@ -1373,15 +1383,15 @@
       const B = pair.bLabel;
       const cellLabel = {
         bothYes: `Both`,
-        aOnly: `${A}, not ${B.toLowerCase()}`,
-        bOnly: `${B}, not ${A.toLowerCase()}`,
+        aOnly: `${A} only`,
+        bOnly: `${B} only`,
         neither: `Neither`,
       };
       const cellPos = (p) => {
         if (phase === 0) return [4 + (p.slot % mixCols) * gap + gap / 2, 8 + Math.floor(p.slot / mixCols) * gap + gap / 2];
         const [cx, cy] = cellXY[p.cell];
         const w = Math.min(perRow, Math.floor((boxW - 16) / gap));
-        return [cx + 8 + (p.k % w) * gap + gap / 2, cy + 22 + Math.floor(p.k / w) * gap + gap / 2];
+        return [cx + 8 + (p.k % w) * gap + gap / 2, cy + headH + Math.floor(p.k / w) * gap + gap / 2];
       };
       const dots = gDots.selectAll("circle").data(list, (p) => `${p.cell}-${p.k}`);
       dots.exit().remove();
@@ -1432,7 +1442,7 @@
           const e = expected[k];
           const full = Math.floor(e);
           // Outline the slots chance alone would fill, so the gap between observed and expected is visible.
-          const pts = d3.range(Math.round(e)).map((i) => [cx + 8 + (i % w) * gap + gap / 2, cy + 22 + Math.floor(i / w) * gap + gap / 2]);
+          const pts = d3.range(Math.round(e)).map((i) => [cx + 8 + (i % w) * gap + gap / 2, cy + headH + Math.floor(i / w) * gap + gap / 2]);
           gGhost
             .selectAll(null)
             .data(pts)
@@ -1449,9 +1459,9 @@
           gText
             .append("text")
             .attr("class", "tbi3-cell-exp")
-            .attr("x", cx + boxW - 8)
-            .attr("y", cy + 15)
-            .attr("text-anchor", "end")
+            .attr("x", narrow ? cx + 8 : cx + boxW - 8)
+            .attr("y", narrow ? cy + 29 : cy + 15)
+            .attr("text-anchor", narrow ? "start" : "end")
             .text(`chance: ${e.toFixed(1)}`);
           void full;
         }
@@ -1513,7 +1523,7 @@
           ? `${N} people who answered questions about both ${pair.aLabel.toLowerCase()} and ${pair.bLabel.toLowerCase()}, in no particular order.`
           : phase === 1
             ? `Sorted: ${a} have both, ${b} only ${pair.aLabel.toLowerCase()}, ${c} only ${pair.bLabel.toLowerCase()}, ${d} neither.`
-            : `If the two conditions had nothing to do with each other, about ${expBoth.toFixed(1)} people would have both. ${a} do. φ = ${phi.toFixed(2)}. ${pair.note}`;
+            : `If the two conditions had nothing to do with each other, about ${expBoth.toFixed(1)} people would have both. ${a} do. φ = ${phi.toFixed(2)}. ${PAIR_NOTE[pair.id] || ""}`;
     };
 
     const setPhase = (p) => {
@@ -1831,7 +1841,7 @@
           const v = phiAt(a, b);
           if (v == null) return;
           const s = Math.min(1, Math.abs(v) / 0.5);
-          hctx.globalAlpha = 0.08 + 0.92 * Math.pow(s, 0.8);
+          hctx.globalAlpha = 0.04 + 0.96 * Math.pow(s, 1.25);
           hctx.fillStyle = v < 0 ? neg : accent;
           hctx.fillRect(x + 0.5, y + 0.5, cell - 1, cell - 1);
           hctx.globalAlpha = 1;
@@ -1846,9 +1856,11 @@
             ((f.pair && ((a === f.pair[0] && b === f.pair[1]) || (a === f.pair[1] && b === f.pair[0]))) ||
               (f.center && (a === f.center || b === f.center)))
           ) {
+            hctx.globalAlpha = f.pair ? 1 : 0.45;
             hctx.strokeStyle = ink;
             hctx.lineWidth = 1;
             hctx.strokeRect(x + 0.5, y + 0.5, cell - 1, cell - 1);
+            hctx.globalAlpha = 1;
           }
         });
       });
@@ -2163,8 +2175,9 @@
       g.filter((d) => revealed && (labelled.has(d.id) || !narrow))
         .append("text")
         .attr("class", "tbi3-sc-label")
-        .attr("x", 7)
-        .attr("y", 4)
+        .attr("x", (d) => (d.x > W * 0.72 ? -7 : 7))
+        .attr("y", (d) => (["Anxiety", "Pneumonia", "SleepDisorder", "Cataracts"].includes(d.id) ? -7 : 4))
+        .attr("text-anchor", (d) => (d.x > W * 0.72 ? "end" : "start"))
         .text((d) => (narrow ? SHORT[d.id] : LABEL[d.id]));
       g.attr("tabindex", 0)
         .attr("role", "img")
@@ -2411,7 +2424,7 @@
           key: netId,
           nodes: viewNodes(net, edges, ids),
           edges,
-          size: (id) => (step.scores.has(id) ? Math.min(1, step.scores.get(id) / 0.35) : 0),
+          size: (id) => (done ? 0.3 : step.scores.has(id) ? Math.min(1, step.scores.get(id) / 0.35) : 0),
           nodeClass: (id) => {
             const parts = [];
             if (sel) parts.push(sel.core.includes(id) ? "is-core" : sel.bridges.includes(id) ? "is-bridge" : "is-dim");
@@ -2650,7 +2663,7 @@
     ];
     const years = [1, 2, 5, 10, 15];
     const netFor = (s, y) => (s === "mild" && y === 5 ? D.nets["thesis-mild-y5"] : D.nets[`supp-${s}-y${y}`]);
-    const big = NetView($("tbi3-beyond-big"), { minR: 4, maxR: 11, aspect: (w) => (w < 560 ? 1.05 : 0.55) });
+    const big = NetView($("tbi3-beyond-big"), { minR: 4, maxR: 11, aspect: (w) => (w < 560 ? 1.05 : 0.9) });
     let current = ["mild", 1];
     const cells = [];
     box.innerHTML = "";

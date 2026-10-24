@@ -88,6 +88,8 @@ _styles: >
   .tbi3-cell-axis { font-size: 11px; fill: var(--tbi-ink-2) !important; letter-spacing: 0.04em; text-transform: uppercase; }
   .tbi3-ghost { fill: none; stroke: var(--tbi-ink); stroke-width: 1.2; stroke-dasharray: 2 2; }
   .tbi3-split { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+  .tbi3-split-even { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-top: 0.75rem; }
+  .tbi3-split-beyond { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; }
   .tbi3-eq { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; font-family: "Newsreader", Georgia, serif; font-size: 1.05rem; margin-bottom: 0.6rem; font-variant-numeric: tabular-nums; }
   .tbi3-frac { display: inline-flex; flex-direction: column; text-align: center; font-size: 0.92rem; }
   .tbi3-frac span:first-child { border-bottom: 1px solid var(--tbi-ink); padding: 0 0.3rem 0.15rem; }
@@ -219,7 +221,8 @@ _styles: >
   .tbi3-lineage thead th { font-weight: 600; color: var(--tbi-ink-2); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; }
   .tbi3-lineage tbody th { font-weight: 600; }
   .tbi3-scroll { overflow-x: auto; }
-  .tbi3-conds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.6rem; }
+  .tbi3-conds { column-count: 2; column-gap: 1.8rem; }
+  .tbi3-cgroup { break-inside: avoid; margin-bottom: 1rem; }
   .tbi3-cgroup-h { font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; font-weight: 600; color: var(--tbi-ink-2); margin-bottom: 0.2rem; }
   .tbi3-crow { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 0.6rem; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid var(--tbi-rule); }
   .tbi3-cname strong { display: block; font-size: 0.82rem; font-weight: 600; }
@@ -233,7 +236,7 @@ _styles: >
   .tbi3-key.tbi3-k-after { background: var(--tbi-psych); height: 10px; width: 10px; }
   .tbi3-key.tbi3-k-before { background: var(--tbi-ink-2); opacity: 0.45; height: 10px; width: 10px; }
   @media (max-width: 760px) {
-    .tbi3-conds { grid-template-columns: 1fr; }
+    .tbi3-conds { column-count: 1; }
     .tbi3-split, .tbi3-rr-grid { grid-template-columns: 1fr; }
     .tbi3-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .tbi3-demo { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -580,18 +583,18 @@ Here, then, is the network for everyone: 25 conditions with at least one edge, j
     </span>
     <button class="tbi-btn" type="button" id="tbi3-map-listbtn" aria-pressed="false" aria-controls="tbi3-map-list">As a list</button>
   </div>
-  <div class="tbi3-split">
-    <div class="tbi3-netwrap">
-      <div class="tbi3-zoombar" role="group" aria-label="Zoom">
-        <button class="tbi-btn" type="button" id="tbi3-zoom-in" aria-label="Zoom in">+</button>
-        <button class="tbi-btn" type="button" id="tbi3-zoom-out" aria-label="Zoom out">−</button>
-        <button class="tbi-btn" type="button" id="tbi3-zoom-reset" aria-label="Reset zoom">⟲</button>
-      </div>
-      <svg id="tbi3-map" role="group" aria-label="The comorbidity network for everyone. Each condition is a focusable node."></svg>
+  <div class="tbi3-netwrap">
+    <div class="tbi3-zoombar" role="group" aria-label="Zoom">
+      <button class="tbi-btn" type="button" id="tbi3-zoom-in" aria-label="Zoom in">+</button>
+      <button class="tbi-btn" type="button" id="tbi3-zoom-out" aria-label="Zoom out">−</button>
+      <button class="tbi-btn" type="button" id="tbi3-zoom-reset" aria-label="Reset zoom">⟲</button>
     </div>
+    <svg id="tbi3-map" role="group" aria-label="The comorbidity network for everyone. Each condition is a focusable node."></svg>
+  </div>
+  <div class="tbi3-split tbi3-split-even">
+    <div class="tbi-panel tbi3-card" id="tbi3-map-card" aria-live="polite"></div>
     <div>
-      <div class="tbi-panel tbi3-card" id="tbi3-map-card" aria-live="polite"></div>
-      <div class="tbi-kicker" style="margin-top: 1rem">Every pair’s φ</div>
+      <div class="tbi-kicker">Every pair’s φ</div>
       <canvas id="tbi3-map-heat" tabindex="0" role="img" aria-label="A 26 by 26 matrix of phi values between every pair of conditions, grouped by type. Focus it and use the arrow keys to read pairs."></canvas>
       <div class="tbi3-heat-read" id="tbi3-map-heat-read" aria-live="polite"></div>
     </div>
@@ -792,8 +795,10 @@ The thesis ended with a line I would still stand by: the choice of mild TBI at f
 
 <figure class="tbi-fig tbi3-fig l-page">
   <div class="tbi-kicker">Exploratory, not published: severity × years since injury</div>
-  <div class="tbi3-bx" id="tbi3-beyond" role="group" aria-label="Fifteen small networks: mild, moderate and severe TBI at 1, 2, 5, 10 and 15 years after injury. Choose one to enlarge it."></div>
-  <svg id="tbi3-beyond-big" role="img" aria-label="The chosen network, enlarged, with node size showing degree."></svg>
+  <div class="tbi3-split tbi3-split-beyond">
+    <div class="tbi3-bx" id="tbi3-beyond" role="group" aria-label="Fifteen small networks: mild, moderate and severe TBI at 1, 2, 5, 10 and 15 years after injury. Choose one to enlarge it."></div>
+    <svg id="tbi3-beyond-big" role="img" aria-label="The chosen network, enlarged, with node size showing degree."></svg>
+  </div>
   <div class="tbi-readout" id="tbi3-beyond-read" aria-live="polite"></div>
   <figcaption>Recomputed data, exploratory and unpublished: networks built from the TBIMS public-use files with the thesis’s edge rule ($t \ge 2.920$, with $t$ from $2N$), so the mild five-year cell is the thesis network itself. Severity bands follow the original code: mild GCS 14–15, moderate 9–13, severe 3–8. Each cell is a different set of people, those who answered the health questions at that follow-up, so the row is not the same people followed over time. Choose a cell to enlarge it; node size is degree.</figcaption>
 </figure>
