@@ -3,6 +3,7 @@
 //   explore  anatomy and what each region does
 //   impact   a toy simulation of coup-contrecoup contusion and rotational shear
 //   shear    the same simulation focused on stretched and torn axon bundles (stylised)
+//   dti      real white-matter tracts from diffusion MRI tractography (tbi-brain-dti.js, loaded only for this mode)
 // Anatomy is MRI-derived (fsaverage5 pial surface, Destrieux atlas, MNI152, Harvard-Oxford and Juelich atlases);
 // see assets/data/tbi/README.md. The mechanics are an illustration, not a finite-element model.
 import * as THREE from "../vendor/three.module.min.js";
@@ -575,6 +576,7 @@ function heatToBruise(data, raw, out) {
 // Relative sensitivity to rotational shear: grey-white junction > corpus callosum > brainstem,
 // so that, as in Adams et al.'s grading of diffuse axonal injury, deeper levels need harder rotation.
 const SHEAR_W = [1.0, 0.45, 0.28];
+const PHI0 = 0.0125; // core-lag rotation (rad) at which a typical grey-white fibre reaches threshold
 
 /* ------------------------------------------------------------------ shaders */
 
@@ -849,12 +851,12 @@ let instanceCount = 0;
 class BrainView {
   constructor(el) {
     this.el = el;
-    this.mode = ["explore", "impact", "shear"].includes(el.dataset.mode) ? el.dataset.mode : "explore";
+    this.mode = ["explore", "impact", "shear", "dti"].includes(el.dataset.mode) ? el.dataset.mode : "explore";
     this.id = `tbi-brain-${++instanceCount}`;
     this.selected = 0;
     this.hovered = 0;
-    this.skullOn = el.dataset.skull !== "off";
-    this.ghost = this.mode === "shear";
+    this.skullOn = el.dataset.skull ? el.dataset.skull !== "off" : this.mode !== "dti";
+    this.ghost = this.mode === "shear" || this.mode === "dti";
     this.cut = el.dataset.cutaway === "on";
     this.scenario = SCENARIOS[el.dataset.scenario] ? el.dataset.scenario : this.mode === "shear" ? "hook" : "front";
     this.severity = clamp(parseInt(el.dataset.severity || "6", 10) || 6, 1, 10);
@@ -879,7 +881,12 @@ class BrainView {
     this.canvasWrap.append(this.tag);
     this.hint = h("div", {
       class: "tbi-brain-hint",
-      text: mode === "explore" ? "Drag to turn · tap a region" : "Drag to turn · choose a blow, then Strike",
+      text:
+        mode === "explore"
+          ? "Drag to turn · tap a region"
+          : mode === "dti"
+            ? "Drag to turn · choose a tract"
+            : "Drag to turn · choose a blow, then Strike",
     });
     this.canvasWrap.append(this.hint);
     const zoom = h("div", { class: "tbi-brain-zoom", role: "group", "aria-label": "Zoom" }, [
@@ -918,7 +925,11 @@ class BrainView {
       this.btnCut,
     ]);
 
-    if (mode === "explore") {
+    if (mode === "dti") {
+      // filled by tbi-brain-dti.js once it has loaded
+      this.dtiSide = h("div", { class: "tbi-dti-side" });
+      side.append(toolbar, this.dtiSide);
+    } else if (mode === "explore") {
       this.select = h("select", {
         class: "tbi-brain-select-input",
         id: `${this.id}-select`,
@@ -1013,10 +1024,13 @@ class BrainView {
       this.canvasWrap.append(this.timeline);
     }
     this.info = h("div", { class: "tbi-brain-info", "aria-live": "polite" });
-    side.append(this.info);
+    if (mode !== "dti") side.append(this.info);
 
     const legend = h("div", { class: "tbi-legend tbi-brain-legend" });
-    if (mode !== "explore") {
+    this.legend = legend;
+    if (mode === "dti") {
+      // drawn by tbi-brain-dti.js for the current lens
+    } else if (mode !== "explore") {
       legend.append(
         h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-bruise" }), "Bruising (contusion)"]),
         h("span", {}, [h("span", { class: "tbi-swatch tbi-brain-sw-dots" }), "Shearing (diffuse axonal injury)"])
@@ -1030,8 +1044,8 @@ class BrainView {
     }
     const main = h("div", { class: "tbi-brain-main" }, [this.canvasWrap, legend]);
     el.append(main, side);
-    this.renderInfo();
-    if (mode !== "explore") this.renderReadout();
+    if (mode !== "dti") this.renderInfo();
+    if (mode !== "explore" && mode !== "dti") this.renderReadout();
   }
 
   /* ---------------- init */
@@ -1048,10 +1062,17 @@ class BrainView {
       this.fail("This interactive 3D model needs WebGL, which this browser or device has turned off. The text around it describes what it shows.");
       return;
     }
-    let data;
+    let data, dtiMod, dtiRaw;
     try {
+      const hiDetail = wantHighDetail(this.el);
+      if (this.mode === "dti") {
+        // the tract module and its data load in parallel with the anatomy, and only for this instance
+        dtiMod = import("./tbi-brain-dti.js");
+        dtiRaw = dtiMod.then((m) => m.loadTracts(hiDetail));
+      }
       data = await loadData();
-      if (wantHighDetail(this.el)) this.hi = await loadHi(data).catch(() => null);
+      if (hiDetail) this.hi = await loadHi(data).catch(() => null);
+      if (dtiMod) [dtiMod, dtiRaw] = await Promise.all([dtiMod, dtiRaw]);
     } catch (e) {
       this.fail("The brain model could not be loaded. Try reloading the page.");
       return;
@@ -1078,7 +1099,21 @@ class BrainView {
     this.clipping = [];
     this.buildMeshes();
     if (this.mode === "shear") this.buildFibres();
-    if (this.mode !== "explore") this.buildImpactor();
+    if (this.mode === "dti") {
+      this.dti = dtiMod.create(this, dtiRaw, {
+        THREE,
+        h,
+        SCENARIOS,
+        SIM,
+        SHEAR_W,
+        PHI0,
+        runSimulation,
+        reduceMotion,
+        clamp,
+        parseColour,
+        mix3,
+      });
+    } else if (this.mode !== "explore") this.buildImpactor();
 
     const controls = new OrbitControls(this.camera, canvas);
     controls.enableDamping = true;
@@ -1114,7 +1149,7 @@ class BrainView {
       this.dirty = true;
     });
     this.resetView(false);
-    this.autoRotate = this.mode === "explore" && !reduceMotion;
+    this.autoRotate = (this.mode === "explore" || this.mode === "dti") && !reduceMotion;
     this.resize();
     new ResizeObserver(() => this.resize()).observe(this.canvasWrap);
     watchVisibility(this.el, (v) => {
@@ -1445,6 +1480,7 @@ class BrainView {
       u.uStrainCol.value.copy(P.strain);
       u.uInjury.value.copy(P.injury);
     }
+    if (this.dti) this.dti.applyPalette(P);
     if (this.impactor) {
       this.impactor.material.color.setRGB(P.theme.x, P.theme.y, P.theme.z, THREE.SRGBColorSpace);
       this.arcMat.color.setRGB(P.injury.x, P.injury.y, P.injury.z, THREE.SRGBColorSpace);
@@ -1471,7 +1507,8 @@ class BrainView {
         m.material.uniforms.uGhost.value = g ? 1 : 0;
         m.material.transparent = g || m.userData.region === 20;
         m.material.depthWrite = !g && m.userData.region !== 20;
-        m.material.uniforms.uOpacity.value = m.userData.region === 20 ? 0.6 : 1;
+        // in the tract view the see-through cortex is only context, so it is fainter
+        m.material.uniforms.uOpacity.value = m.userData.region === 20 ? 0.6 : g && this.mode === "dti" ? 0.55 : 1;
         m.renderOrder = g ? 4 : m.userData.region === 20 ? 3 : m.userData.cortex ? 2 : 1;
         m.material.needsUpdate = true;
       }
@@ -1487,7 +1524,7 @@ class BrainView {
   }
 
   cutPlaneKind() {
-    if (this.mode === "explore") return "sagittal";
+    if (this.mode === "explore" || this.mode === "dti") return "sagittal";
     return SCENARIOS[this.scenario].cut;
   }
 
@@ -1539,6 +1576,7 @@ class BrainView {
     if (this.cut) this.skullBack.visible = false;
     else this.skullBack.visible = true;
     if (this.fibres) this.fibres.material.clippingPlanes = [];
+    if (this.dti) this.dti.setClipping(planes);
     if (goal && animate) this.tweenTo(goal.normalize(), this.camera.position.distanceTo(this.controls.target));
     this.updateAria();
     this.dirty = true;
@@ -1547,6 +1585,7 @@ class BrainView {
   defaultDir() {
     if (this.mode === "impact") return new THREE.Vector3(-0.92, -0.08, -0.62).normalize();
     if (this.mode === "shear") return new THREE.Vector3(-0.75, 0.42, -0.6).normalize();
+    if (this.mode === "dti") return new THREE.Vector3(-0.92, 0.3, -0.36).normalize();
     return new THREE.Vector3(-0.8, 0.35, -0.62).normalize();
   }
 
@@ -1634,6 +1673,7 @@ class BrainView {
     const ndc = new THREE.Vector2();
     let down = null;
     const pick = (e) => {
+      if (this.mode === "dti") return 0; // tracts are chosen from the list; the cortex is only context here
       const r = this.canvas.getBoundingClientRect();
       ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
       ray.setFromCamera(ndc, this.camera);
@@ -1682,6 +1722,7 @@ class BrainView {
       const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y);
       down = null;
       if (moved > 6) return;
+      if (this.mode === "dti") return;
       const r = pick(e);
       this.selectRegion(r === this.selected ? 0 : r, false);
     });
@@ -1829,7 +1870,6 @@ class BrainView {
     // sensitivity per site: grey-white junction < corpus callosum < brainstem (the order of Adams' DAI grades)
     const axis = res.axis.lengthSq() > 0 ? res.axis : new THREE.Vector3(1, 0, 0);
     const W = SHEAR_W;
-    const PHI0 = 0.0125; // core-lag rotation (rad) at which a typical grey-white fibre reaches threshold
     const lever = (p) => clamp(new THREE.Vector3().crossVectors(axis, p).length() / 70, 0.25, 1.2);
     res.phiScale = 1 / PHI0;
     if (this.fibreInfo) res.fibreSens = this.fibreInfo.map((f) => (W[f.kind] * (f.kind === 0 ? lever(f.mid) : 0.8 + 0.2 * lever(f.mid))) / f.jitter);
@@ -2151,7 +2191,9 @@ class BrainView {
     ]
       .filter(Boolean)
       .join(", ");
-    if (this.mode === "explore") {
+    if (this.dti) {
+      label = this.dti.aria(views);
+    } else if (this.mode === "explore") {
       label = `Interactive 3D model of a human brain built from MRI-derived anatomy, ${views}. `;
       label += this.selected
         ? `Selected: ${REGIONS[this.selected].name}. ${REGIONS[this.selected].does}`
@@ -2199,6 +2241,7 @@ class BrainView {
         this.setTime(Math.min(t, SIM.duration));
       }
       this._lastNow = now;
+      if (this.dti && this.dti.tick(now)) this.dirty = true;
       if (this.controls.update()) this.dirty = true;
       const S = this.tissue[0].material.uniforms;
       const sel = this.selected || -1;

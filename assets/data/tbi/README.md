@@ -80,3 +80,52 @@ voxelisation) and fast-simplification (decimation), in a virtual environment out
 6. For fsaverage6, subdivide each fsaverage5 triangle (edges in first-seen order a-b, b-c, c-a), match each edge midpoint to its fsaverage6
    vertex on the sphere (exact one-to-one match), and store those vertices' pial positions and sulcal depth.
 7. Write everything as aligned little-endian typed arrays into the two `.bin` files, with offsets in `brain.json`.
+
+## Diffusion MRI tracts (Part 1, `data-mode="dti"`)
+
+Files: `brain/tracts.json` (manifest), `brain/tracts.bin` (base level, 3,031 streamlines, 146k points, ~454 kB, fetched for every DTI
+figure) and `brain/tracts-hi.bin` (another 3,031 streamlines, ~452 kB, desktops only). Used by `assets/js/posts/tbi-brain-dti.js`, which
+`tbi-brain-core.js` imports only for an element with `data-mode="dti"`.
+
+**Source and licence.** "Advanced Atlas of 80 Bundles in MNI space", E. Garyfallidis, figshare, doi
+[10.6084/m9.figshare.7375883.v2](https://doi.org/10.6084/m9.figshare.7375883.v2) (file `Atlas_80_Bundles.zip`, `bundles/*.trk`), licensed
+**CC BY 4.0** (stated on the figshare record and in the archive's `LICENSE`). It is curated from the population-averaged HCP-842 tractography
+atlas: Yeh F-C et al. 2018, "Population-averaged atlas of the macroscale human structural connectome and its network topology",
+NeuroImage 178:57-68, doi 10.1016/j.neuroimage.2018.05.027 (diffusion MRI of 842 Human Connectome Project adults averaged into a template,
+tracked, and labelled by neuroanatomists). Please cite Yeh et al. 2018 and Garyfallidis et al. 2018 (NeuroImage 170:283-295, doi
+10.1016/j.neuroimage.2017.07.015) as the dataset asks. The streamlines are in MNI ICBM 2009a space (RAS mm; identity voxel-to-RAS in the .trk
+header), the same space as the MNI152 2009 template and fsaverage surface used for the brain mesh above, so no registration was needed:
+99.9% of the kept streamline points fall inside the MNI152 2009 brain mask, and screenshots show the tracts inside the cortex.
+
+**What was kept.** Twelve displayed tracts (id: atlas files): 1-3 corpus callosum genu / body / splenium (`CC.trk`, split by where each
+streamline crosses the midline: anterior 25% of the callosal extent = genu, posterior 20% = splenium, the rest = body; streamlines that do
+not come within 3 mm of the midline dropped; an approximate geometric split, not the JHU labels); 4 corticospinal (`CST_L/R`); 5 corona
+radiata and internal capsule, drawn with the fronto- and parieto-pontine tracts (`FPT_L/R`, `PPT_L/R`); 6 cingulum (`C_L/R`); 7 fornix
+(`F_L_R`); 8 uncinate (`UF_L/R`); 9 inferior longitudinal (`ILF_L/R`); 10 inferior fronto-occipital (`IFOF_L/R`; the duplicate `IF0F_R` was
+ignored); 11 superior longitudinal and arcuate (`SLF_L/R`, `AF_L/R`); 12 cerebellar peduncles (`MCP`, `ICP_L/R`, `SCP`).
+
+**How it was built** (Python 3.13, nibabel 5.4, numpy, nilearn 0.14.1 for the mask check; script `build_tracts.py`, kept outside the repo):
+
+1. Load each bundle with `nibabel.streamlines`; resample every streamline to a 2.4 mm step (4-255 points).
+2. Drop streamlines shorter than 25 mm, those whose midpoint lies beyond the 95th percentile distance from the bundle's median midpoint,
+   and those whose end points lie beyond the 97th percentile from the bundle's median end points (either orientation).
+3. Randomly subsample (seed 1065) per file: e.g. 1,000 callosal streamlines (300 genu / 400 body / 300 splenium), 170 per corticospinal
+   tract, 60-150 for the others; an equal, disjoint second sample forms `tracts-hi.bin`.
+4. Convert MNI RAS to three.js axes (x, z, -y), as for `brain.bin`. Store per streamline: point count (uint8), tract id (uint8), first point
+   (int16, 1/256 mm); then each later point as an int8 x3 delta in 1/32 mm, quantised with error feedback (max error 0.016 mm). The browser
+   subtracts `brain.json`'s `centre`.
+
+**What is literature-derived, and what is a toy.** The "Mild TBI findings" colours are not data from these tracts. Each tract is given one of
+four levels by the author of the figure from published group studies: the number of publications reporting an anisotropy abnormality in the
+matching ICBM-DTI-81 region in Eierud et al. 2014 (NeuroImage: Clinical 4:283-294, Table 2), Aoki et al. 2012's meta-analysis of the
+corpus callosum (J Neurol Neurosurg Psychiatry 83:870-876) and Niogi et al. 2008 (AJNR 29:967-973). Most consistent: splenium (Aoki
+significant; Eierud 5). Often reported: genu (Eierud 6; Aoki n.s.), corona radiata / internal capsule (anterior corona radiata 6, posterior
+limb of internal capsule 5), uncinate (4), cingulum (4). Occasionally: callosal body (1; Aoki marginal), corticospinal (1), fornix (1 + 1),
+ILF/IFOF (sagittal stratum 2), SLF (2). Rarely: cerebellar peduncles (MCP 1, SCP 1, ICP 0). The "Rotational strain (toy)" view colours
+tracts with the same toy model as the `impact`/`shear` figures (`tbi-brain-sim.js`); per-point sensitivity follows the toy's ordering
+(grey-white junction x lever arm, scaled down with depth; corpus callosum within 22 mm of the midline; brainstem), with a per-streamline
+random tolerance. It is an illustration, not a measurement. The FA explainer uses illustrative eigenvalues (1.7 and 0.3 x 10^-3 mm^2/s for
+healthy white matter) and the standard FA formula (Pierpaoli & Basser 1996, Magn Reson Med 36:893-906).
+
+Not used: FSL's JHU ICBM-DTI-81 and JHU tractography atlases and the FMRIB58_FA template (FSL's licence restricts commercial use and their
+redistribution terms were not needed once a CC BY source was available); no FA map is shipped.

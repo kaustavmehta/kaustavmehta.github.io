@@ -418,6 +418,146 @@ html[data-theme="dark"] .tbi-brain {
   margin-bottom: 1.1rem;
 }
 
+/* diffusion MRI tracts (data-mode="dti", tbi-brain-dti.js) */
+.tbi-dti-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.tbi-dti-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.4rem;
+}
+.tbi-brain .tbi-dti-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.6rem;
+  font-size: 0.72rem;
+}
+.tbi-dti-dot {
+  display: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  flex: none;
+  background: var(--tbi-injury);
+}
+.is-dti-findings .tbi-dti-dot {
+  display: inline-block;
+}
+.tbi-dti-tier-3 {
+  --tbi-dti-a: 1;
+}
+.tbi-dti-tier-2 {
+  --tbi-dti-a: 0.7;
+}
+.tbi-dti-tier-1 {
+  --tbi-dti-a: 0.42;
+}
+.tbi-dti-tier-0 {
+  --tbi-dti-a: 0.16;
+}
+.tbi-dti-dot {
+  opacity: var(--tbi-dti-a, 1);
+}
+.tbi-dti-chip[aria-pressed="true"] .tbi-dti-dot {
+  box-shadow: 0 0 0 1.5px var(--global-bg-color);
+}
+.tbi-dti-badge {
+  display: inline-block;
+  margin-left: 0.3rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--global-text-color);
+  background: color-mix(in srgb, var(--tbi-injury) calc(var(--tbi-dti-a, 1) * 32%), transparent);
+  border: 1px solid color-mix(in srgb, var(--tbi-injury) calc(var(--tbi-dti-a, 1) * 70%), transparent);
+}
+.tbi-dti-info p {
+  font-size: 0.8rem;
+}
+.tbi-dti-strain[hidden],
+.tbi-dti-fa[hidden] {
+  display: none;
+}
+.tbi-dti-fa {
+  margin-top: 1rem;
+  max-width: 34rem;
+}
+.tbi-dti-note,
+.tbi-dti-fa-out {
+  font-size: 0.78rem;
+  margin: 0.2rem 0 0.4rem;
+}
+.tbi-dti-fa-out {
+  color: var(--global-text-color-light);
+  font-variant-numeric: tabular-nums;
+}
+.tbi-dti-fa-canvas {
+  display: block;
+  width: 100%;
+  height: 130px;
+  border-radius: 10px;
+  border: 1px solid var(--tbi-rule, rgba(0, 0, 0, 0.1));
+  background: var(--tbi-soft, rgba(0, 0, 0, 0.03));
+}
+.tbi-dti-fa-range {
+  display: flex;
+  width: 100%;
+  margin-top: 0.4rem;
+}
+.tbi-dti-fa-range input[type="range"] {
+  flex: 1;
+  min-width: 0;
+}
+.tbi-dti-fa-range input:focus-visible {
+  outline: 2px solid var(--global-theme-color);
+  outline-offset: 2px;
+}
+.tbi-dti-caveat {
+  margin-top: 0.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--tbi-rule, rgba(0, 0, 0, 0.1));
+  font-size: 0.72rem;
+  color: var(--global-text-color-light);
+}
+.tbi-dti-legend-note {
+  color: var(--global-text-color-light);
+  font-style: italic;
+}
+.tbi-dti-sw-lr {
+  background: #d9473f;
+}
+.tbi-dti-sw-ap {
+  background: #3fa45b;
+}
+.tbi-dti-sw-si {
+  background: #4a6fe0;
+}
+.tbi-dti-sw-t3,
+.tbi-dti-sw-t2,
+.tbi-dti-sw-t1 {
+  background: var(--tbi-injury);
+}
+.tbi-dti-sw-t2 {
+  opacity: 0.72;
+}
+.tbi-dti-sw-t1 {
+  opacity: 0.45;
+}
+.tbi-dti-sw-t0 {
+  background: var(--global-theme-color);
+  opacity: 0.55;
+}
+.tbi-dti-sw-strain {
+  background: #d08c2c;
+}
+
 /* WebGL unavailable */
 .tbi-brain.is-fallback .tbi-brain-zoom,
 .tbi-brain.is-fallback .tbi-brain-hint,
