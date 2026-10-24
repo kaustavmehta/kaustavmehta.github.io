@@ -15,6 +15,9 @@ self.onmessage = (e) => {
     res.frames = res.frames.map((f) => ({ ...f, u: plain(f.u), th: plain(f.th), ph: plain(f.ph), sp: plain(f.sp), sr: plain(f.sr) }));
     res.axis = plain(res.axis);
     res.linDir = plain(res.linDir);
-    self.postMessage({ id: m.id, res }, res.keys.map((k) => k.buffer));
+    self.postMessage(
+      { id: m.id, res },
+      res.keys.map((k) => k.buffer)
+    );
   }
 };

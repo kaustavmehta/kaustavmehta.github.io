@@ -6,6 +6,7 @@ import { Vector3 } from "../vendor/three.module.min.js";
 export const SCENARIOS = {
   front: {
     label: "Forehead",
+    phrase: "a blow to the forehead",
     blurb: "A blow to the front of the head, or the forehead hitting something hard.",
     site: [0, 0.25, -1],
     lin: [0, 0, 1],
@@ -15,6 +16,7 @@ export const SCENARIOS = {
   },
   back: {
     label: "Back of head",
+    phrase: "a blow to the back of the head",
     blurb: "The back of the head hits something, as in a fall backwards onto a hard floor.",
     site: [0, 0.1, 1],
     lin: [0, 0, -1],
@@ -24,6 +26,7 @@ export const SCENARIOS = {
   },
   side: {
     label: "Side",
+    phrase: "a blow to the side of the head",
     blurb: "A blow to the side of the head, or the temple hitting a door frame or window.",
     site: [-1, 0.15, 0],
     lin: [1, 0, 0],
@@ -33,6 +36,7 @@ export const SCENARIOS = {
   },
   hook: {
     label: "Hook to the jaw",
+    phrase: "a hook to the jaw",
     blurb: "A glancing blow to the side of the jaw, which spins the head sideways about the neck.",
     site: [-1, -0.9, -0.6],
     lin: [0.25, 0, 0],
@@ -42,6 +46,7 @@ export const SCENARIOS = {
   },
   uppercut: {
     label: "Uppercut",
+    phrase: "an uppercut",
     blurb: "A blow under the chin that snaps the head backwards.",
     site: [0, -1, -0.8],
     lin: [0, 0.3, 0],
@@ -51,6 +56,7 @@ export const SCENARIOS = {
   },
   whiplash: {
     label: "Whiplash",
+    phrase: "whiplash with no blow to the head",
     blurb: "No blow to the head at all: the body is thrown forward, the head lags and then whips back and forth on the neck.",
     site: [0, -1, 0.4],
     lin: [0, 0, -0.35],
@@ -94,7 +100,10 @@ export const SIM = {
 export function simulate(data, scenarioKey, severity) {
   const S = SCENARIOS[scenarioKey];
   const { contact } = data;
-  const { N, r, n, g, rough, hw, target, total } = contact;
+  const { N, r, n, rough, hw, target, total } = contact;
+  // the resting brain sags slightly onto the skull base; contact is measured from that resting position
+  const g = new Float32Array(N);
+  for (let i = 0; i < N; i++) g[i] = Math.max(contact.g[i], SIM.sag * n[i * 3 + 1] + 0.4);
   const heat = new Float32Array(total);
   const dt = SIM.dt;
   const steps = Math.round(SIM.duration / dt);
@@ -251,4 +260,3 @@ export function simulate(data, scenarioKey, severity) {
   keys.push(heat.slice());
   return { scenario: scenarioKey, severity, frames, keys, maxPhi, maxPen, axis: rot.clone().normalize(), linDir: lin.clone().normalize() };
 }
-

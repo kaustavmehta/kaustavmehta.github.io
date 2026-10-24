@@ -212,7 +212,6 @@ const CORTEX_ORDER = [21, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const DEEP_ORDER = [17, 18, 15, 13, 14, 16, 19, 20];
 const DEEP = new Set(DEEP_ORDER);
 
-
 /* ------------------------------------------------------------------ simulation (worker when possible) */
 
 let worker = null;
@@ -472,7 +471,7 @@ function decode(m, buf) {
           dy = mesh.pos[i * 3 + 1] - c.y,
           dz = mesh.pos[i * 3 + 2] - c.z;
         const d = dx * dx + dy * dy + dz * dz;
-        if (d < bd) ((bd = d), (best = i));
+        if (d < bd) (bd = d), (best = i);
       }
       (anchors[r] = anchors[r] || []).push({ mesh: mesh.name, p: new THREE.Vector3().fromArray(mesh.pos, best * 3) });
     }
@@ -1698,8 +1697,8 @@ class BrainView {
       else if (e.key === "ArrowRight") sph.theta += step;
       else if (e.key === "ArrowUp") sph.phi = clamp(sph.phi - step, 0.1, Math.PI - 0.1);
       else if (e.key === "ArrowDown") sph.phi = clamp(sph.phi + step, 0.1, Math.PI - 0.1);
-      else if (e.key === "+" || e.key === "=") return (this.zoom(0.88), e.preventDefault());
-      else if (e.key === "-" || e.key === "_") return (this.zoom(1.12), e.preventDefault());
+      else if (e.key === "+" || e.key === "=") return this.zoom(0.88), e.preventDefault();
+      else if (e.key === "-" || e.key === "_") return this.zoom(1.12), e.preventDefault();
       else handled = false;
       if (!handled) return;
       e.preventDefault();
@@ -1762,7 +1761,7 @@ class BrainView {
     this.markHeat();
     for (const m of this.tissue) m.material.uniforms.uShearAll.value = 0;
     if (this.fibreState) {
-      for (let i = 0; i < this.fibreInfo.length; i++) ((this.fibreState[i * 4] = 0), (this.fibreState[i * 4 + 1] = 0));
+      for (let i = 0; i < this.fibreInfo.length; i++) (this.fibreState[i * 4] = 0), (this.fibreState[i * 4 + 1] = 0);
       this.fibreTex.needsUpdate = true;
       this.fibres.material.uniforms.uPhi.value.set(0, 0, 0);
     }
@@ -1770,7 +1769,7 @@ class BrainView {
     this.head.rotation.set(0, 0, 0);
     this.brain.position.set(0, 0, 0);
     this.brain.rotation.set(0, 0, 0);
-    if (this.impactor) ((this.impactor.visible = false), (this.arc.visible = false));
+    if (this.impactor) (this.impactor.visible = false), (this.arc.visible = false);
     for (const m of this.skullMats) m.uniforms.uRingA.value = 0;
     this.timeline.hidden = true;
     this.renderReadout();
@@ -1809,7 +1808,7 @@ class BrainView {
     const hit = new THREE.Vector3();
     for (let i = 0; i < pos.length; i += 3) {
       const d = pos[i] * dir.x + pos[i + 1] * dir.y + pos[i + 2] * dir.z;
-      if (d > best) ((best = d), hit.set(pos[i], pos[i + 1], pos[i + 2]));
+      if (d > best) (best = d), hit.set(pos[i], pos[i + 1], pos[i + 2]);
     }
     if (!S.impactor) hit.copy(dir).multiplyScalar(best + 12);
     res.hit = hit;
@@ -2159,11 +2158,11 @@ class BrainView {
         : "No region selected; use the region list or click the model.";
     } else {
       const S = SCENARIOS[this.scenario];
-      label = `Interactive 3D simulation of a brain inside the skull, ${views}. `;
+      label = `Interactive 3D simulation of a brain, ${views}. `;
       const sum = this.result && this.result.summary;
       if (sum && this._summaryShown) {
-        const names = sum.bruised.slice(0, 5).map((b) => `${b.side ? b.side + " " : ""}${REGIONS[b.region].name}`);
-        label += `After a ${S.label.toLowerCase()} at severity ${this.result.severity} of 10, the skull is intact. `;
+        const names = sum.bruised.slice(0, 5).map((b) => `${b.side ? b.side + " " : ""}${REGIONS[b.region].name.toLowerCase()}`);
+        label += `After ${S.phrase} at severity ${this.result.severity} of 10, the skull is intact. `;
         label += names.length ? `Contusions at the ${names.join(", ")}. ` : "No contusions. ";
         label += sum.levels.gwj
           ? `Shearing reached the ${sum.levels.bs ? "brainstem" : sum.levels.cc ? "corpus callosum" : "grey-white junction"}.`
@@ -2241,7 +2240,7 @@ class BrainView {
       const mesh = this.meshByName[a.mesh];
       if (mesh && !mesh.visible) continue;
       const d = a.p.distanceTo(cam);
-      if (d < bd) ((bd = d), (best = a));
+      if (d < bd) (bd = d), (best = a);
     }
     if (!best) {
       this.tag.classList.remove("is-on");
