@@ -1328,7 +1328,7 @@
       const Wd = narrow ? 360 : 640;
       const Hh = narrow ? 170 : 150;
       curve.setAttribute("viewBox", `0 0 ${Wd} ${Hh}`);
-      const L = 34;
+      const L = 48;
       const R = Wd - 10;
       const top = 18;
       const bot = Hh - 30;
@@ -1976,6 +1976,19 @@
       life: { label: "Shorter life", cat: "--tbi-injury" },
     };
     // Node positions as fractions of the plot (x) and of the cloud height (y); they gather above the marker that introduces them.
+    const NODEPOS_NARROW = {
+      func: [0.2, 0.72],
+      ptsd: [0.36, 0.42],
+      dep: [0.4, 0.92],
+      dem: [0.5, 0.15],
+      ht: [0.7, 0.92],
+      dia: [0.66, 0.48],
+      stroke: [0.7, 0.0],
+      anx: [0.86, 0.66],
+      pain: [0.86, 0.26],
+      sui: [0.97, 0.45],
+      life: [0.97, 0.9],
+    };
     const NODEPOS = {
       func: [0.27, 0.78],
       ptsd: [0.43, 0.6],
@@ -2022,7 +2035,6 @@
             [30, "1 month"],
             [365, "1 year"],
             [1826, "5 years"],
-            [7300, "20 years"],
           ]
       ).forEach(([d, t]) => {
         svgEl("line", { x1: x(d), x2: x(d), y1: axisY - 4, y2: axisY + 4 }, ax);
@@ -2046,14 +2058,19 @@
       const cloudTop = 18;
       const cloudBot = axisY - 46;
       nodes = {};
-      Object.entries(NODEPOS).forEach(([id, [fx, fy]]) => {
+      Object.entries(narrow ? NODEPOS_NARROW : NODEPOS).forEach(([id, [fx, fy]]) => {
         const g = svgEl("g", { opacity: 0 }, svg);
         g.style.transition = RM ? "none" : "opacity 0.6s";
         const nx = L + fx * (longX - L);
         const ny = cloudTop + fy * (cloudBot - cloudTop);
         const cx = narrow ? Math.min(nx, Wd - 34) : nx;
         svgEl("circle", { cx, cy: ny, r: 8, fill: `var(${NODES[id].cat})` }, g);
-        svgEl("text", { x: cx, y: ny + 22, "text-anchor": "middle", class: "tbi1-svg-label" }, g, NODES[id].label);
+        svgEl(
+          "text",
+          { x: cx, y: ny + 22, "text-anchor": "middle", class: "tbi1-svg-label" },
+          g,
+          narrow && id === "ht" ? "Hypertension" : NODES[id].label
+        );
         nodes[id] = g;
       });
       // Markers.
