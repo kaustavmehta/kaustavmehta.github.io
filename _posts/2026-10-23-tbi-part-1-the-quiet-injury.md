@@ -250,8 +250,8 @@ The model below is a real brain surface, reconstructed from MRI, inside a skull.
 
 <figure class="tbi-fig tbi1-brain-fig l-page">
   <div class="tbi-kicker">The brain, region by region</div>
-  <div class="tbi-brain" data-mode="explore" aria-label="Interactive 3D brain for exploring regions"></div>
-  <figcaption id="tbi1-brain-cap-explore">Anatomy from open MRI-derived templates (details below the figure series); the descriptions of what each region does are simplified summaries. Drag to turn, tap or tab to a region, and use the buttons to show or hide the skull. Lighting and colours are for legibility, not realism.</figcaption>
+  <div class="tbi-brain" id="tbi-brain" data-mode="explore"></div>
+  <figcaption id="tbi1-brain-cap-explore">Anatomy, not a schematic: the cortex is FreeSurfer’s fsaverage surface (an average of 40 adult brains reconstructed from MRI), divided into regions with the Destrieux atlas, with deep structures from the Harvard-Oxford and Juelich atlases; the skull is derived and simplified. The descriptions of what each region does are my plain-language summaries. Drag to turn, tap or choose a region, and use Skull, See-through and Cutaway to look inside; Cutaway shows the midline and the bony floor the frontal and temporal lobes rest on.</figcaption>
 </figure>
 
 The functions in that model are summaries, and the brain does not really divide its work this neatly, but the broad strokes matter for this series. The frontal lobes, and in particular their underside (the orbitofrontal cortex), are heavily involved in planning, holding back impulses and regulating emotion. The temporal lobes hold the machinery for forming new memories and for processing emotion. These are the regions that sit on the rough parts of the skull floor. If you were designing a skull to protect personality, mood and memory, you would not put them there.
@@ -286,8 +286,8 @@ The 3D model can do the same thing on real anatomy. Choose where the blow comes 
 
 <figure class="tbi-fig tbi1-brain-fig l-page">
   <div class="tbi-kicker">Coup, contrecoup and shear on a real brain surface</div>
-  <div class="tbi-brain" data-mode="impact" data-scenario="back" aria-label="Interactive 3D brain for simulating a blow"></div>
-  <figcaption id="tbi1-brain-cap-impact">An illustration on MRI-derived anatomy: where contusions and shear strain would be expected for each kind of blow is computed by a simple rule of thumb from the direction of the force and the shape of the skull, not by a finite-element model of tissue. Choose a blow, set its strength and press Strike; scrub the timeline to replay. None of these blows fractures the skull.</figcaption>
+  <div class="tbi-brain" id="tbi-brain-impact" data-mode="impact" data-scenario="back"></div>
+  <figcaption id="tbi1-brain-cap-impact">An illustration on MRI-derived anatomy. The mechanics are a toy model built to give intuition, not a finite-element simulation: the brain lags the skull in its fluid, bruises where it is pressed against or scraped over bone and where it pulls away on the far side, and shears when the head rotates. Severity is unitless and the times are illustrative, so none of its numbers should be read as measurements. The pattern it is built to reproduce, frontal and temporal bruising for most directions of blow and deeper axonal injury with harder rotation, is from the clinical and experimental work cited in the text <d-cite key="bigler2007,gennarelli1982,adams1989dai"></d-cite>. Choose where the blow lands and how hard, then press Strike; scrub the timeline to replay in slow motion, and turn on Cutaway to watch the fluid gap close at one side and open at the other. The skull is intact every time.</figcaption>
 </figure>
 
 ## Stretch, not crush
@@ -328,8 +328,8 @@ In other words, the stretch lasts milliseconds but the damage plays out over a d
 
 <figure class="tbi-fig tbi1-brain-fig l-page">
   <div class="tbi-kicker">Rotation and the long fibre bundles</div>
-  <div class="tbi-brain" data-mode="shear" aria-label="Interactive 3D brain showing shear strain in fibre bundles"></div>
-  <figcaption id="tbi1-brain-cap-shear">An illustration on MRI-derived anatomy, with fibre bundles drawn schematically. The strain shown follows a simple rule (strain grows with distance from the axis of rotation and with the speed of the rotation), not a measured or simulated tissue response. Choose a kind of motion and press Rotate.</figcaption>
+  <div class="tbi-brain" id="tbi-brain-shear" data-mode="shear"></div>
+  <figcaption id="tbi1-brain-cap-shear">The same toy model, with the cortex made see-through and 364 stylised axon bundles drawn in: fibres crossing the corpus callosum, the tract running down into the brainstem, and short fibres just under the cortex. During a rotation the deep core lags the outer brain (the deformation is drawn four times larger than the model computes); bundles turn amber as they stretch and, past a threshold, swell and break. The bundles are drawn, not traced from imaging. Choose a kind of motion, including whiplash, where nothing touches the head, and press Rotate.</figcaption>
 </figure>
 
 None of the damage in this section needs a broken skull, a bleed, or anything that shows up on the CT scan used in most emergency departments. In one study of 135 people with mild TBI, 27% of those with a normal CT on admission had an abnormal MRI soon after, and contusions or four or more small bleeds along axons on that MRI predicted a worse outcome at three months <d-cite key="yuh2013mri"></d-cite>. A normal scan means that the scan was normal.
@@ -505,7 +505,7 @@ Answering those questions needs a way of thinking about connections that most pe
   <a href="{{ '/blog/2026/tbi-part-3-a-map-of-what-comes-after/' | relative_url }}"><span class="tbi-series-num">Part 3</span><span class="tbi-series-title">A map of what comes after</span></a>
 </nav>
 
-<p class="tbi-caption" id="tbi1-brain-credits">About the 3D brain: BRAIN_CREDITS_PLACEHOLDER</p>
+<p class="tbi-caption" id="tbi1-brain-credits">About the 3D brain: the cortex is FreeSurfer’s fsaverage surface (Fischl et al. 1999), parcellated with the Destrieux atlas (Destrieux et al. 2010); deep structures come from the Harvard-Oxford and Juelich atlases in MNI152 space, processed with nilearn (Abraham et al. 2014). The skull and fibre bundles are derived or stylised, and the mechanics are a toy model. Sources and build steps are in the repository’s <code>assets/data/tbi/README.md</code>.</p>
 
 <script src="{{ '/assets/js/posts/tbi-common.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/posts/tbi-part1.js' | relative_url }}"></script>
