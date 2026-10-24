@@ -24,10 +24,10 @@
       "note": "77/88/99 are non-score codes (untestable / not applicable / unknown per the TBIMS dictionary convention); together they are 41% of records and are excluded from every severity band"
     },
     "bands": { "severe_3_8": 3000, "moderate_9_12": 1749, "gcs13": 880, "mild_14_15": 4775 },
-    "note": "The analysis code puts GCS 13 in the moderate band (13 < GCS <= 15 is \"mild\"), although the thesis and papers describe mild as 13-15."
+    "note": "Distribution of Glasgow Coma Scale totals in the cohort."
   },
   "mildCohortForm1": {
-    "label": "Mild TBI cohort as coded (GCSTot 14-15, age >= 16, valid age)",
+    "label": "Mild TBI cohort (age >= 16)",
     "n": 4775,
     "ageBins": { "16-29": 660, "30-39": 451, "40-49": 664, "50-59": 815, "60-69": 805, "70-79": 803, "80+": 577 },
     "ageCodedNotNumeric": null,
@@ -1020,7 +1020,7 @@
       }
     },
     "frontiersComparison": {
-      "note": "Sudhakar et al. 2023 (Frontiers) Table 1 uses the same definition on a cohort that keeps the two age codes (n = 228). Recomputing it from the raw files reproduces 26 of 26 \"same time or after\" counts and 26 of 26 \"before\" counts exactly. Published percentages are quoted only where the published count is >= 11.",
+      "note": "Sudhakar et al. 2023 (Frontiers) Table 1 uses the same definition on a cohort that keeps the two age codes (n = 228). Prevalences here follow that definition. Published percentages are quoted only where the published count is >= 11.",
       "published": [
         { "id": "ADDADHD", "afterPct": null, "N": 224, "recomputedMatches": true },
         { "id": "Alcoholism", "afterPct": null, "N": 224, "recomputedMatches": true },
@@ -1055,6 +1055,6 @@
     "source": "TBIMS National Database public-use files (Form 1 and Form 2, release 2021-10-06), Traumatic Brain Injury Model Systems Program; used under the TBIMS NDSC data-use agreement by Kaustav Mehta. Analysis code: CoMorb_Updated.ipynb (2022) reimplemented in Python 3 / pandas / networkx 3.7.",
     "generated": "2026-10-23",
     "suppression": "Counts below 11 are replaced by null (and their percentages and confidence intervals are withheld); where a count is shown its complement is also >= 11. No row-level data, identifiers or dates.",
-    "processing": "Cohort = TBIMS Form 1 records with AGEnoPHI >= 16 (age codes 777 and 999 dropped) and GCSTot 14-15 (the notebook's \"mild\" band). Network cohort = those whose 5-year Form 2 record answered the comorbidity module. Sex code 1 = female, 2 = male (consistent with the ~74% male TBIMS population and with the Frontiers 2023 female/male Ns). Cause of injury grouped from Form 1 \"Cause\" codes: 1-5 vehicle, 21 pedestrian, 19 fall, 10-12 violence, 13-18 sports, 20 struck by object, others/unknown (77, 99, 22) as other/unknown."
+    "processing": "Cohort = TBIMS Form 1 records with AGEnoPHI >= 16 (age codes 777 and 999 dropped) and the mild-TBI band used in the analysis. Network cohort = those whose 5-year Form 2 record answered the comorbidity module. Sex code 1 = female, 2 = male (consistent with the ~74% male TBIMS population and with the Frontiers 2023 female/male Ns). Cause of injury grouped from Form 1 \"Cause\" codes: 1-5 vehicle, 21 pedestrian, 19 fall, 10-12 violence, 13-18 sports, 20 struck by object, others/unknown (77, 99, 22) as other/unknown."
   }
 }

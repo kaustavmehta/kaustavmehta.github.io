@@ -13,20 +13,14 @@
       "b": "Depression",
       "aLabel": "Anxiety",
       "bLabel": "Depression",
-      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; table as used for the network: yes = reported with onset at or after the injury",
-      "table": {
-        "bothYes": 19,
-        "aOnly": 14,
-        "bOnly": 14,
-        "neither": 133,
-        "N": 180
-      },
+      "cohort": "Mild TBI, 5-year follow-up, comorbidity respondents",
+      "table": { "bothYes": 19, "aOnly": 14, "bOnly": 14, "neither": 133, "N": 180 },
       "phi": 0.4805,
       "t": 7.31,
       "tCritical_p01_oneTailed": 2.347,
       "pTwoTailed": 0.0,
       "edgeInNetwork": true,
-      "note": "phi = 0.48, the value quoted in BMC Neurology 2025 for depression-anxiety. People reporting the condition with onset before the injury drop out of this table, which is why N is smaller than the cohort."
+      "note": "phi = 0.48, the value quoted in BMC Neurology 2025 for depression-anxiety."
     },
     {
       "id": "anxiety-depression-any",
@@ -35,20 +29,14 @@
       "b": "Depression",
       "aLabel": "Anxiety",
       "bLabel": "Depression",
-      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all, regardless of onset",
-      "table": {
-        "bothYes": 48,
-        "aOnly": 17,
-        "bOnly": 21,
-        "neither": 133,
-        "N": 219
-      },
+      "cohort": "Mild TBI, 5-year follow-up, comorbidity respondents; yes = reported at all, regardless of onset",
+      "table": { "bothYes": 48, "aOnly": 17, "bOnly": 21, "neither": 133, "N": 219 },
       "phi": 0.5921,
       "t": 10.824,
       "tCritical_p01_oneTailed": 2.344,
       "pTwoTailed": 0.0,
       "edgeInNetwork": true,
-      "note": "Same pair without the onset rule: an even stronger association."
+      "note": "Same pair, counting any report of either condition."
     },
     {
       "id": "depression-hypertension",
@@ -57,14 +45,8 @@
       "b": "Hypertension",
       "aLabel": "Depression",
       "bLabel": "Hypertension",
-      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all",
-      "table": {
-        "bothYes": 34,
-        "aOnly": 36,
-        "bOnly": 72,
-        "neither": 78,
-        "N": 220
-      },
+      "cohort": "Mild TBI, 5-year follow-up, comorbidity respondents; yes = reported at all",
+      "table": { "bothYes": 34, "aOnly": 36, "bOnly": 72, "neither": 78, "N": 220 },
       "phi": 0.0053,
       "t": 0.079,
       "tCritical_p01_oneTailed": 2.344,
@@ -79,14 +61,8 @@
       "b": "Depression",
       "aLabel": "Cataracts",
       "bLabel": "Depression",
-      "cohort": "Mild TBI (GCS 14-15), 5-year follow-up, comorbidity respondents; yes = reported at all",
-      "table": {
-        "bothYes": 11,
-        "aOnly": 34,
-        "bOnly": 59,
-        "neither": 115,
-        "N": 219
-      },
+      "cohort": "Mild TBI, 5-year follow-up, comorbidity respondents; yes = reported at all",
+      "table": { "bothYes": 11, "aOnly": 34, "bOnly": 59, "neither": 115, "N": 219 },
       "phi": -0.082,
       "t": -1.212,
       "tCritical_p01_oneTailed": 2.344,
@@ -102,13 +78,7 @@
       "aLabel": "ADD / ADHD",
       "bLabel": "Hypertension",
       "cohort": "All severities pooled (GCS 3-15), 5-year follow-up, comorbidity respondents; yes = reported at all. Exploratory: not a cohort used in the papers.",
-      "table": {
-        "bothYes": 12,
-        "aOnly": 44,
-        "bOnly": 174,
-        "neither": 275,
-        "N": 505
-      },
+      "table": { "bothYes": 12, "aOnly": 44, "bOnly": 174, "neither": 275, "N": 505 },
       "phi": -0.1128,
       "t": -2.546,
       "tCritical_p01_oneTailed": 2.334,

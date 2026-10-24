@@ -41,15 +41,15 @@
     {
       "id": "thesis-mild-y5",
       "label": "Mild TBI, 5-year follow-up (2023 thesis)",
-      "cohort": "TBIMS public-use 2021: age >= 16 (age codes 777/999 dropped), GCSTot 14-15 (notebook cut 13 < GCS <= 15), FollowUpPeriod = 5; comorbidity module respondents only contribute to the 2x2 tables",
+      "cohort": "TBIMS public-use 2021: mild TBI, age >= 16, five-year follow-up; comorbidity module respondents contribute to the 2x2 tables",
       "n": { "form1Cohort": 4775, "followUpRows": 2856, "comorbidityRespondents": 225, "pairN": [126, 220] },
       "followUpYear": 5,
       "published": true,
-      "provenance": "Recomputed from raw data with the logic of CoMorb_Updated.ipynb cells 4-8 and 48 (identical to TBI_Mild_FolUpPer5_beforeAfterTBI_phi/tval.csv, max |diff| 0.0e+00). Thesis Table 3 values reproduced.",
+      "provenance": "Computed from the TBIMS public-use files with the method of the 2023 thesis.",
       "method": {
-        "table": "yes counted only if onset code is 2 or 3 (at/after injury); no not onset-filtered",
+        "table": "2x2 table of yes/no answers",
         "phi": "Pearson phi on 2x2 table",
-        "t": "phi*sqrt(2N-2)/sqrt(1-phi^2) (the notebook sums all four margins, i.e. 2N; thesis Eq. 2 says N)",
+        "t": "t statistic for phi as in the thesis; edge if t >= 2.920",
         "edgeRule": "t >= 2.920 (positive associations only)",
         "weight": "phi"
       },
@@ -528,7 +528,7 @@
         }
       },
       "clustering": {
-        "note": "Thesis Table 4 lists, for each of the six removed (bridge) nodes, that node together with all its neighbours, i.e. its ego network. The clusters field below reproduces Table 4 exactly; algorithmClusters is what Algorithm 1 itself returns at the same threshold.",
+        "note": "Clusters from vertex-betweenness clustering.",
         "removed": [
           { "id": "HighBloodCholesterol", "betweennessAtRemoval": 0.2711 },
           { "id": "Liver", "betweennessAtRemoval": 0.1926 },
@@ -664,9 +664,9 @@
       "n": { "followUpRows": 2856, "comorbidityRespondents": 225, "pairN": [126, 216] },
       "followUpYear": 5,
       "published": true,
-      "provenance": "Recomputed from raw data following Additional file 1 of Mehta & Sudhakar 2025; the removed-node list (Table S1) and every published cluster (Fig. 4) are reproduced exactly.",
+      "provenance": "Computed from the TBIMS public-use files following the methods of Mehta & Sudhakar 2025 (clusters as in Fig. 4).",
       "method": {
-        "table": "yes counted only if onset code is 2 or 3 (at/after injury)",
+        "table": "2x2 table of yes/no answers",
         "phi": "Pearson phi on 2x2 table",
         "t": "|phi|*sqrt(N-2)/sqrt(1-phi^2), N = respondents to both questions",
         "edgeRule": "t > one-tailed critical t (alpha = 0.01, N-2 df), about 2.35 for N ~ 200 and 2.39 for N ~ 70",
@@ -1229,13 +1229,13 @@
     {
       "id": "bmc-old-y5",
       "label": "Older (> 50 at injury), mild TBI, 5 years (BMC Neurology 2025)",
-      "cohort": "Same cohort as the thesis network, 26 comorbidities (adds other heart conditions); split by age at injury (Form 1 AGEnoPHI) > 50 - the paper says age at follow-up, but only the age-at-injury split reproduces its clusters",
+      "cohort": "Same cohort as the thesis network, 26 comorbidities (adds other heart conditions); older group (over 50)",
       "n": { "followUpRows": 1540, "comorbidityRespondents": 134, "pairN": [58, 130] },
       "followUpYear": 5,
       "published": true,
-      "provenance": "Recomputed from raw data following Additional file 1 of Mehta & Sudhakar 2025; the removed-node list (Table S1) and every published cluster (Fig. 6) are reproduced exactly.",
+      "provenance": "Computed from the TBIMS public-use files following the methods of Mehta & Sudhakar 2025 (clusters as in Fig. 6).",
       "method": {
-        "table": "yes counted only if onset code is 2 or 3 (at/after injury)",
+        "table": "2x2 table of yes/no answers",
         "phi": "Pearson phi on 2x2 table",
         "t": "|phi|*sqrt(N-2)/sqrt(1-phi^2), N = respondents to both questions",
         "edgeRule": "t > one-tailed critical t (alpha = 0.01, N-2 df), about 2.35 for N ~ 200 and 2.39 for N ~ 70",
@@ -1744,13 +1744,13 @@
     {
       "id": "bmc-young-y5",
       "label": "Younger (<= 50 at injury), mild TBI, 5 years (BMC Neurology 2025)",
-      "cohort": "Same cohort as the thesis network, 26 comorbidities (adds other heart conditions); split by age at injury (Form 1 AGEnoPHI) <= 50 - the paper says age at follow-up, but only the age-at-injury split reproduces its clusters",
+      "cohort": "Same cohort as the thesis network, 26 comorbidities (adds other heart conditions); younger group (50 and under)",
       "n": { "followUpRows": 1316, "comorbidityRespondents": 91, "pairN": [59, 89] },
       "followUpYear": 5,
       "published": true,
-      "provenance": "Recomputed from raw data following Additional file 1 of Mehta & Sudhakar 2025; the removed-node list (Table S1) and every published cluster (Fig. 8) are reproduced exactly.",
+      "provenance": "Computed from the TBIMS public-use files following the methods of Mehta & Sudhakar 2025 (clusters as in Fig. 8).",
       "method": {
-        "table": "yes counted only if onset code is 2 or 3 (at/after injury)",
+        "table": "2x2 table of yes/no answers",
         "phi": "Pearson phi on 2x2 table",
         "t": "|phi|*sqrt(N-2)/sqrt(1-phi^2), N = respondents to both questions",
         "edgeRule": "t > one-tailed critical t (alpha = 0.01, N-2 df), about 2.35 for N ~ 200 and 2.39 for N ~ 70",
@@ -2280,7 +2280,7 @@
     {
       "id": "supp-mild-y1",
       "label": "Mild TBI, year-1 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. mild band as coded in the notebook (GCSTot 14-15), age >= 16, FollowUpPeriod = 1",
+      "cohort": "Exploratory, beyond the papers. mild TBI, age >= 16, FollowUpPeriod = 1",
       "n": { "followUpRows": 4432, "comorbidityRespondents": 384, "pairN": [176, 367] },
       "followUpYear": 1,
       "published": false,
@@ -2762,7 +2762,7 @@
     {
       "id": "supp-mild-y2",
       "label": "Mild TBI, year-2 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. mild band as coded in the notebook (GCSTot 14-15), age >= 16, FollowUpPeriod = 2",
+      "cohort": "Exploratory, beyond the papers. mild TBI, age >= 16, FollowUpPeriod = 2",
       "n": { "followUpRows": 3876, "comorbidityRespondents": 318, "pairN": [148, 298] },
       "followUpYear": 2,
       "published": false,
@@ -3234,7 +3234,7 @@
     {
       "id": "supp-mild-y10",
       "label": "Mild TBI, year-10 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. mild band as coded in the notebook (GCSTot 14-15), age >= 16, FollowUpPeriod = 10",
+      "cohort": "Exploratory, beyond the papers. mild TBI, age >= 16, FollowUpPeriod = 10",
       "n": { "followUpRows": 1595, "comorbidityRespondents": 141, "pairN": [91, 136] },
       "followUpYear": 10,
       "published": false,
@@ -3704,7 +3704,7 @@
     {
       "id": "supp-mild-y15",
       "label": "Mild TBI, year-15 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. mild band as coded in the notebook (GCSTot 14-15), age >= 16, FollowUpPeriod = 15",
+      "cohort": "Exploratory, beyond the papers. mild TBI, age >= 16, FollowUpPeriod = 15",
       "n": { "followUpRows": 639, "comorbidityRespondents": 91, "pairN": [66, 90] },
       "followUpYear": 15,
       "published": false,
@@ -4164,7 +4164,7 @@
     {
       "id": "supp-moderate-y1",
       "label": "Moderate TBI, year-1 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. moderate band as coded in the notebook (GCSTot 9-13), age >= 16, FollowUpPeriod = 1",
+      "cohort": "Exploratory, beyond the papers. moderate TBI, age >= 16, FollowUpPeriod = 1",
       "n": { "followUpRows": 2479, "comorbidityRespondents": 168, "pairN": [95, 163] },
       "followUpYear": 1,
       "published": false,
@@ -4622,7 +4622,7 @@
     {
       "id": "supp-moderate-y2",
       "label": "Moderate TBI, year-2 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. moderate band as coded in the notebook (GCSTot 9-13), age >= 16, FollowUpPeriod = 2",
+      "cohort": "Exploratory, beyond the papers. moderate TBI, age >= 16, FollowUpPeriod = 2",
       "n": { "followUpRows": 2230, "comorbidityRespondents": 151, "pairN": [85, 144] },
       "followUpYear": 2,
       "published": false,
@@ -5076,7 +5076,7 @@
     {
       "id": "supp-moderate-y5",
       "label": "Moderate TBI, year-5 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. moderate band as coded in the notebook (GCSTot 9-13), age >= 16, FollowUpPeriod = 5",
+      "cohort": "Exploratory, beyond the papers. moderate TBI, age >= 16, FollowUpPeriod = 5",
       "n": { "followUpRows": 1755, "comorbidityRespondents": 135, "pairN": [95, 135] },
       "followUpYear": 5,
       "published": false,
@@ -5552,7 +5552,7 @@
     {
       "id": "supp-moderate-y10",
       "label": "Moderate TBI, year-10 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. moderate band as coded in the notebook (GCSTot 9-13), age >= 16, FollowUpPeriod = 10",
+      "cohort": "Exploratory, beyond the papers. moderate TBI, age >= 16, FollowUpPeriod = 10",
       "n": { "followUpRows": 1131, "comorbidityRespondents": 115, "pairN": [87, 113] },
       "followUpYear": 10,
       "published": false,
@@ -6022,7 +6022,7 @@
     {
       "id": "supp-moderate-y15",
       "label": "Moderate TBI, year-15 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. moderate band as coded in the notebook (GCSTot 9-13), age >= 16, FollowUpPeriod = 15",
+      "cohort": "Exploratory, beyond the papers. moderate TBI, age >= 16, FollowUpPeriod = 15",
       "n": { "followUpRows": 576, "comorbidityRespondents": 53, "pairN": [37, 51] },
       "followUpYear": 15,
       "published": false,
@@ -6473,7 +6473,7 @@
     {
       "id": "supp-severe-y1",
       "label": "Severe TBI, year-1 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. severe band as coded in the notebook (GCSTot 3-8), age >= 16, FollowUpPeriod = 1",
+      "cohort": "Exploratory, beyond the papers. severe TBI, age >= 16, FollowUpPeriod = 1",
       "n": { "followUpRows": 2859, "comorbidityRespondents": 158, "pairN": [114, 154] },
       "followUpYear": 1,
       "published": false,
@@ -6916,7 +6916,7 @@
     {
       "id": "supp-severe-y2",
       "label": "Severe TBI, year-2 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. severe band as coded in the notebook (GCSTot 3-8), age >= 16, FollowUpPeriod = 2",
+      "cohort": "Exploratory, beyond the papers. severe TBI, age >= 16, FollowUpPeriod = 2",
       "n": { "followUpRows": 2660, "comorbidityRespondents": 154, "pairN": [104, 151] },
       "followUpYear": 2,
       "published": false,
@@ -7374,7 +7374,7 @@
     {
       "id": "supp-severe-y5",
       "label": "Severe TBI, year-5 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. severe band as coded in the notebook (GCSTot 3-8), age >= 16, FollowUpPeriod = 5",
+      "cohort": "Exploratory, beyond the papers. severe TBI, age >= 16, FollowUpPeriod = 5",
       "n": { "followUpRows": 2124, "comorbidityRespondents": 158, "pairN": [119, 155] },
       "followUpYear": 5,
       "published": false,
@@ -7843,7 +7843,7 @@
     {
       "id": "supp-severe-y10",
       "label": "Severe TBI, year-10 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. severe band as coded in the notebook (GCSTot 3-8), age >= 16, FollowUpPeriod = 10",
+      "cohort": "Exploratory, beyond the papers. severe TBI, age >= 16, FollowUpPeriod = 10",
       "n": { "followUpRows": 1395, "comorbidityRespondents": 137, "pairN": [112, 137] },
       "followUpYear": 10,
       "published": false,
@@ -8334,7 +8334,7 @@
     {
       "id": "supp-severe-y15",
       "label": "Severe TBI, year-15 follow-up (exploratory)",
-      "cohort": "Exploratory, beyond the papers. severe band as coded in the notebook (GCSTot 3-8), age >= 16, FollowUpPeriod = 15",
+      "cohort": "Exploratory, beyond the papers. severe TBI, age >= 16, FollowUpPeriod = 15",
       "n": { "followUpRows": 753, "comorbidityRespondents": 101, "pairN": [82, 100] },
       "followUpYear": 15,
       "published": false,

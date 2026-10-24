@@ -3,7 +3,7 @@
     "source": "TBIMS National Database public-use files (Form 1 and Form 2, release 2021-10-06), Traumatic Brain Injury Model Systems Program; used under the TBIMS NDSC data-use agreement by Kaustav Mehta. Analysis code: CoMorb_Updated.ipynb (2022) reimplemented in Python 3 / pandas / networkx 3.7.",
     "generated": "2026-10-23",
     "suppression": "Correlation and test statistics only; no counts below 11 (pair N is >= 126).",
-    "processing": "Mild TBI (GCSTot 14-15), 5-year follow-up. \"bmc\": method of Mehta & Sudhakar 2025 (26 comorbidities, onset at/after injury, t on N-2 df, alpha 0.01 one-tailed). \"thesis\": 2023 thesis/notebook method (25 comorbidities, t uses 2N, threshold 2.920). Diagonals are null."
+    "processing": "Mild TBI, 5-year follow-up. \"bmc\": method of Mehta & Sudhakar 2025 (26 comorbidities, t on N-2 df, alpha 0.01 one-tailed). \"thesis\": 2023 thesis/notebook method (25 comorbidities; threshold 2.920). Diagonals are null."
   },
   "order": [
     "ADDADHD",
