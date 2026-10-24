@@ -823,7 +823,9 @@
         .attr("y", H - m.b + 15)
         .attr("text-anchor", "middle")
         .text((s) => s);
-      bars.on("pointerenter focus", (ev, s) => T.showTooltip(`<strong>GCS ${s}</strong><br>${fmtInt(counts[s])} people aged 16 or over`, ev.type === "focus" ? ev.currentTarget : ev));
+      bars.on("pointerenter focus", (ev, s) =>
+        T.showTooltip(`<strong>GCS ${s}</strong><br>${fmtInt(counts[s])} people aged 16 or over`, ev.type === "focus" ? ev.currentTarget : ev)
+      );
       bars.on("pointerleave blur", T.hideTooltip);
       svg
         .append("text")
@@ -881,12 +883,37 @@
     const fu5 = c.followUp.rows.find((r) => r.year === 5);
     const gcsScored = d3.sum(d3.range(3, 16), (s) => c.gcs.counts[s]);
     const stages = [
-      { n: d3.sum(d3.range(3, 16), (s) => c.gcs.counts[s]) + c.gcs.sentinel.code77 + c.gcs.sentinel.code88 + c.gcs.sentinel.code99 + c.gcs.sentinel.missing, label: "In the public database, aged 16 or over", note: "Everyone in the TBIMS public-use files with a valid age of 16 or more at injury." },
-      { n: gcsScored, label: "Had a coma score recorded", note: "The rest were sedated, intubated or otherwise could not be scored on arrival, or the score is unknown." },
-      { n: c.mildCohortForm1.n, label: "Mild by that score", note: "A total score of 14 or 15, which is how the analysis code defined mild (see the previous figure)." },
-      { n: fu5.followUpRecords, label: "Due a five-year follow-up", note: "Had a record at the five-year follow-up, including people who could not be reached." },
+      {
+        n:
+          d3.sum(d3.range(3, 16), (s) => c.gcs.counts[s]) +
+          c.gcs.sentinel.code77 +
+          c.gcs.sentinel.code88 +
+          c.gcs.sentinel.code99 +
+          c.gcs.sentinel.missing,
+        label: "In the public database, aged 16 or over",
+        note: "Everyone in the TBIMS public-use files with a valid age of 16 or more at injury.",
+      },
+      {
+        n: gcsScored,
+        label: "Had a coma score recorded",
+        note: "The rest were sedated, intubated or otherwise could not be scored on arrival, or the score is unknown.",
+      },
+      {
+        n: c.mildCohortForm1.n,
+        label: "Mild by that score",
+        note: "A total score of 14 or 15, which is how the analysis code defined mild (see the previous figure).",
+      },
+      {
+        n: fu5.followUpRecords,
+        label: "Due a five-year follow-up",
+        note: "Had a record at the five-year follow-up, including people who could not be reached.",
+      },
       { n: fu5.interviewed, label: "Interviewed at five years", note: "Actually reached and interviewed at the five-year mark." },
-      { n: c.networkCohort.n, label: "Answered the health questions", note: "The comorbidity questions were only asked in interviews from 2017 to 2019, so most interviews never included them." },
+      {
+        n: c.networkCohort.n,
+        label: "Answered the health questions",
+        note: "The comorbidity questions were only asked in interviews from 2017 to 2019, so most interviews never included them.",
+      },
     ];
     const PER = 10;
     const total = Math.round(stages[0].n / PER);
@@ -1048,20 +1075,23 @@
           bins.forEach((b) => {
             const v = d.ageBins[b] / tot;
             const vo = other.ageBins[b] / totO;
-            svg.append("rect")
+            svg
+              .append("rect")
               .attr("class", "tbi3-demo-bar")
               .attr("x", x(b))
               .attr("width", x.bandwidth())
               .attr("y", y(v))
               .attr("height", y(0) - y(v))
               .attr("rx", 2);
-            svg.append("line")
+            svg
+              .append("line")
               .attr("class", "tbi3-demo-ghost")
               .attr("x1", x(b))
               .attr("x2", x(b) + x.bandwidth())
               .attr("y1", y(vo))
               .attr("y2", y(vo));
-            svg.append("text")
+            svg
+              .append("text")
               .attr("class", "tbi3-tick")
               .attr("x", x(b) + x.bandwidth() / 2)
               .attr("y", H - 6)
@@ -1070,7 +1100,13 @@
           });
           s.setAttribute("aria-label", `Age at injury: median ${d.ageMedian} years, interquartile range ${d.ageIQR[0]} to ${d.ageIQR[1]}.`);
         } else {
-          const entries = k === "sex" ? [["Men", d.sex.male], ["Women", d.sex.female]] : Object.entries(d.cause);
+          const entries =
+            k === "sex"
+              ? [
+                  ["Men", d.sex.male],
+                  ["Women", d.sex.female],
+                ]
+              : Object.entries(d.cause);
           const tot = d3.sum(entries, (e) => e[1] || 0);
           const rowH = 22;
           const H = entries.length * rowH + 4;
@@ -1082,13 +1118,15 @@
             .range([lw, W - 44]);
           entries.forEach(([name, v], i) => {
             const y0 = i * rowH + 2;
-            svg.append("text")
+            svg
+              .append("text")
               .attr("class", "tbi3-tick tbi3-tick-strong")
               .attr("x", lw - 6)
               .attr("y", y0 + 14)
               .attr("text-anchor", "end")
               .text(name);
-            svg.append("rect")
+            svg
+              .append("rect")
               .attr("class", "tbi3-demo-track")
               .attr("x", lw)
               .attr("y", y0 + 4)
@@ -1096,7 +1134,8 @@
               .attr("height", 12)
               .attr("rx", 3);
             if (v != null) {
-              svg.append("rect")
+              svg
+                .append("rect")
                 .attr("class", "tbi3-demo-bar")
                 .attr("x", lw)
                 .attr("y", y0 + 4)
@@ -1104,7 +1143,8 @@
                 .attr("height", 12)
                 .attr("rx", 3);
             }
-            svg.append("text")
+            svg
+              .append("text")
               .attr("class", "tbi3-tick")
               .attr("x", W - 40)
               .attr("y", y0 + 14)
@@ -1162,7 +1202,13 @@
         .domain([0, 4800])
         .range([H - m.b, m.t]);
       [1000, 2000, 3000, 4000].forEach((v) =>
-        svg.append("line").attr("class", "tbi3-grid").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(v)).attr("y2", y(v))
+        svg
+          .append("line")
+          .attr("class", "tbi3-grid")
+          .attr("x1", m.l)
+          .attr("x2", W - m.r)
+          .attr("y1", y(v))
+          .attr("y2", y(v))
       );
       [0, 2000, 4000].forEach((v) =>
         svg
@@ -1179,7 +1225,10 @@
           .attr("class", "tbi-focusable")
           .attr("tabindex", 0)
           .attr("role", "img")
-          .attr("aria-label", `Year ${r.year}: ${fmtInt(r.followUpRecords)} due, ${fmtInt(r.interviewed)} interviewed, ${fmtInt(r.comorbidityModuleAnswered)} answered the health questions`);
+          .attr(
+            "aria-label",
+            `Year ${r.year}: ${fmtInt(r.followUpRecords)} due, ${fmtInt(r.interviewed)} interviewed, ${fmtInt(r.comorbidityModuleAnswered)} answered the health questions`
+          );
         series.forEach(([k, , cls]) => {
           g.append("rect")
             .attr("class", cls)
@@ -1218,6 +1267,42 @@
     };
     draw();
     onWidth(svgEl, draw);
+  });
+
+  /* ------------------------------------------------------------------ */
+  /* 4b. The conditions, and when they began                             */
+  /* ------------------------------------------------------------------ */
+
+  lazy("tbi3-conds", (D, box) => {
+    const prev = D.cohort.prevalence.overall.conditions;
+    const MAX = 0.5;
+    box.querySelectorAll("[data-cond]").forEach((el, i) => {
+      const id = el.getAttribute("data-cond");
+      const p = prev[id];
+      const after = p.afterInjury.p;
+      const before = p.beforeInjury.p;
+      const show = (v) => (v == null ? "<11" : `${Math.round(v * 100)}%`);
+      el.innerHTML = `<span class="tbi3-ctrack"><span class="tbi3-cbar-a"></span><span class="tbi3-cbar-b"></span></span><span class="tbi3-cval">after ${show(after)} · before ${show(before)}</span>`;
+      el.setAttribute("tabindex", "0");
+      el.setAttribute("role", "img");
+      const txt = `${fullName(id)}: of ${p.any.n} people, ${p.afterInjury.x == null ? "fewer than 11" : p.afterInjury.x} reported it beginning at or after the injury and ${
+        p.beforeInjury.x == null ? "fewer than 11" : p.beforeInjury.x
+      } before it.`;
+      el.setAttribute("aria-label", txt);
+      el.addEventListener("pointerenter", (ev) => T.showTooltip(txt, ev));
+      el.addEventListener("focus", () => T.showTooltip(txt, el));
+      el.addEventListener("pointerleave", T.hideTooltip);
+      el.addEventListener("blur", T.hideTooltip);
+      const a = el.querySelector(".tbi3-cbar-a");
+      const b = el.querySelector(".tbi3-cbar-b");
+      setTimeout(
+        () => {
+          a.style.width = `${((after || 0) / MAX) * 100}%`;
+          b.style.width = `${((before || 0) / MAX) * 100}%`;
+        },
+        RM ? 0 : 60 + i * 25
+      );
+    });
   });
 
   /* ------------------------------------------------------------------ */
@@ -1427,8 +1512,8 @@
         phase === 0
           ? `${N} people who answered questions about both ${pair.aLabel.toLowerCase()} and ${pair.bLabel.toLowerCase()}, in no particular order.`
           : phase === 1
-          ? `Sorted: ${a} have both, ${b} only ${pair.aLabel.toLowerCase()}, ${c} only ${pair.bLabel.toLowerCase()}, ${d} neither.`
-          : `If the two conditions had nothing to do with each other, about ${expBoth.toFixed(1)} people would have both. ${a} do. φ = ${phi.toFixed(2)}. ${pair.note}`;
+            ? `Sorted: ${a} have both, ${b} only ${pair.aLabel.toLowerCase()}, ${c} only ${pair.bLabel.toLowerCase()}, ${d} neither.`
+            : `If the two conditions had nothing to do with each other, about ${expBoth.toFixed(1)} people would have both. ${a} do. φ = ${phi.toFixed(2)}. ${pair.note}`;
     };
 
     const setPhase = (p) => {
@@ -1495,7 +1580,8 @@
       };
       setBar("tbi3-rr-rr", rr, 10, rr.toFixed(1));
       setBar("tbi3-rr-phi", Math.max(0, phi), 1, phi.toFixed(3));
-      $("tbi3-rr-read").textContent = `Of 10,000 imaginary people, ${Math.round(nA)} have A, ${Math.round(nB)} have B and ${Math.round(both)} have both (chance alone would give ${((nA * nB) / N).toFixed(1)}). Relative risk ${rr.toFixed(1)}; φ ${phi.toFixed(3)}, out of a highest possible φ of ${phiMax.toFixed(2)} for these two prevalences.`;
+      $("tbi3-rr-read").textContent =
+        `Of 10,000 imaginary people, ${Math.round(nA)} have A, ${Math.round(nB)} have B and ${Math.round(both)} have both (chance alone would give ${((nA * nB) / N).toFixed(1)}). Relative risk ${rr.toFixed(1)}; φ ${phi.toFixed(3)}, out of a highest possible φ of ${phiMax.toFixed(2)} for these two prevalences.`;
     };
     [sA, sB, sL].forEach((s) => s.addEventListener("input", update));
     const pb = all("[data-rr]");
@@ -1533,7 +1619,7 @@
         const t = (Math.abs(phi) * Math.sqrt(N - 2)) / Math.sqrt(1 - phi * phi);
         pairs.push({ source: order[i], target: order[j], phi, N, p: tUpper(t, N - 2), paper: !!P.bmc.significant[i][j] });
       }
-    const tested = order.length * (order.length - 1) / 2;
+    const tested = (order.length * (order.length - 1)) / 2;
     const slider = $("tbi3-th-alpha");
     const marks = all("[data-alpha]");
     const toAlpha = (v) => 10 ** (-5 + (v / 1000) * 4.3); // 1e-5 .. 0.2
@@ -1603,7 +1689,11 @@
     let tour = null;
     let heatHover = null;
     const MEAS = {
-      prevalence: { name: "How common", get: (id) => (prev[id].any.p == null ? 0.02 : prev[id].any.p), fmt: (id) => (prev[id].any.p == null ? "fewer than 11 people" : pct(prev[id].any.p)) },
+      prevalence: {
+        name: "How common",
+        get: (id) => (prev[id].any.p == null ? 0.02 : prev[id].any.p),
+        fmt: (id) => (prev[id].any.p == null ? "fewer than 11 people" : pct(prev[id].any.p)),
+      },
       degree: { name: "Degree", get: (id) => M[id].degree, fmt: (id) => `${M[id].degree} links` },
       strength: { name: "Weighted degree", get: (id) => M[id].strength, fmt: (id) => f2(M[id].strength) },
       betweenness: { name: "Betweenness", get: (id) => M[id].betweenness, fmt: (id) => f3(M[id].betweenness) },
@@ -1617,9 +1707,29 @@
         .map((e) => ({ id: e.source === id ? e.target : e.source, phi: e.phi }))
         .sort((a, b) => b.phi - a.phi);
     const TOURS = {
-      core: { nodes: ["Anxiety", "Depression", "PTSD", "PanicAttacks", "Alcoholism", "DrugAddiction", "ADDADHD"], text: "The psychiatric core: seven conditions with 2 to 25 triangles each, tied together by the network's strongest edges." },
-      bridges: { nodes: ["HighBloodCholesterol", "BipolarDisorder", "Emphysema", "CongHF", "OtherHeartConditions"], text: "The five conditions with the highest betweenness: they sit between groups rather than inside one." },
-      heart: { nodes: ["CongHF", "MyocardialInfarction", "OtherHeartConditions", "Pneumonia", "Emphysema", "HighBloodCholesterol", "Hypertension", "Diabetes", "Cataracts", "Stroke"], text: "Heart, lungs and metabolism: a looser neighbourhood, joined to the psychiatric core mostly through bipolar disorder, emphysema and liver disease." },
+      core: {
+        nodes: ["Anxiety", "Depression", "PTSD", "PanicAttacks", "Alcoholism", "DrugAddiction", "ADDADHD"],
+        text: "The psychiatric core: seven conditions with 2 to 25 triangles each, tied together by the network's strongest edges.",
+      },
+      bridges: {
+        nodes: ["HighBloodCholesterol", "BipolarDisorder", "Emphysema", "CongHF", "OtherHeartConditions"],
+        text: "The five conditions with the highest betweenness: they sit between groups rather than inside one.",
+      },
+      heart: {
+        nodes: [
+          "CongHF",
+          "MyocardialInfarction",
+          "OtherHeartConditions",
+          "Pneumonia",
+          "Emphysema",
+          "HighBloodCholesterol",
+          "Hypertension",
+          "Diabetes",
+          "Cataracts",
+          "Stroke",
+        ],
+        text: "Heart, lungs and metabolism: a looser neighbourhood, joined to the psychiatric core mostly through bipolar disorder, emphysema and liver disease.",
+      },
     };
     const focusSet = () => {
       const f = selected || hover || (heatHover ? heatHover[0] : null);
@@ -1628,7 +1738,8 @@
       if (!f) return null;
       return { set: new Set([f, ...nbrs(f).map((n) => n.id)]), center: f };
     };
-    const ariaFor = (id) => `${LABEL[id]}: ${MEAS.prevalence.fmt(id)} reported it; ${M[id].degree} links; betweenness ${f3(M[id].betweenness)}. Press Enter to pin.`;
+    const ariaFor = (id) =>
+      `${LABEL[id]}: ${MEAS.prevalence.fmt(id)} reported it; ${M[id].degree} links; betweenness ${f3(M[id].betweenness)}. Press Enter to pin.`;
     const view = NetView(svgEl, {
       minR: 4,
       maxR: 18,
@@ -1656,7 +1767,10 @@
         return;
       }
       const p = prev[id];
-      const line = (o, label) => (o.suppressed || o.p == null ? `<span>${label}</span><span>fewer than 11</span>` : `<span>${label}</span><span>${pct(o.p)} <span class="tbi3-ci">(${pct(o.lo)}–${pct(o.hi)})</span></span>`);
+      const line = (o, label) =>
+        o.suppressed || o.p == null
+          ? `<span>${label}</span><span>fewer than 11</span>`
+          : `<span>${label}</span><span>${pct(o.p)} <span class="tbi3-ci">(${pct(o.lo)}–${pct(o.hi)})</span></span>`;
       const nb = nbrs(id);
       card.innerHTML = `
         <div class="tbi3-card-head"><span class="tbi3-swatch ${CAT_CLASS[cat(id)]}"></span><strong>${fullName(id)}</strong></div>
@@ -1727,7 +1841,11 @@
             hctx.arc(x + cell / 2, y + cell / 2, Math.max(1.2, cell * 0.12), 0, 6.2832);
             hctx.fill();
           }
-          if (f && ((f.pair && ((a === f.pair[0] && b === f.pair[1]) || (a === f.pair[1] && b === f.pair[0]))) || (f.center && (a === f.center || b === f.center)))) {
+          if (
+            f &&
+            ((f.pair && ((a === f.pair[0] && b === f.pair[1]) || (a === f.pair[1] && b === f.pair[0]))) ||
+              (f.center && (a === f.center || b === f.center)))
+          ) {
             hctx.strokeStyle = ink;
             hctx.lineWidth = 1;
             hctx.strokeRect(x + 0.5, y + 0.5, cell - 1, cell - 1);
@@ -1808,7 +1926,8 @@
           },
           edgeClass: (e) => {
             if (!f) return "";
-            if (f.pair) return (e.source === f.pair[0] && e.target === f.pair[1]) || (e.source === f.pair[1] && e.target === f.pair[0]) ? "is-hot" : "is-faint";
+            if (f.pair)
+              return (e.source === f.pair[0] && e.target === f.pair[1]) || (e.source === f.pair[1] && e.target === f.pair[0]) ? "is-hot" : "is-faint";
             if (f.center) return e.source === f.center || e.target === f.center ? "is-hot" : "is-faint";
             return f.set.has(e.source) && f.set.has(e.target) ? "is-hot" : "is-faint";
           },
@@ -1843,8 +1962,12 @@
       b.addEventListener("click", () => {
         measure = b.getAttribute("data-measure");
         pressed(measureButtons, b);
-        const top = ids.slice().sort((a, c) => MEAS[measure].get(c) - MEAS[measure].get(a)).slice(0, 3);
-        $("tbi3-map-read").textContent = `Sized by ${MEAS[measure].name.toLowerCase()}. Largest: ${top.map((id) => `${LABEL[id]} (${MEAS[measure].fmt(id)})`).join(", ")}.`;
+        const top = ids
+          .slice()
+          .sort((a, c) => MEAS[measure].get(c) - MEAS[measure].get(a))
+          .slice(0, 3);
+        $("tbi3-map-read").textContent =
+          `Sized by ${MEAS[measure].name.toLowerCase()}. Largest: ${top.map((id) => `${LABEL[id]} (${MEAS[measure].fmt(id)})`).join(", ")}.`;
         view.set({ size: (id) => MEAS[measure].get(id) / maxOf(measure) }).draw(true);
         refresh();
       })
@@ -1890,7 +2013,12 @@
       { k: "Density", v: f2(s.density), sub: `${s.m} of ${(s.n * (s.n - 1)) / 2} possible edges, among the ${s.n} conditions with any edge` },
       { k: "Average path length", v: f2(s.avgPath), sub: `steps between two conditions, on average`, ref: f2(ref.avgPathLength) },
       { k: "Diameter", v: s.diameter, sub: "the longest shortest path" },
-      { k: "Average clustering", v: f2(s.clustering), sub: "share of a condition's neighbours that are linked to each other", ref: f2(ref.avgClustering) },
+      {
+        k: "Average clustering",
+        v: f2(s.clustering),
+        sub: "share of a condition's neighbours that are linked to each other",
+        ref: f2(ref.avgClustering),
+      },
       { k: "Assortativity", v: (s.assortativity > 0 ? "+" : "") + f2(s.assortativity), sub: "do well-connected conditions link to each other?" },
       { k: "Triangles", v: s.triangles, sub: "closed loops of three conditions" },
     ];
@@ -1908,7 +2036,8 @@
       const cr = s.clustering / ref.avgClustering;
       const lr = s.avgPath / ref.avgPathLength;
       const verdict = guess === "more" ? "You guessed more clustered, and it is." : guess ? "It is in fact more clustered than chance." : "";
-      $("tbi3-glob-read").textContent = `${verdict} Against 500 random networks with the same ${s.n} nodes and ${s.m} edges, the clustering is ${cr.toFixed(1)} times higher (${f2(s.clustering)} against ${f2(ref.avgClustering)}), while the average path is only ${Math.round((lr - 1) * 100)}% longer (${f2(s.avgPath)} against ${f2(ref.avgPathLength)}). Thesis network, for comparison: ${th.stats.edges} edges, diameter ${th.stats.diameter}, clustering ${th.published_values.avgClustering} as published.`;
+      $("tbi3-glob-read").textContent =
+        `${verdict} Against 500 random networks with the same ${s.n} nodes and ${s.m} edges, the clustering is ${cr.toFixed(1)} times higher (${f2(s.clustering)} against ${f2(ref.avgClustering)}), while the average path is only ${Math.round((lr - 1) * 100)}% longer (${f2(s.avgPath)} against ${f2(ref.avgPathLength)}). Thesis network, for comparison: ${th.stats.edges} edges, diameter ${th.stats.diameter}, clustering ${th.published_values.avgClustering} as published.`;
     };
     guessButtons.forEach((b) =>
       b.addEventListener("click", () => {
@@ -1947,7 +2076,13 @@
         .domain([0, 0.2])
         .range([H - m.b, m.t]);
       [0, 0.1, 0.2, 0.3, 0.4, 0.5].forEach((v) => {
-        svg.append("line").attr("class", "tbi3-grid").attr("x1", x(v)).attr("x2", x(v)).attr("y1", m.t).attr("y2", H - m.b);
+        svg
+          .append("line")
+          .attr("class", "tbi3-grid")
+          .attr("x1", x(v))
+          .attr("x2", x(v))
+          .attr("y1", m.t)
+          .attr("y2", H - m.b);
         svg
           .append("text")
           .attr("class", "tbi3-tick")
@@ -1957,7 +2092,13 @@
           .text(`${v * 100}%`);
       });
       [0, 0.05, 0.1, 0.15, 0.2].forEach((v) => {
-        svg.append("line").attr("class", "tbi3-grid").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(v)).attr("y2", y(v));
+        svg
+          .append("line")
+          .attr("class", "tbi3-grid")
+          .attr("x1", m.l)
+          .attr("x2", W - m.r)
+          .attr("y1", y(v))
+          .attr("y2", y(v));
         svg
           .append("text")
           .attr("class", "tbi3-tick")
@@ -1974,7 +2115,13 @@
         .attr("x", bandX)
         .attr("y", H - m.b + 15)
         .text("<11 people");
-      svg.append("text").attr("class", "tbi3-axis-label").attr("x", (m.l + W - m.r) / 2).attr("y", H - 6).attr("text-anchor", "middle").text("Share of the 225 who reported the condition at all");
+      svg
+        .append("text")
+        .attr("class", "tbi3-axis-label")
+        .attr("x", (m.l + W - m.r) / 2)
+        .attr("y", H - 6)
+        .attr("text-anchor", "middle")
+        .text("Share of the 225 who reported the condition at all");
       svg
         .append("text")
         .attr("class", "tbi3-axis-label")
@@ -1993,9 +2140,26 @@
         .join("g")
         .attr("class", (d) => `tbi3-sc ${CAT_CLASS[cat(d.id)]} ${guess === d.id ? "is-guess" : ""}`)
         .attr("transform", (d) => `translate(${d.x},${revealed && tr ? y(0.1) + ((D.ids.indexOf(d.id) % 7) - 3) * 9 : d.y})`);
-      if (tr && revealed) g.transition(tr).delay((d, i) => i * 18).attr("transform", (d) => `translate(${d.x},${d.y})`);
+      if (tr && revealed)
+        g.transition(tr)
+          .delay((d, i) => i * 18)
+          .attr("transform", (d) => `translate(${d.x},${d.y})`);
       g.append("circle").attr("r", narrow ? 4.5 : 5.5);
-      const labelled = new Set(["HighBloodCholesterol", "BipolarDisorder", "Emphysema", "CongHF", "OtherHeartConditions", "Hypertension", "Depression", "Anxiety", "ChronicPain", "PanicAttacks", "RheumatoidArthritis", "Cataracts", "Diabetes"]);
+      const labelled = new Set([
+        "HighBloodCholesterol",
+        "BipolarDisorder",
+        "Emphysema",
+        "CongHF",
+        "OtherHeartConditions",
+        "Hypertension",
+        "Depression",
+        "Anxiety",
+        "ChronicPain",
+        "PanicAttacks",
+        "RheumatoidArthritis",
+        "Cataracts",
+        "Diabetes",
+      ]);
       g.filter((d) => revealed && (labelled.has(d.id) || !narrow))
         .append("text")
         .attr("class", "tbi3-sc-label")
@@ -2004,9 +2168,15 @@
         .text((d) => (narrow ? SHORT[d.id] : LABEL[d.id]));
       g.attr("tabindex", 0)
         .attr("role", "img")
-        .attr("aria-label", (d) => `${LABEL[d.id]}: ${d.px == null ? "fewer than 11 reported it" : pct(d.px)}${revealed ? `, betweenness ${f3(d.b)}` : ""}`)
+        .attr(
+          "aria-label",
+          (d) => `${LABEL[d.id]}: ${d.px == null ? "fewer than 11 reported it" : pct(d.px)}${revealed ? `, betweenness ${f3(d.b)}` : ""}`
+        )
         .on("pointerenter focus", (ev, d) =>
-          T.showTooltip(`<strong>${LABEL[d.id]}</strong><br>${d.px == null ? "fewer than 11 people" : `${pct(d.px)} reported it`}${revealed ? `<br>betweenness ${f3(d.b)}` : ""}`, ev.type === "focus" ? ev.currentTarget : ev)
+          T.showTooltip(
+            `<strong>${LABEL[d.id]}</strong><br>${d.px == null ? "fewer than 11 people" : `${pct(d.px)} reported it`}${revealed ? `<br>betweenness ${f3(d.b)}` : ""}`,
+            ev.type === "focus" ? ev.currentTarget : ev
+          )
         )
         .on("pointerleave blur", T.hideTooltip);
     };
@@ -2016,7 +2186,8 @@
       const ranked = D.ids.slice().sort((a, b) => M[b].betweenness - M[a].betweenness);
       const r = (id) => ranked.indexOf(id) + 1;
       const gtxt = guess ? `You picked ${LABEL[guess]}: it ranks ${r(guess)} of 25 for betweenness. ` : "";
-      $("tbi3-bridge-read").textContent = `${gtxt}The top three are high cholesterol (${f3(M.HighBloodCholesterol.betweenness)}), bipolar disorder (${f3(M.BipolarDisorder.betweenness)}) and emphysema (${f3(M.Emphysema.betweenness)}). Depression, reported by almost a third of people, ranks ${r("Depression")}.`;
+      $("tbi3-bridge-read").textContent =
+        `${gtxt}The top three are high cholesterol (${f3(M.HighBloodCholesterol.betweenness)}), bipolar disorder (${f3(M.BipolarDisorder.betweenness)}) and emphysema (${f3(M.Emphysema.betweenness)}). Depression, reported by almost a third of people, ranks ${r("Depression")}.`;
     };
     guessButtons.forEach((b) =>
       b.addEventListener("click", () => {
@@ -2057,12 +2228,34 @@
     const CL_CLASS = ["tbi3-cl-1", "tbi3-cl-2", "tbi3-cl-3", "tbi3-cl-4", "tbi3-cl-5", "tbi3-cl-6", "tbi3-cl-7"];
     const svg = d3.select(svgEl);
     const steps = [
-      { text: `Start: compute every node's betweenness. Nodes 1 and 4 lie on the most shortest paths (0.40 each). The threshold is the median, ${R.threshold.toFixed(2)}.`, removed: [], scores: R.steps[0].scores },
-      { text: "The highest is above the threshold, so remove it: node 1 goes (it ties with 4; the first in order is taken).", removed: ["1"], scores: R.steps[0].scores, gone: "1" },
-      { text: "Recompute on what is left. Without node 1, node 4 now carries even more of the traffic (0.50).", removed: ["1"], scores: R.steps[1].scores },
+      {
+        text: `Start: compute every node's betweenness. Nodes 1 and 4 lie on the most shortest paths (0.40 each). The threshold is the median, ${R.threshold.toFixed(2)}.`,
+        removed: [],
+        scores: R.steps[0].scores,
+      },
+      {
+        text: "The highest is above the threshold, so remove it: node 1 goes (it ties with 4; the first in order is taken).",
+        removed: ["1"],
+        scores: R.steps[0].scores,
+        gone: "1",
+      },
+      {
+        text: "Recompute on what is left. Without node 1, node 4 now carries even more of the traffic (0.50).",
+        removed: ["1"],
+        scores: R.steps[1].scores,
+      },
       { text: "Still above the threshold: remove node 4.", removed: ["1", "4"], scores: R.steps[1].scores, gone: "4" },
-      { text: "Recompute: every remaining node scores 0, below the threshold, so stop. What is left falls into four pieces: {0}, {2, 5}, {3} and {6}.", removed: ["1", "4"], scores: R.steps[2].scores, comps: true },
-      { text: "Put each removed node back into every piece it touched. Node 1 touched 0, 2 and 3; node 4 touched 5, 3 and 6. Four overlapping clusters, exactly as in the paper.", removed: [], clusters: true },
+      {
+        text: "Recompute: every remaining node scores 0, below the threshold, so stop. What is left falls into four pieces: {0}, {2, 5}, {3} and {6}.",
+        removed: ["1", "4"],
+        scores: R.steps[2].scores,
+        comps: true,
+      },
+      {
+        text: "Put each removed node back into every piece it touched. Node 1 touched 0, 2 and 3; node 4 touched 5, 3 and 6. Four overlapping clusters, exactly as in the paper.",
+        removed: [],
+        clusters: true,
+      },
     ];
     let k = 0;
     const draw = () => {
@@ -2120,28 +2313,34 @@
         const gone = s.removed.includes(e.source) || s.removed.includes(e.target);
         const [x1, y1] = P(e.source);
         const [x2, y2] = P(e.target);
-        svg.append("line").attr("class", `tbi3-toy-edge ${gone ? "is-gone" : ""}`).attr("x1", x1).attr("y1", y1).attr("x2", x2).attr("y2", y2);
+        svg
+          .append("line")
+          .attr("class", `tbi3-toy-edge ${gone ? "is-gone" : ""}`)
+          .attr("x1", x1)
+          .attr("y1", y1)
+          .attr("x2", x2)
+          .attr("y2", y2);
       });
       ids.forEach((id) => {
         const [x, y] = P(id);
         const gone = s.removed.includes(id);
-        const g = svg.append("g").attr("class", `tbi3-toy-node ${gone ? "is-gone" : ""} ${s.gone === id ? "is-out" : ""} ${s.comps && !gone ? CL_CLASS[compOf[id]] : ""}`);
+        const g = svg
+          .append("g")
+          .attr("class", `tbi3-toy-node ${gone ? "is-gone" : ""} ${s.gone === id ? "is-out" : ""} ${s.comps && !gone ? CL_CLASS[compOf[id]] : ""}`);
         g.attr("transform", `translate(${x},${y})`);
         g.append("circle").attr("r", 14);
         g.append("text").attr("class", "tbi3-toy-id").attr("y", 5).attr("text-anchor", "middle").text(id);
         if (s.scores && s.scores.has(id) && !gone)
-          g.append("text")
-            .attr("class", "tbi3-toy-b")
-            .attr("y", -21)
-            .attr("text-anchor", "middle")
-            .text(s.scores.get(id).toFixed(2));
+          g.append("text").attr("class", "tbi3-toy-b").attr("y", -21).attr("text-anchor", "middle").text(s.scores.get(id).toFixed(2));
       });
       $("tbi3-toy-read").textContent = `Step ${k + 1} of ${steps.length}. ${s.text}`;
       $("tbi3-toy-back").disabled = k === 0;
       $("tbi3-toy-next").textContent = k === steps.length - 1 ? "Start again" : "Next step";
       const list = $("tbi3-toy-clusters");
       list.innerHTML = s.clusters
-        ? R.clusters.map((c, ci) => `<span class="tbi3-clchip ${CL_CLASS[ci]}">Cluster ${ci + 1}: ${c.members.slice().sort().join(", ")}</span>`).join("")
+        ? R.clusters
+            .map((c, ci) => `<span class="tbi3-clchip ${CL_CLASS[ci]}">Cluster ${ci + 1}: ${c.members.slice().sort().join(", ")}</span>`)
+            .join("")
         : "";
     };
     $("tbi3-toy-next").addEventListener("click", () => {
@@ -2216,13 +2415,19 @@
           nodeClass: (id) => {
             const parts = [];
             if (sel) parts.push(sel.core.includes(id) ? "is-core" : sel.bridges.includes(id) ? "is-bridge" : "is-dim");
-            else if (done) parts.push(R.removed.includes(id) ? "is-bridge" : clusterOf.has(id) ? `is-cl ${CL_CLASS[clusterOf.get(id) % 7]}` : "is-dim");
+            else if (done)
+              parts.push(R.removed.includes(id) ? "is-bridge" : clusterOf.has(id) ? `is-cl ${CL_CLASS[clusterOf.get(id) % 7]}` : "is-dim");
             else if (removed.includes(id)) parts.push("is-gone");
             else if (id === step.top && step.max > R.threshold) parts.push("is-next");
             return parts.join(" ");
           },
           edgeClass: (e) => {
-            if (sel) return sel.members.includes(e.source) && sel.members.includes(e.target) && !(sel.bridges.includes(e.source) && sel.bridges.includes(e.target)) ? "is-hot" : "is-faint";
+            if (sel)
+              return sel.members.includes(e.source) &&
+                sel.members.includes(e.target) &&
+                !(sel.bridges.includes(e.source) && sel.bridges.includes(e.target))
+                ? "is-hot"
+                : "is-faint";
             if (done) return clusterOf.has(e.source) && clusterOf.get(e.source) === clusterOf.get(e.target) ? "is-cledge" : "is-faint";
             return removed.includes(e.source) || removed.includes(e.target) ? "is-gone" : "";
           },
@@ -2328,13 +2533,37 @@
       const o = oldSet.get(k);
       const y = youngSet.get(k);
       const e = o || y;
-      union.push({ source: e.source, target: e.target, phi: Math.max(o ? Math.abs(o.phi) : 0, y ? Math.abs(y.phi) : 0), side: o && y ? "both" : o ? "old" : "young" });
+      union.push({
+        source: e.source,
+        target: e.target,
+        phi: Math.max(o ? Math.abs(o.phi) : 0, y ? Math.abs(y.phi) : 0),
+        side: o && y ? "both" : o ? "old" : "young",
+      });
     });
-    const PSY = new Set(["Anxiety", "Depression", "PTSD", "PanicAttacks", "ObsessiveCompulsiveDisorder", "BipolarDisorder", "ADDADHD", "Alcoholism", "DrugAddiction"]);
+    const PSY = new Set([
+      "Anxiety",
+      "Depression",
+      "PTSD",
+      "PanicAttacks",
+      "ObsessiveCompulsiveDisorder",
+      "BipolarDisorder",
+      "ADDADHD",
+      "Alcoholism",
+      "DrugAddiction",
+    ]);
     const FOCUS = {
-      bipolar: { nodes: ["BipolarDisorder", "MyocardialInfarction", "CongHF", "HighBloodCholesterol"], text: "Bipolar disorder and the heart: in the younger group bipolar disorder is linked to heart attack, heart failure and high cholesterol. In the older group it has no link to any of them." },
-      ocd: { nodes: ["ObsessiveCompulsiveDisorder", "RheumatoidArthritis", "ADDADHD"], text: "OCD with rheumatoid arthritis and ADD/ADHD: present for everyone and in the younger group, absent in the older group." },
-      cross: { cross: true, text: "Every edge between a psychiatric or substance-use condition and anything else. Which non-psychiatric conditions they touch depends on the age group." },
+      bipolar: {
+        nodes: ["BipolarDisorder", "MyocardialInfarction", "CongHF", "HighBloodCholesterol"],
+        text: "Bipolar disorder and the heart: in the younger group bipolar disorder is linked to heart attack, heart failure and high cholesterol. In the older group it has no link to any of them.",
+      },
+      ocd: {
+        nodes: ["ObsessiveCompulsiveDisorder", "RheumatoidArthritis", "ADDADHD"],
+        text: "OCD with rheumatoid arthritis and ADD/ADHD: present for everyone and in the younger group, absent in the older group.",
+      },
+      cross: {
+        cross: true,
+        text: "Every edge between a psychiatric or substance-use condition and anything else. Which non-psychiatric conditions they touch depends on the age group.",
+      },
     };
     let mode = "young";
     let focus = null;
@@ -2345,12 +2574,17 @@
       const edges = mode === "diff" ? union : net.useEdges;
       const layoutNet = mode === "diff" ? allNet : net;
       const f = focus ? FOCUS[focus] : null;
-      const inFocus = (e) => (f ? (f.cross ? PSY.has(e.source) !== PSY.has(e.target) : f.nodes.includes(e.source) && f.nodes.includes(e.target)) : true);
+      const inFocus = (e) =>
+        f ? (f.cross ? PSY.has(e.source) !== PSY.has(e.target) : f.nodes.includes(e.source) && f.nodes.includes(e.target)) : true;
       const nodesIn = new Set();
       if (f) edges.filter(inFocus).forEach((e) => (nodesIn.add(e.source), nodesIn.add(e.target)));
       if (f && !f.cross) f.nodes.forEach((n) => nodesIn.add(n));
       const prevSet =
-        mode === "old" ? D.cohort.prevalence.olderAtInjury.conditions : mode === "young" ? D.cohort.prevalence.youngerAtInjury.conditions : D.cohort.prevalence.overall.conditions;
+        mode === "old"
+          ? D.cohort.prevalence.olderAtInjury.conditions
+          : mode === "young"
+            ? D.cohort.prevalence.youngerAtInjury.conditions
+            : D.cohort.prevalence.overall.conditions;
       view
         .set({
           key: `age-${mode}`,
@@ -2373,9 +2607,17 @@
         const nb = union.filter((e) => e.side === "both").length;
         stats.innerHTML = `<div class="tbi3-agestat"><div class="tbi3-agestat-k">Overlay</div><div><span class="tbi3-key is-young"></span><strong>${ny}</strong> edges only in the younger group</div><div><span class="tbi3-key is-old"></span><strong>${no}</strong> only in the older group</div><div><span class="tbi3-key is-both"></span><strong>${nb}</strong> in both</div></div>`;
       } else {
-        stats.innerHTML = row(mode === "old" ? "Older (over 50 at injury)" : mode === "young" ? "Younger (50 or under)" : "Everyone", net, sumOf(net));
+        stats.innerHTML = row(
+          mode === "old" ? "Older (over 50 at injury)" : mode === "young" ? "Younger (50 or under)" : "Everyone",
+          net,
+          sumOf(net)
+        );
       }
-      $("tbi3-age-read").textContent = f ? f.text : mode === "diff" ? "Both age groups drawn on one layout. Edges are coloured by where they appear." : `Showing ${NET_NAME[net.id]}. Node size is how many reported the condition at all, in this group.`;
+      $("tbi3-age-read").textContent = f
+        ? f.text
+        : mode === "diff"
+          ? "Both age groups drawn on one layout. Edges are coloured by where they appear."
+          : `Showing ${NET_NAME[net.id]}. Node size is how many reported the condition at all, in this group.`;
     };
     modeButtons.forEach((b) =>
       b.addEventListener("click", () => {
@@ -2436,7 +2678,12 @@
         net.edges.forEach((e) => {
           const a = net.nodeMap.get(e.source);
           const c = net.nodeMap.get(e.target);
-          sv.append("line").attr("class", "tbi3-bx-edge").attr("x1", 6 + a.x * 88).attr("y1", 6 + a.y * 88).attr("x2", 6 + c.x * 88).attr("y2", 6 + c.y * 88);
+          sv.append("line")
+            .attr("class", "tbi3-bx-edge")
+            .attr("x1", 6 + a.x * 88)
+            .attr("y1", 6 + a.y * 88)
+            .attr("x2", 6 + c.x * 88)
+            .attr("y2", 6 + c.y * 88);
         });
         net.nodes.forEach((n) => {
           sv.append("circle")
@@ -2461,12 +2708,19 @@
       const [s, y] = current;
       const net = netFor(s, y);
       cells.forEach((c) => c.b.setAttribute("aria-pressed", c.s === s && c.y === y ? "true" : "false"));
-      const M = G.measures(D.ids.filter((id) => net.nodeMap.has(id)), net.edges);
+      const M = G.measures(
+        D.ids.filter((id) => net.nodeMap.has(id)),
+        net.edges
+      );
       const mx = d3.max(Object.values(M), (m) => m.degree) || 1;
       big
         .set({
           key: net.id,
-          nodes: viewNodes(net, net.edges, D.ids.filter((id) => net.nodeMap.has(id))),
+          nodes: viewNodes(
+            net,
+            net.edges,
+            D.ids.filter((id) => net.nodeMap.has(id))
+          ),
           edges: net.edges,
           size: (id) => M[id].degree / mx,
         })
@@ -2474,9 +2728,10 @@
       const top = Object.keys(M)
         .sort((a, b) => M[b].degree - M[a].degree)
         .slice(0, 4);
-      $("tbi3-beyond-read").textContent = `${sev.find((x) => x[0] === s)[1]} TBI, ${y} year${y > 1 ? "s" : ""} after injury: ${net.n.comorbidityRespondents} people answered the health questions; ${net.edges.length} edges by the thesis rule (${
-        net.edgesWithBmcMethod != null ? net.edgesWithBmcMethod : D.nets["bmc-all-y5"].edges.length
-      } by the paper's). Most connected: ${top.map((id) => `${LABEL[id]} (${M[id].degree})`).join(", ")}.${s === "mild" && y === 5 ? " This cell is the thesis network itself." : ""}`;
+      $("tbi3-beyond-read").textContent =
+        `${sev.find((x) => x[0] === s)[1]} TBI, ${y} year${y > 1 ? "s" : ""} after injury: ${net.n.comorbidityRespondents} people answered the health questions; ${net.edges.length} edges by the thesis rule (${
+          net.edgesWithBmcMethod != null ? net.edgesWithBmcMethod : D.nets["bmc-all-y5"].edges.length
+        } by the paper's). Most connected: ${top.map((id) => `${LABEL[id]} (${M[id].degree})`).join(", ")}.${s === "mild" && y === 5 ? " This cell is the thesis network itself." : ""}`;
     };
     show(false);
     onWidth($("tbi3-beyond-big"), () => show(false));

@@ -19,6 +19,7 @@ bibliography: 2026-10-23-tbi-part-3-a-map-of-what-comes-after.bib
 toc:
   - name: Where we left off
   - name: Where the numbers come from
+  - name: What was asked, and how it became data
   - name: From people to pairs
   - name: Where to draw the line
   - name: The map
@@ -218,7 +219,21 @@ _styles: >
   .tbi3-lineage thead th { font-weight: 600; color: var(--tbi-ink-2); font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; }
   .tbi3-lineage tbody th { font-weight: 600; }
   .tbi3-scroll { overflow-x: auto; }
+  .tbi3-conds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.6rem; }
+  .tbi3-cgroup-h { font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; font-weight: 600; color: var(--tbi-ink-2); margin-bottom: 0.2rem; }
+  .tbi3-crow { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 0.6rem; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid var(--tbi-rule); }
+  .tbi3-cname strong { display: block; font-size: 0.82rem; font-weight: 600; }
+  .tbi3-cname span { display: block; font-size: 0.72rem; line-height: 1.35; color: var(--tbi-ink-2); }
+  .tbi3-cbar { display: grid; grid-template-columns: 1fr; gap: 0.15rem; outline: none; }
+  .tbi3-cbar:focus-visible { box-shadow: 0 0 0 2px var(--tbi-accent); border-radius: 4px; }
+  .tbi3-ctrack { display: flex; height: 10px; border-radius: 5px; background: var(--tbi-soft); overflow: hidden; }
+  .tbi3-cbar-a { background: var(--c); transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); width: 0; }
+  .tbi3-cbar-b { background: var(--tbi-ink-2); opacity: 0.4; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); width: 0; }
+  .tbi3-cval { font-size: 0.68rem; color: var(--tbi-ink-2); font-variant-numeric: tabular-nums; }
+  .tbi3-key.tbi3-k-after { background: var(--tbi-psych); height: 10px; width: 10px; }
+  .tbi3-key.tbi3-k-before { background: var(--tbi-ink-2); opacity: 0.45; height: 10px; width: 10px; }
   @media (max-width: 760px) {
+    .tbi3-conds { grid-template-columns: 1fr; }
     .tbi3-split, .tbi3-rr-grid { grid-template-columns: 1fr; }
     .tbi3-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .tbi3-demo { grid-template-columns: 1fr; gap: 0.8rem; }
@@ -293,7 +308,7 @@ Rebuilding the analysis turned up the first of several discrepancies between wha
 
 The study did not use everyone with a mild injury. It used the five-year follow-up, chosen (as the thesis admitted plainly) somewhat arbitrarily, as a point far enough from the injury for the long tail to show <d-cite key="mehta2023thesis"></d-cite>. And at five years, it needed people who had answered a particular set of health questions.
 
-Those questions were modelled on the US National Health and Nutrition Examination Survey (NHANES). For each of 26 conditions, a person was asked whether a doctor or other health professional had ever told them they had it, and if so, whether it began before the injury, around the time of it, or after <d-cite key="sudhakar2023frontiers"></d-cite>. Self-diagnosis was not accepted. The 26 span mental health (depression, anxiety, post-traumatic stress disorder, panic attacks, obsessive-compulsive disorder, bipolar disorder, attention deficit disorders, alcoholism and drug addiction), the heart and circulation (hypertension, congestive heart failure, myocardial infarction, stroke, high cholesterol and "other heart conditions"), metabolism (diabetes), the lungs (emphysema, pneumonia), the joints (rheumatoid arthritis, osteoarthritis, chronic pain), the nervous system (sleep disorders, movement disorders, dementia), the eyes (cataracts) and the liver.
+Those questions, which the next section describes in detail, were about 26 long-term conditions, and only people who answered them can contribute to a network of those conditions.
 
 <figure class="tbi-fig tbi3-fig l-body-outset">
   <div class="tbi-kicker">Each dot is ten people</div>
@@ -335,6 +350,76 @@ The mild group as a whole is older than you might expect (a median age of 57 at 
 </figure>
 
 Attrition is the quiet companion of every long study. People move, stop answering, become too unwell to take part, or die, and the ones who remain may not be like the ones who left. For a study of illness after injury, that is not a small worry: if the sickest people are the likeliest to drop out, the conditions we see at five years will understate what the injury does. I will come back to this.
+
+## What was asked, and how it became data
+
+Part 1 introduced the conditions by family. Here I want to be exact about what each one is, what people were asked about it, and how an answer became a number, because every later step depends on it.
+
+### The 26 conditions
+
+At each follow-up, the TBIMS interview includes a block of questions modelled on the US National Health and Nutrition Examination Survey (NHANES), asked in the style of “Has a doctor or other health professional ever told you that you have…?”. A condition counts only if a doctor or other health professional diagnosed it; self-diagnosis was not accepted <d-cite key="sudhakar2023frontiers"></d-cite>. If the answer is yes, the interviewer asks when it began: before the injury, around the time of it, or after. My thesis used 25 of these conditions (all but “other heart conditions”); the BMC paper used all 26 <d-cite key="mehta2023thesis,mehta2025bmc"></d-cite>.
+
+<figure class="tbi-fig tbi3-fig l-body-outset">
+  <div class="tbi-kicker">The 26 conditions, and when people said they began</div>
+  <div class="tbi3-conds" id="tbi3-conds">
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-psych"></span>Psychiatric</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Depression</strong><span>Low mood or loss of interest and pleasure that persists for weeks and gets in the way of life.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="Depression"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Anxiety</strong><span>Excessive, hard-to-control worry and tension.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="Anxiety"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Post-traumatic stress disorder</strong><span>Intrusive memories, avoidance and being constantly on guard after a frightening event.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="PTSD"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Panic attacks</strong><span>Sudden surges of intense fear, with a racing heart and breathlessness.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="PanicAttacks"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Bipolar disorder</strong><span>Episodes of abnormally raised mood and energy (mania), usually alternating with depression.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="BipolarDisorder"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Obsessive-compulsive disorder</strong><span>Unwanted, intrusive thoughts and repeated acts done to quiet them.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="ObsessiveCompulsiveDisorder"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>ADD / ADHD</strong><span>Long-standing difficulty sustaining attention, often with restlessness and impulsivity.</span></div><div class="tbi3-cbar tbi3-c-psych" data-cond="ADDADHD"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-subst"></span>Substance use</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Alcoholism</strong><span>Dependence on alcohol.</span></div><div class="tbi3-cbar tbi3-c-subst" data-cond="Alcoholism"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Drug addiction</strong><span>Dependence on drugs, prescribed or not.</span></div><div class="tbi3-cbar tbi3-c-subst" data-cond="DrugAddiction"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-cardio"></span>Heart and circulation</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Hypertension</strong><span>Blood pressure that stays high.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="Hypertension"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>High blood cholesterol</strong><span>Too much cholesterol in the blood, a risk factor for heart disease and stroke.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="HighBloodCholesterol"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Stroke</strong><span>Brain damage from a blocked or burst blood vessel.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="Stroke"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Myocardial infarction</strong><span>A heart attack: heart muscle dying because its artery is blocked.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="MyocardialInfarction"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Congestive heart failure</strong><span>A heart too weak to pump what the body needs, so fluid backs up into the lungs and legs.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="CongHF"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Other heart conditions</strong><span>Any other heart problem a doctor diagnosed; a catch-all, and the one condition the thesis left out.</span></div><div class="tbi3-cbar tbi3-c-cardio" data-cond="OtherHeartConditions"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-metab"></span>Metabolic</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Diabetes</strong><span>Blood sugar the body can no longer keep in range.</span></div><div class="tbi3-cbar tbi3-c-metab" data-cond="Diabetes"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-neuro"></span>Neurological</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Sleep disorder</strong><span>A diagnosed problem with sleep, such as insomnia or sleep apnoea.</span></div><div class="tbi3-cbar tbi3-c-neuro" data-cond="SleepDisorder"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Dementia</strong><span>A progressive decline in memory and thinking that interferes with daily life.</span></div><div class="tbi3-cbar tbi3-c-neuro" data-cond="Dementia"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Movement disorder</strong><span>Trouble controlling movement, such as tremor or Parkinson’s disease.</span></div><div class="tbi3-cbar tbi3-c-neuro" data-cond="MovementDisorder"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-musc"></span>Joints and pain</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Chronic pain</strong><span>Pain that lasts for months, beyond normal healing.</span></div><div class="tbi3-cbar tbi3-c-musc" data-cond="ChronicPain"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Osteoarthritis</strong><span>Wear of the cartilage in joints, bringing pain and stiffness.</span></div><div class="tbi3-cbar tbi3-c-musc" data-cond="Osteoarthritis"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Rheumatoid arthritis</strong><span>The immune system attacking the lining of the joints.</span></div><div class="tbi3-cbar tbi3-c-musc" data-cond="RheumatoidArthritis"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-resp"></span>Lungs</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Emphysema</strong><span>Destroyed air sacs in the lungs, a form of chronic obstructive lung disease, mostly from smoking.</span></div><div class="tbi3-cbar tbi3-c-resp" data-cond="Emphysema"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Pneumonia</strong><span>An infection that inflames the lungs.</span></div><div class="tbi3-cbar tbi3-c-resp" data-cond="Pneumonia"></div></div>
+    </div>
+    <div class="tbi3-cgroup"><div class="tbi3-cgroup-h"><span class="tbi3-swatch tbi3-c-other"></span>Eyes and liver</div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Cataracts</strong><span>Clouding of the lens of the eye, common with age.</span></div><div class="tbi3-cbar tbi3-c-other" data-cond="Cataracts"></div></div>
+      <div class="tbi3-crow"><div class="tbi3-cname"><strong>Liver disease</strong><span>Long-term damage to the liver, from alcohol, viral hepatitis, fat and other causes.</span></div><div class="tbi3-cbar tbi3-c-other" data-cond="Liver"></div></div>
+    </div>
+  </div>
+  <div class="tbi-legend">
+    <span><span class="tbi3-key tbi3-k-after"></span>Began at or after the injury</span>
+    <span><span class="tbi3-key tbi3-k-before"></span>Began before it</span>
+    <span>Bars run to 50% of the people asked</span>
+  </div>
+  <figcaption>Descriptions are mine, in plain language. Recomputed data: the share of people at the five-year follow-up who reported each condition (of those who gave a clear yes or no, about 220 per condition), split by when they said it began, from the TBIMS public-use files. Counts below 11 are not shown, under the data-use agreement, and the bar is marked “&lt;11”. Hover, tap or tab to a bar for the numbers. Groups follow Sudhakar et al. 2023, with substance use split from the other psychiatric conditions and high cholesterol drawn with diabetes rather than with the heart.</figcaption>
+</figure>
+
+### From answers to ones and zeros
+
+In the data each condition is stored as a code: yes, no, or one of several codes for “unknown”, “refused” or “not asked”. Anything other than a clear yes or no is set aside, which is why the number of people behind each condition is a little below 225. The onset question adds a second code (before, around the time of, or after the injury).
+
+The network then applies a rule that neither paper states plainly, though the code is clear about it. A condition counts as present only if it began at or around the time of the injury or after it. A “no” is always a no. But a “yes, and it began before the injury” is neither: that person is dropped from every pair involving that condition, and so is anyone who said yes without saying when. The idea is reasonable (the study is about what comes after the injury, and a condition someone already had is not part of that), but it has two consequences worth knowing. Every pair of conditions ends up resting on a different set of people, from 126 to 220 of the 225, because each pair loses whoever had either condition beforehand. And the measured associations change: anxiety and depression, counted regardless of onset, correlate more strongly than when only post-injury cases count, because many people had one or both already. One more wrinkle, which I cannot fully resolve from the public files: the Frontiers paper notes that a condition reported at an earlier follow-up was not asked about again <d-cite key="sudhakar2023frontiers"></d-cite>, so how earlier answers are carried forward to year five is something I would want to check before trusting any single person’s record.
+
+So the data that goes into the network is, for each person and each condition, a 1 (diagnosed, beginning at or after the injury), a 0 (never diagnosed), or a blank. Everything from here on is arithmetic on those columns.
 
 ## From people to pairs
 
@@ -382,7 +467,7 @@ $$
 
 The numerator is the heart of it. The product $ad$ grows when people tend to have both or neither (the two conditions agree), and $bc$ grows when people tend to have one without the other (they disagree). If the conditions are independent the two products balance, and $\varphi$ is zero. The denominator is the product of the four row and column totals, and it scales the result so that $\varphi$ runs from $-1$ (whenever one is present, the other is absent) to $+1$ (the two always occur together). For anxiety and depression, $\varphi = 0.48$, one of the strongest associations in the whole network and the value quoted in the BMC paper <d-cite key="mehta2025bmc"></d-cite>. For depression and hypertension it is 0.005. For cataracts and depression it is slightly negative, $-0.08$, with fewer people having both than chance would predict, plausibly because cataracts are a condition of older people and depression was reported more often by younger ones in this group.
 
-One detail of how the table was built matters more than it looks. For the network, a condition only counted as "yes" if the person said it began at or after the injury. Someone who already had depression before their injury is not counted as having it, and drops out of that pair's table if they answered "yes, before". This is why the anxiety and depression table above holds 180 people rather than 220, why every pair has a slightly different number of people behind it (from 126 to 220), and why the same pair gives $\varphi = 0.59$ if you count the conditions regardless of when they started. The aim was to look at conditions that arrived with or after the injury, which is reasonable. Though, neither paper says clearly that this was done; it is only visible in the code, and it changes the numbers.
+The onset rule from the previous section shows up here too. Because people who had anxiety or depression before their injury drop out, the anxiety and depression table holds 180 people rather than 220, and counting the two conditions regardless of when they began gives a larger $\varphi$ of 0.59. The rule shapes the network, and it is worth remembering that a different, equally reasonable rule would give a somewhat different one.
 
 ### Why not just compare with chance directly?
 
