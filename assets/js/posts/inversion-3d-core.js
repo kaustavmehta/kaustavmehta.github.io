@@ -254,7 +254,7 @@ function createStage(root, opts) {
     if (stage.onFrame) stage.onFrame(dt);
     if (stage.onRender) stage.onRender();
     renderer.render(scene, camera);
-    if (stage.visible && !document.hidden && (controls.autoRotate || stage.isBusy())) stage.raf = requestAnimationFrame(frame);
+    if (!stage.raf && stage.visible && !document.hidden && (controls.autoRotate || stage.isBusy())) stage.raf = requestAnimationFrame(frame);
     else stage.last = 0;
   };
   stage.invalidate = () => {
