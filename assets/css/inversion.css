@@ -1,0 +1,229 @@
+/* Styles for the umbrella-inversion post ("inv-" prefix).
+   Shared tokens and figure chrome live here; each widget's own rules follow in its section. */
+
+:root {
+  --inv-rule: rgba(0, 0, 0, 0.12);
+  --inv-soft: rgba(0, 0, 0, 0.04);
+  --inv-ink: var(--global-text-color);
+  --inv-ink-2: var(--global-text-color-light);
+  --inv-accent: var(--global-theme-color);
+  /* Molecules and environments */
+  --inv-oh: #c4553a; /* hydronium, OH3+ */
+  --inv-ph: #d08c2c; /* phosphine, PH3 */
+  --inv-free: #4a6fa5; /* free molecule, gas phase */
+  --inv-caged: #c4553a; /* confined in C60 */
+  --inv-cage: #5d6470; /* carbon */
+  --inv-wave-pos: #3a8fb7; /* symmetric (+) state */
+  --inv-wave-neg: #a0567a; /* antisymmetric (−) state */
+  /* Atoms (CPK-ish, softened) */
+  --inv-atom-o: #e0473c;
+  --inv-atom-p: #f08a24;
+  --inv-atom-h: #eef0f2;
+  --inv-atom-c: #4b5058;
+}
+html[data-theme="dark"] {
+  --inv-rule: rgba(255, 255, 255, 0.14);
+  --inv-soft: rgba(255, 255, 255, 0.05);
+  --inv-oh: #e57c62;
+  --inv-ph: #e8b25c;
+  --inv-free: #7fa3d8;
+  --inv-caged: #e57c62;
+  --inv-cage: #9aa1ad;
+  --inv-wave-pos: #6cb8dc;
+  --inv-wave-neg: #cf88aa;
+  --inv-atom-c: #8a909a;
+}
+
+/* Figures */
+.inv-fig {
+  margin: 2rem 0 2.5rem;
+}
+.inv-fig figcaption,
+.inv-caption {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--inv-ink-2);
+  margin-top: 0.75rem;
+}
+.inv-kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--inv-ink-2);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.inv-panel {
+  border: 1px solid var(--inv-rule);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  background: var(--global-card-bg-color, transparent);
+}
+.inv-fig svg,
+.inv-fig canvas {
+  display: block;
+  max-width: 100%;
+}
+.inv-fig svg text {
+  fill: var(--inv-ink);
+}
+.inv-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Lede */
+d-article blockquote.inv-lede {
+  border-left: none !important;
+  background: none;
+}
+.inv-lede {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: 1.45rem;
+  line-height: 1.45;
+  color: var(--inv-ink);
+  margin: 1.5rem 0 0.5rem;
+  padding: 0;
+}
+
+/* Aside boxes for detours (units, jargon) */
+.inv-aside {
+  border-left: 3px solid var(--inv-accent);
+  background: var(--inv-soft);
+  border-radius: 0 8px 8px 0;
+  padding: 0.8rem 1rem;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.inv-aside h3 {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: var(--inv-ink-2);
+}
+.inv-aside p:last-child {
+  margin-bottom: 0;
+}
+
+/* Big numbers */
+.inv-stat-num {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 300;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--inv-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Controls */
+.inv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.6rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+.inv-btn {
+  font: inherit;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--inv-rule);
+  background: transparent;
+  color: var(--inv-ink);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.inv-btn:hover {
+  border-color: var(--inv-accent);
+  color: var(--inv-accent);
+}
+.inv-btn[aria-pressed="true"],
+.inv-btn.is-active {
+  background: var(--inv-accent);
+  border-color: var(--inv-accent);
+  color: var(--global-bg-color);
+}
+.inv-btn:focus-visible,
+.inv-focusable:focus-visible {
+  outline: 2px solid var(--inv-accent);
+  outline-offset: 2px;
+}
+.inv-range {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+.inv-range input[type="range"] {
+  flex: 1 1 10rem;
+  min-width: 0;
+  accent-color: var(--inv-accent);
+}
+.inv-range output {
+  font-variant-numeric: tabular-nums;
+  min-width: 6rem;
+}
+.inv-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.75rem;
+  color: var(--inv-ink-2);
+  margin-top: 0.5rem;
+}
+.inv-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+  margin-right: 0.35rem;
+  vertical-align: -0.1rem;
+}
+.inv-readout {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  min-height: 3em;
+  margin-top: 0.6rem;
+}
+
+/* Tooltip */
+.inv-tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  max-width: 18rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  background: var(--global-bg-color);
+  color: var(--inv-ink);
+  border: 1px solid var(--inv-rule);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.inv-tooltip.is-on {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-btn {
+    transition: none;
+  }
+}
+
+/* ---- Widget sections are appended below ---- */
