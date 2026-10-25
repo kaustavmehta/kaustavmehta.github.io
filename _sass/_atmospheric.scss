@@ -926,6 +926,23 @@ nav#toc-sidebar {
     align-items: stretch;
   }
 
+  // Entries below the feature get a narrower cover beside the text
+  .has-cover:not(.is-feature) .blog-entry-link {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: stretch;
+  }
+
+  .has-cover:not(.is-feature) .blog-cover {
+    min-height: 17rem;
+  }
+
+  .has-cover:not(.is-feature) .blog-entry-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   .is-feature .blog-entry-body {
     display: flex;
     flex-direction: column;
@@ -1078,8 +1095,12 @@ nav#toc-sidebar {
     .ambient-rings {
       right: 0;
     }
-    .is-feature .blog-entry-link {
+    .is-feature .blog-entry-link,
+    .has-cover:not(.is-feature) .blog-entry-link {
       grid-template-columns: 1fr;
+    }
+    .has-cover:not(.is-feature) .blog-cover {
+      min-height: 13rem;
     }
     .blog-cover {
       min-height: 15rem;
