@@ -11,7 +11,7 @@ ninja.data = [{
     },
   },{id: "nav-blog",
           title: "blog",
-          description: "Papers I&#39;ve been part of, explained with more room than a journal gives them, with the context, the people&#39;s own words, and the numbers drawn out.",
+          description: "I write these posts to explain my papers to people who are curious about them but don&#39;t work in the field. Most of them start from the basics and build up to what we found, with figures you can play with along the way.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/blog/";
@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/cv/";
           },
-        },{id: "post-the-quiet-injury",
+        },{id: "post-umbrellas-in-a-cage",
+        
+          title: "Umbrellas in a cage",
+        
+        description: "Some small molecules turn themselves inside out like an umbrella in the wind, and quantum mechanics lets them do it through a wall of energy they cannot climb. A visual walk through my paper on what happens to that flip when the molecule is shut inside a C₆₀ football, and an introduction to how chemists calculate any of this, density functional theory included.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/umbrellas-in-a-cage/";
+          
+        },
+      },{id: "post-the-quiet-injury",
         
           title: "The quiet injury",
         
