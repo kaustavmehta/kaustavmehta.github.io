@@ -1,0 +1,229 @@
+/* Styles for the quantum widgets of the umbrella-inversion post (#inv-ball, #inv-well, #inv-slosh, #inv-four). */
+
+.inv-q {
+  position: relative;
+}
+.inv-q .inv-q-canvas {
+  width: 100%;
+  height: 300px;
+  touch-action: pan-y;
+}
+.inv-q .inv-controls {
+  gap: 0.4rem 0.9rem;
+}
+.inv-q-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.inv-q-ctl {
+  font-size: 0.75rem;
+  color: var(--inv-ink-2);
+}
+.inv-q .inv-range {
+  margin: 0.35rem 0;
+}
+.inv-q .inv-range label {
+  min-width: 8.5rem;
+  margin: 0;
+}
+.inv-q .inv-range output {
+  min-width: 5.5rem;
+  text-align: right;
+  color: var(--inv-ink-2);
+}
+.inv-q .inv-legend i {
+  vertical-align: -0.1rem;
+}
+
+/* Ball readout */
+.inv-q-verdict {
+  font-weight: 600;
+  color: var(--inv-ink);
+}
+.inv-q-verdict::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  background: var(--inv-cage);
+}
+.inv-q-verdict.is-cross::before {
+  background: var(--inv-accent);
+}
+.inv-q-detail {
+  color: var(--inv-ink-2);
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+.inv-q-detail strong {
+  color: var(--inv-ink);
+}
+
+/* Big number plus log strip */
+.inv-q-out {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--inv-rule);
+}
+.inv-q-big {
+  flex: 1 1 15rem;
+  min-width: 0;
+}
+.inv-q-big .inv-stat-num {
+  font-size: 2.3rem;
+  overflow-wrap: anywhere;
+}
+.inv-q-bigsub {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--inv-ink-2);
+  margin-top: 0.35rem;
+}
+.inv-q-note {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--inv-ink-2);
+}
+.inv-q-stripwrap {
+  flex: 1.4 1 18rem;
+  min-width: 0;
+}
+.inv-q .inv-q-strip {
+  width: 100%;
+  height: 68px;
+}
+
+/* Slosh */
+.inv-q-eq {
+  font-size: 0.78rem;
+  color: var(--inv-ink-2);
+  margin: 0.2rem 0 0.4rem;
+}
+.inv-q-gauge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.7rem;
+  font-size: 0.72rem;
+  color: var(--inv-ink-2);
+}
+.inv-q-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--inv-soft);
+  border: 1px solid var(--inv-rule);
+  overflow: hidden;
+}
+.inv-q-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--inv-accent);
+  opacity: 0.75;
+}
+.inv-q-pct {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.8rem;
+  margin: 0.2rem 0 0.2rem;
+}
+.inv-q .inv-q-trace {
+  width: 100%;
+  height: 78px;
+}
+.inv-q-clock {
+  flex: 1 1 14rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.inv-q-clock span {
+  color: var(--inv-ink-2);
+}
+.inv-q-clock strong {
+  color: var(--inv-ink);
+}
+.inv-q-play {
+  min-width: 4.5rem;
+}
+
+/* Four-potential comparison */
+.inv-q-four {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.5rem 2rem;
+}
+.inv-q-fpanel {
+  min-width: 0;
+}
+.inv-q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin-top: 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+.inv-q-table th,
+.inv-q-table td {
+  padding: 0.4rem 0.4rem 0.4rem 0;
+  border-bottom: 1px solid var(--inv-rule);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+  line-height: 1.3;
+  background: none;
+}
+.inv-q-table thead th {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--inv-ink-2);
+  font-weight: 600;
+}
+.inv-q-table tbody th {
+  width: 36%;
+  color: var(--inv-ink);
+}
+.inv-q-table small {
+  display: block;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--inv-ink-2);
+  margin-top: 0.1rem;
+}
+.inv-q-table .is-dim {
+  opacity: 0.35;
+}
+.inv-q-table tbody td:first-of-type,
+.inv-q-table tbody td:last-of-type {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+  .inv-q .inv-range label {
+    min-width: 100%;
+  }
+  .inv-q .inv-range input[type="range"] {
+    flex-basis: 6rem;
+  }
+  .inv-q .inv-range output {
+    min-width: 4.2rem;
+  }
+  .inv-q-big .inv-stat-num {
+    font-size: 1.9rem;
+  }
+  .inv-q-table {
+    font-size: 0.76rem;
+  }
+}
