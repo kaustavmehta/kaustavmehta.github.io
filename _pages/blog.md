@@ -8,7 +8,7 @@ kicker: Blog
 atmospheric: true
 hero_title_strong: My research,
 hero_title_rest: explained from scratch.
-description: I write these posts to explain my papers to people who are curious about them but don't work in the field. Most of them start from the basics and build up to what we found, with figures you can play with along the way.
+description: I write these posts to explain my research to anyone who is curious about it. Most of them start from the basics and build up to what we found, with figures you can play with along the way.
 pagination:
   enabled: true
   collection: posts
