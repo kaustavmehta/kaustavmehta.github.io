@@ -11,7 +11,7 @@ ninja.data = [{
     },
   },{id: "nav-blog",
           title: "blog",
-          description: "I write these posts to explain my papers to people who are curious about them but don&#39;t work in the field. Most of them start from the basics and build up to what we found, with figures you can play with along the way.",
+          description: "I write these posts to explain my research to anyone who is curious about it. Most of them start from the basics and build up to what we found, with figures you can play with along the way.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/blog/";
