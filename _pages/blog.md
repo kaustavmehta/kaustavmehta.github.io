@@ -6,9 +6,9 @@ nav: true
 nav_order: 1
 kicker: Blog
 atmospheric: true
-hero_title_strong: Longer walks
-hero_title_rest: through the work.
-description: Papers I've been part of, explained with more room than a journal gives them, with the context, the people's own words, and the numbers drawn out.
+hero_title_strong: My research,
+hero_title_rest: explained from scratch.
+description: I write these posts to explain my papers to people who are curious about them but don't work in the field. Most of them start from the basics and build up to what we found, with figures you can play with along the way.
 pagination:
   enabled: true
   collection: posts
@@ -67,9 +67,9 @@ pagination:
       {% assign is_feature = false %}
       {% if forloop.first and paginator.page == 1 %}{% assign is_feature = true %}{% endif %}
 
-      <li class="blog-entry atmo-reveal{% if is_feature %} is-feature{% endif %}">
+      <li class="blog-entry atmo-reveal{% if is_feature %} is-feature{% endif %}{% if post.cover %} has-cover{% endif %}">
         <a class="blog-entry-link" href="{{ post_href }}"{% if post.redirect contains '://' %} target="_blank" rel="noopener"{% endif %}>
-          {% if is_feature %}
+          {% if post.cover or is_feature %}
             <div class="blog-cover" data-seed="{{ post.title | escape }}">
               {% if post.cover %}
                 {% include blog_covers/{{ post.cover }}.liquid %}

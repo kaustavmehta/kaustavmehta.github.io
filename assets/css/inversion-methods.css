@@ -1,0 +1,271 @@
+/* Styles for the "how do you compute any of this" widgets (inv-curse, inv-basis, inv-cost, inv-bench, inv-led, inv-scf).
+   Prefix "invm-". Relies on the tokens in inversion.css. */
+
+:root {
+  --invm-blue: #4a6fa5;
+  --invm-amber: #d08c2c;
+  --invm-red: #c4553a;
+  --invm-green: #4f8a72;
+  --invm-slate: #8a93a3;
+  --invm-violet: #7a62a8;
+}
+html[data-theme="dark"] {
+  --invm-blue: #7fa3d8;
+  --invm-amber: #e8b25c;
+  --invm-red: #e57c62;
+  --invm-green: #74b79b;
+  --invm-slate: #9aa1ad;
+  --invm-violet: #a592d0;
+}
+
+.inv-widget {
+  position: relative;
+  font-size: 0.85rem;
+}
+.invm-chart {
+  width: 100%;
+}
+.invm-chart svg {
+  display: block;
+  overflow: visible;
+}
+.inv-widget svg text {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+.inv-widget svg text.invm-2 {
+  fill: var(--inv-ink-2);
+}
+.inv-widget svg text.invm-b {
+  font-weight: 600;
+}
+.inv-widget svg text.invm-lg {
+  font-size: 12px;
+}
+.invm-grid {
+  stroke: var(--inv-rule);
+  stroke-width: 1;
+  fill: none;
+}
+.invm-axis {
+  stroke: var(--inv-ink-2);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.6;
+}
+.invm-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.invm-focus:focus-visible {
+  outline: none;
+}
+.invm-focus:focus-visible .invm-ring {
+  stroke: var(--inv-accent);
+  stroke-width: 2;
+}
+
+.invm-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  align-items: flex-end;
+}
+.invm-note {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--inv-ink-2);
+  margin-top: 0.5rem;
+}
+.invm-label {
+  font-size: 0.75rem;
+  color: var(--inv-ink-2);
+}
+
+/* curse */
+.invm-big-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+.invm-big {
+  border-top: 2px solid var(--invm-red);
+  padding-top: 0.4rem;
+}
+.invm-big.is-density {
+  border-top-color: var(--invm-blue);
+}
+.invm-big .inv-stat-num {
+  font-size: 2.2rem;
+  white-space: nowrap;
+}
+.invm-big .inv-stat-num sup {
+  font-size: 0.55em;
+  line-height: 0;
+}
+.invm-big-sub {
+  font-size: 0.75rem;
+  color: var(--inv-ink-2);
+  line-height: 1.4;
+}
+.invm-cube {
+  float: right;
+  margin: -0.2rem 0 0 0.3rem;
+}
+.invm-verdict {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  min-height: 3em;
+  margin-top: 0.5rem;
+}
+@media (max-width: 480px) {
+  .invm-big .inv-stat-num {
+    font-size: 1.55rem;
+  }
+  .invm-cube {
+    display: none;
+  }
+}
+
+/* basis */
+.invm-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.9rem;
+}
+.invm-chip {
+  border-top: 2px solid var(--inv-rule);
+  padding-top: 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--inv-ink-2);
+}
+.invm-chip b {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--inv-ink);
+  font-weight: 600;
+}
+.invm-chip small {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.invm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  margin: 0.3rem 0 0.8rem;
+}
+.invm-table th,
+.invm-table td {
+  text-align: left;
+  padding: 0.25rem 0.4rem 0.25rem 0;
+  border-bottom: 1px solid var(--inv-rule);
+  font-weight: normal;
+}
+.invm-table th {
+  color: var(--inv-ink-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.invm-table td.num {
+  text-align: right;
+  font-weight: 600;
+}
+.invm-tot {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 9rem) 1fr 3.4rem;
+  gap: 0.2rem 0.6rem;
+  align-items: center;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+.invm-tot .bar {
+  height: 0.7rem;
+  background: var(--inv-soft);
+  border-radius: 0 3px 3px 0;
+}
+.invm-tot .bar i {
+  display: block;
+  height: 100%;
+  border-radius: 0 3px 3px 0;
+  background: var(--inv-free);
+}
+.invm-tot .bar i.caged {
+  background: var(--inv-caged);
+}
+.invm-tot .v {
+  text-align: right;
+  font-weight: 600;
+}
+
+/* legends in SVG-like style */
+.invm-leg-dot {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+  vertical-align: -0.05rem;
+  box-sizing: border-box;
+}
+.invm-leg-line {
+  display: inline-block;
+  width: 1.1rem;
+  border-top: 2px dashed var(--inv-ink-2);
+  margin-right: 0.35rem;
+  vertical-align: 0.2rem;
+}
+
+/* scf */
+.invm-scf {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+@media (min-width: 640px) {
+  .invm-scf {
+    grid-template-columns: 1.15fr 1fr;
+    align-items: start;
+  }
+}
+.invm-node {
+  cursor: pointer;
+}
+.invm-node rect {
+  fill: var(--global-bg-color);
+  stroke: var(--inv-rule);
+  stroke-width: 1.5;
+  transition:
+    stroke 0.2s,
+    fill 0.2s;
+}
+.invm-node.is-on rect {
+  stroke: var(--inv-accent);
+  fill: var(--inv-soft);
+}
+.invm-node:focus-visible rect {
+  stroke: var(--inv-accent);
+  stroke-width: 2.5;
+}
+.invm-node:focus {
+  outline: none;
+}
+.invm-desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  min-height: 3.2em;
+  border-left: 3px solid var(--inv-accent);
+  padding: 0.2rem 0 0.2rem 0.7rem;
+  margin-top: 0.4rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .invm-node rect {
+    transition: none;
+  }
+}

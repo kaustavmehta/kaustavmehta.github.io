@@ -3,6 +3,7 @@ layout: distill
 title: "A map of what comes after"
 description: "Part 3 of a series on traumatic brain injury. The research itself: from 225 people five years after a mild brain injury to a network of 26 conditions, its hubs and bridges, its clusters, how it differs between younger and older people, and what it cannot tell us."
 tags: traumatic-brain-injury graph-theory network-medicine comorbidity
+cover: tbi-map
 categories: research
 giscus_comments: false
 related_posts: false
