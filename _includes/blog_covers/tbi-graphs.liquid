@@ -1,0 +1,155 @@
+{% comment %}
+  Cover for TBI part 2: a Watts-Strogatz small-world ring. 36 nodes on a circle, each joined to its two neighbours on either
+  side; five of the short links are rewired into long-range chords (warm), which is what shortens the paths across the ring.
+{% endcomment %}
+<style>
+  .tbig-cover {
+    position: absolute;
+    inset: 1.5rem 1.5rem 3.4rem;
+    color: var(--global-theme-color);
+    --tbig-cover-hot: #d9483b;
+  }
+  html[data-theme='dark'] .tbig-cover {
+    --tbig-cover-hot: #ff6b5c;
+  }
+  .tbig-cover-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .tbig-cover-edges line {
+    stroke: currentColor;
+    stroke-opacity: 0.4;
+    stroke-width: 1;
+  }
+  .tbig-cover-edges line.is-hot {
+    stroke: var(--tbig-cover-hot);
+    stroke-opacity: 0.6;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .tbig-cover-nodes circle {
+    fill: currentColor;
+    fill-opacity: 0.72;
+  }
+  .tbig-cover-nodes circle.is-hot {
+    fill: var(--tbig-cover-hot);
+    fill-opacity: 0.95;
+  }
+</style>
+<div class="tbig-cover">
+  <svg class="tbig-cover-svg" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+    <g class="tbig-cover-edges">
+    <line x1="300.0" y1="42.0" x2="327.4" y2="44.4"/>
+    <line x1="300.0" y1="42.0" x2="354.0" y2="51.5"/>
+    <line x1="327.4" y1="44.4" x2="354.0" y2="51.5"/>
+    <line x1="327.4" y1="44.4" x2="379.0" y2="63.2"/>
+    <line x1="354.0" y1="51.5" x2="379.0" y2="63.2"/>
+    <line x1="354.0" y1="51.5" x2="401.6" y2="79.0"/>
+    <line x1="379.0" y1="63.2" x2="401.6" y2="79.0"/>
+    <line x1="401.6" y1="79.0" x2="421.0" y2="98.4"/>
+    <line x1="401.6" y1="79.0" x2="436.8" y2="121.0"/>
+    <line x1="421.0" y1="98.4" x2="436.8" y2="121.0"/>
+    <line x1="436.8" y1="121.0" x2="448.5" y2="146.0"/>
+    <line x1="436.8" y1="121.0" x2="455.6" y2="172.6"/>
+    <line x1="448.5" y1="146.0" x2="455.6" y2="172.6"/>
+    <line x1="448.5" y1="146.0" x2="458.0" y2="200.0"/>
+    <line x1="455.6" y1="172.6" x2="458.0" y2="200.0"/>
+    <line x1="455.6" y1="172.6" x2="455.6" y2="227.4"/>
+    <line x1="458.0" y1="200.0" x2="455.6" y2="227.4"/>
+    <line x1="455.6" y1="227.4" x2="448.5" y2="254.0"/>
+    <line x1="455.6" y1="227.4" x2="436.8" y2="279.0"/>
+    <line x1="448.5" y1="254.0" x2="436.8" y2="279.0"/>
+    <line x1="448.5" y1="254.0" x2="421.0" y2="301.6"/>
+    <line x1="436.8" y1="279.0" x2="421.0" y2="301.6"/>
+    <line x1="436.8" y1="279.0" x2="401.6" y2="321.0"/>
+    <line x1="421.0" y1="301.6" x2="401.6" y2="321.0"/>
+    <line x1="421.0" y1="301.6" x2="379.0" y2="336.8"/>
+    <line x1="401.6" y1="321.0" x2="379.0" y2="336.8"/>
+    <line x1="379.0" y1="336.8" x2="354.0" y2="348.5"/>
+    <line x1="379.0" y1="336.8" x2="327.4" y2="355.6"/>
+    <line x1="354.0" y1="348.5" x2="327.4" y2="355.6"/>
+    <line x1="354.0" y1="348.5" x2="300.0" y2="358.0"/>
+    <line x1="327.4" y1="355.6" x2="300.0" y2="358.0"/>
+    <line x1="327.4" y1="355.6" x2="272.6" y2="355.6"/>
+    <line x1="300.0" y1="358.0" x2="272.6" y2="355.6"/>
+    <line x1="300.0" y1="358.0" x2="246.0" y2="348.5"/>
+    <line x1="272.6" y1="355.6" x2="246.0" y2="348.5"/>
+    <line x1="246.0" y1="348.5" x2="221.0" y2="336.8"/>
+    <line x1="246.0" y1="348.5" x2="198.4" y2="321.0"/>
+    <line x1="221.0" y1="336.8" x2="198.4" y2="321.0"/>
+    <line x1="221.0" y1="336.8" x2="179.0" y2="301.6"/>
+    <line x1="198.4" y1="321.0" x2="179.0" y2="301.6"/>
+    <line x1="198.4" y1="321.0" x2="163.2" y2="279.0"/>
+    <line x1="179.0" y1="301.6" x2="163.2" y2="279.0"/>
+    <line x1="179.0" y1="301.6" x2="151.5" y2="254.0"/>
+    <line x1="163.2" y1="279.0" x2="151.5" y2="254.0"/>
+    <line x1="163.2" y1="279.0" x2="144.4" y2="227.4"/>
+    <line x1="151.5" y1="254.0" x2="144.4" y2="227.4"/>
+    <line x1="151.5" y1="254.0" x2="142.0" y2="200.0"/>
+    <line x1="144.4" y1="227.4" x2="142.0" y2="200.0"/>
+    <line x1="144.4" y1="227.4" x2="144.4" y2="172.6"/>
+    <line x1="142.0" y1="200.0" x2="144.4" y2="172.6"/>
+    <line x1="142.0" y1="200.0" x2="151.5" y2="146.0"/>
+    <line x1="144.4" y1="172.6" x2="151.5" y2="146.0"/>
+    <line x1="144.4" y1="172.6" x2="163.2" y2="121.0"/>
+    <line x1="151.5" y1="146.0" x2="163.2" y2="121.0"/>
+    <line x1="151.5" y1="146.0" x2="179.0" y2="98.4"/>
+    <line x1="163.2" y1="121.0" x2="179.0" y2="98.4"/>
+    <line x1="163.2" y1="121.0" x2="198.4" y2="79.0"/>
+    <line x1="179.0" y1="98.4" x2="198.4" y2="79.0"/>
+    <line x1="179.0" y1="98.4" x2="221.0" y2="63.2"/>
+    <line x1="198.4" y1="79.0" x2="221.0" y2="63.2"/>
+    <line x1="198.4" y1="79.0" x2="246.0" y2="51.5"/>
+    <line x1="221.0" y1="63.2" x2="246.0" y2="51.5"/>
+    <line x1="221.0" y1="63.2" x2="272.6" y2="44.4"/>
+    <line x1="246.0" y1="51.5" x2="272.6" y2="44.4"/>
+    <line x1="246.0" y1="51.5" x2="300.0" y2="42.0"/>
+    <line x1="272.6" y1="44.4" x2="300.0" y2="42.0"/>
+    <line x1="272.6" y1="44.4" x2="327.4" y2="44.4"/>
+    <line x1="379.0" y1="63.2" x2="198.4" y2="321.0" class="is-hot"/>
+    <line x1="458.0" y1="200.0" x2="179.0" y2="98.4" class="is-hot"/>
+    <line x1="401.6" y1="321.0" x2="142.0" y2="200.0" class="is-hot"/>
+    <line x1="272.6" y1="355.6" x2="246.0" y2="51.5" class="is-hot"/>
+    <line x1="421.0" y1="98.4" x2="354.0" y2="348.5" class="is-hot"/>
+    </g><g class="tbig-cover-nodes">
+    <circle cx="300.0" cy="42.0" r="3.6"/>
+    <circle cx="327.4" cy="44.4" r="3.6"/>
+    <circle cx="354.0" cy="51.5" r="3.6"/>
+    <circle cx="379.0" cy="63.2" r="4.6" class="is-hot"/>
+    <circle cx="401.6" cy="79.0" r="3.6"/>
+    <circle cx="421.0" cy="98.4" r="4.6" class="is-hot"/>
+    <circle cx="436.8" cy="121.0" r="3.6"/>
+    <circle cx="448.5" cy="146.0" r="3.6"/>
+    <circle cx="455.6" cy="172.6" r="3.6"/>
+    <circle cx="458.0" cy="200.0" r="4.6" class="is-hot"/>
+    <circle cx="455.6" cy="227.4" r="3.6"/>
+    <circle cx="448.5" cy="254.0" r="3.6"/>
+    <circle cx="436.8" cy="279.0" r="3.6"/>
+    <circle cx="421.0" cy="301.6" r="3.6"/>
+    <circle cx="401.6" cy="321.0" r="4.6" class="is-hot"/>
+    <circle cx="379.0" cy="336.8" r="3.6"/>
+    <circle cx="354.0" cy="348.5" r="4.6" class="is-hot"/>
+    <circle cx="327.4" cy="355.6" r="3.6"/>
+    <circle cx="300.0" cy="358.0" r="3.6"/>
+    <circle cx="272.6" cy="355.6" r="4.6" class="is-hot"/>
+    <circle cx="246.0" cy="348.5" r="3.6"/>
+    <circle cx="221.0" cy="336.8" r="3.6"/>
+    <circle cx="198.4" cy="321.0" r="4.6" class="is-hot"/>
+    <circle cx="179.0" cy="301.6" r="3.6"/>
+    <circle cx="163.2" cy="279.0" r="3.6"/>
+    <circle cx="151.5" cy="254.0" r="3.6"/>
+    <circle cx="144.4" cy="227.4" r="3.6"/>
+    <circle cx="142.0" cy="200.0" r="4.6" class="is-hot"/>
+    <circle cx="144.4" cy="172.6" r="3.6"/>
+    <circle cx="151.5" cy="146.0" r="3.6"/>
+    <circle cx="163.2" cy="121.0" r="3.6"/>
+    <circle cx="179.0" cy="98.4" r="4.6" class="is-hot"/>
+    <circle cx="198.4" cy="79.0" r="3.6"/>
+    <circle cx="221.0" cy="63.2" r="3.6"/>
+    <circle cx="246.0" cy="51.5" r="4.6" class="is-hot"/>
+    <circle cx="272.6" cy="44.4" r="3.6"/>
+    </g>
+  </svg>
+</div>
+<div class="blog-cover-caption" aria-hidden="true">A ring of neighbours, with a few long-range shortcuts that make it a small world</div>

@@ -3,6 +3,7 @@ layout: distill
 title: "Thinking in graphs"
 description: "Part 2 of a series on traumatic brain injury. Graph networks built up from Euler's bridges, with every measure my research used made into something you can poke: degree, paths, triangles, assortativity, centrality and small worlds."
 tags: traumatic-brain-injury graph-theory network-medicine comorbidity
+cover: tbi-graphs
 categories: research
 giscus_comments: false
 related_posts: false
