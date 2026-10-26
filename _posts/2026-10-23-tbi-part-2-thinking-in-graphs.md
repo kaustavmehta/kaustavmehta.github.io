@@ -212,11 +212,11 @@ In 1735 Leonhard Euler settled a question about the bridges of a Prussian city b
 
 ## How do you look at a tangle?
 
-Part 1 ended with the conditions that turn up in the years after a mild traumatic brain injury. Think of one person five years on. The injury itself may be long healed in the sense that a scan would show nothing, but they are more likely than they would otherwise have been to be living with depression, or anxiety, or trouble sleeping, or chronic pain, or high blood pressure, and quite often with several of these at once. For a clinician seeing that person, this is a list of problems to manage. For anyone trying to understand what a brain injury does to people in general, though, it is something messier: thousands of people, each carrying a different handful of conditions, with the handfuls overlapping in ways that are hard to hold in your head. It is a tangle, and the question this post is about is how you look at one.
+Part 1 ended with the conditions that turn up in the years after a mild traumatic brain injury. Think of one person five years on. A scan might show nothing, but they are more likely to be living with depression, anxiety, poor sleep, chronic pain or high blood pressure, often several at once. Across thousands of people, each carries a different handful of conditions, and the handfuls overlap in ways that are hard to hold in your head. This post is about how you look at a tangle like that.
 
-The answer I used in my undergraduate capstone at Krea University, supervised by Dr Shyam Kumar Sudhakar, and in the papers that came out of it <d-cite key="mehta2025exploring"></d-cite>, was graph theory. I had not met it formally before that project, and most of what follows is what I wish someone had shown me at the start. I want to build it up from nothing, with figures you can push around, because I think the ideas are much simpler than their notation suggests, and because almost all of them come from a person asking a plain question about who is connected to whom. If you already know the definitions, I hope the figures still give you a slightly different angle on them.
+The answer I used in my undergraduate capstone at Krea University, supervised by Dr Shyam Kumar Sudhakar, and in the papers that followed <d-cite key="mehta2025exploring"></d-cite>, was graph theory. I had not met it formally before, and what follows is what I wish someone had shown me at the start. I think the ideas are much simpler than their notation suggests.
 
-There is one move that runs through the whole series, and it is worth naming before the first figure. It is the act of _recasting_: taking a problem that looks like it is about one thing (a city, a group of friends, a population of patients) and deciding that the only thing that matters about it is what is connected to what. Everything else gets thrown away. That sounds like a loss, and sometimes it is, but it is also what lets a single set of tools work on bridges, friendships, power grids, brains and diseases.
+One move runs through the whole series. It is _recasting_: taking a problem that seems to be about a city, a group of friends or a population of patients, and deciding that only what is connected to what matters. Everything else is thrown away. Sometimes that is a real loss, but it is what lets one set of tools work on bridges, friendships, power grids, brains and diseases.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">A tangle, and the same tangle laid out</div>
@@ -225,12 +225,12 @@ There is one move that runs through the whole series, and it is worth naming bef
     <button class="tbi-btn" id="tbi2-tangle-btn" type="button">Untangle</button>
     <span class="tbi-readout" id="tbi2-tangle-read" aria-live="polite"></span>
   </div>
-  <figcaption>An illustration, not data: a small random network with four groups planted in it. Scattered at random, the structure is invisible. A force-directed layout, which treats lines as springs and dots as repelling magnets, pulls the same network into shape. Nothing about who is connected to whom changes between the two pictures.</figcaption>
+  <figcaption>An illustration, not data: a small random network with four planted groups. A force-directed layout (lines as springs, dots as repelling magnets) pulls it into shape without changing who is connected to whom.</figcaption>
 </figure>
 
 ## Seven bridges
 
-Königsberg (now Kaliningrad) was built where the river Pregel splits around two islands. Seven bridges joined the islands and the two banks, and the story goes that people liked to ask whether you could take a walk through the city that crossed every bridge exactly once. Try it.
+Königsberg (now Kaliningrad) was built where the river Pregel splits around two islands, with seven bridges joining the islands and banks. The story goes that people liked to ask whether a walk could cross every bridge exactly once. Try it.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">The puzzle, then the graph</div>
@@ -242,22 +242,20 @@ Königsberg (now Kaliningrad) was built where the river Pregel splits around two
     <button class="tbi-btn" id="tbi2-kb-today" type="button">Five bridges, as today</button>
   </div>
   <div class="tbi-readout" id="tbi2-kb-read" aria-live="polite"></div>
-  <figcaption>A stylised map, not a survey: the shapes are simplified, but which land masses each bridge joins follows the arrangement Euler described, with bridges lettered a to g as in his paper <d-cite key="euler1741solutio"></d-cite>. Click or tab to a land mass to start, then click bridges to cross them. “Throw away the map” turns the city into a graph; there you can click two land masses to build a bridge between them and click a bridge to demolish it. The numbers in the circles count the bridges touching each land mass, and odd ones glow. The five-bridge button shows one simple arrangement in which a walk is possible, loosely like the modern city’s; it is not a survey of today’s bridges.</figcaption>
+  <figcaption>A stylised map: which land masses each bridge joins follows Euler’s description, with his letters a to g <d-cite key="euler1741solutio"></d-cite>. Click or tab to a land mass, then click bridges to cross them. “Throw away the map” turns the city into a graph where you can build or demolish bridges; odd counts glow. The five-bridge layout is only loosely like today’s city.</figcaption>
 </figure>
 
-You will have got stuck, and so does everyone, but getting stuck six times does not prove that the seventh attempt will fail. Euler's contribution was to show that it must. His first step was to notice that nearly everything about the city is irrelevant. The shape of the islands, the length of the bridges, the streets you walk along on the way, none of it changes the answer. All that matters is which land masses are joined by how many bridges. That is the recasting, and the second half of the figure shows it: each land mass becomes a dot and each bridge a line.
+You will have got stuck, as everyone does, but six failures do not prove the seventh will fail. Euler showed that it must. His first step was to notice that the shape of the islands, the length of the bridges and the streets in between do not change the answer. All that matters is which land masses are joined by how many bridges. That is the recasting: each land mass becomes a dot and each bridge a line.
 
-The second step is an argument about counting, and it is short enough to follow in full. Think about any land mass that is neither where your walk starts nor where it ends. Every time you arrive there by one bridge you have to leave by another, so the bridges you use there come in pairs, and if you are to use all of them, that land mass must touch an even number of bridges. Only the start and the end can be odd. In Königsberg, Kneiphof touches five bridges and each of the other three land masses touches three, which makes four odd land masses, and a walk can have at most two ends. No route exists, and no amount of trying will find one.
+The second step is a short counting argument. Take any land mass that is neither the start nor the end of the walk. Every time you arrive by one bridge you must leave by another, so it must touch an even number of bridges. Only the start and the end can be odd. In Königsberg, Kneiphof touches five bridges and the other three land masses touch three each. Four odd land masses, and a walk has only two ends, so no route exists.
 
-Building a bridge in the figure lets you check the converse. Make every land mass even, and a walk exists that can even end where it began; make exactly two odd, and a walk exists that must start at one of them and end at the other. Euler stated this, though the proof that the condition is enough, as well as necessary, came from Carl Hierholzer in 1873 <d-cite key="hierholzer1873moglichkeit"></d-cite>, and the “Find a walk” button uses his method. The city itself has since changed the puzzle. Its bridges have been added, destroyed and rebuilt over the centuries, so that the walk has been possible in some periods and impossible in others, and after one of them was rebuilt in 2005 the chemist Roger Mallion went to Kaliningrad and walked an Eulerian route in February 2006 <d-cite key="mallion2007kaliningrad"></d-cite>.
-
-I should be honest about one part of the story as it is usually told. Euler did not draw the dots-and-lines picture. His paper, presented to the St Petersburg Academy in 1735 and published in 1741, reasons with letters for the regions and the bridges, and the diagrams we now call graphs only appear in the second half of the nineteenth century <d-cite key="hopkins2004truth"></d-cite>. The drawing came later; the idea that only the connections matter is Euler’s.
+Building bridges in the figure lets you check the converse: with no odd land masses, or exactly two, a walk exists. Euler stated this, but the proof that the condition is enough came from Carl Hierholzer in 1873 <d-cite key="hierholzer1873moglichkeit"></d-cite>, and “Find a walk” uses his method. The real city has since changed, and in 2006 the chemist Roger Mallion walked an Eulerian route through Kaliningrad <d-cite key="mallion2007kaliningrad"></d-cite>. One correction to the usual story, though: Euler reasoned with letters, and the dots-and-lines drawings only appear in the late nineteenth century <d-cite key="hopkins2004truth"></d-cite>. The idea that only the connections matter is his.
 
 ## Dots and lines
 
-So here is the object itself. A **graph** $G = (V, E)$ is a set of **nodes** (or vertices) $V$ and a set of **edges** $E$, where each edge joins two nodes. That is the whole definition. A graph is a guest list together with a list of who knows whom; it says nothing about where anyone is standing.
+A **graph** $G = (V, E)$ is a set of **nodes** (or vertices) $V$ and a set of **edges** $E$, each joining two nodes. That is the whole definition. A graph is a guest list together with a list of who knows whom; it says nothing about where anyone is standing.
 
-Two refinements matter for this series. An edge can carry a **weight**, a number saying how strong the connection is, which makes the graph _weighted_. And an edge can have a **direction**, from one node to another, as a follow on social media does, which makes the graph _directed_. The disease networks in Part 3 are weighted and undirected. They are weighted because some pairs of conditions are much more strongly associated than others. They are undirected because the study can only see that two conditions turn up together in the same people, and co-occurrence is not causation: depression and chronic pain appearing together tells you nothing on its own about which, if either, led to the other. An arrow would claim something the data cannot support.
+An edge can also carry a **weight**, saying how strong the connection is, or a **direction**, as a follow on social media does. The disease networks in Part 3 are weighted, because some pairs of conditions are much more strongly associated than others. They are undirected, because the study only sees two conditions turning up in the same people. That says nothing on its own about which, if either, led to the other, and an arrow would claim something the data cannot support.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Two views of one object</div>
@@ -274,28 +272,24 @@ Two refinements matter for this series. An edge can carry a **weight**, a number
     <button class="tbi-btn" id="tbi2-mx-shuffle" type="button">Redraw the picture</button>
   </div>
   <div class="tbi-readout" id="tbi2-mx-read" aria-live="polite">Hover over or tab to a cell to light up its edge; click a cell to change it. Drag a person to move them.</div>
-  <figcaption>The same small graph as a drawing and as an adjacency matrix. Row Asha, column Ben holds whatever connects Asha to Ben. In the undirected modes the matrix is symmetric, so changing one cell changes its mirror. The last column adds up each row, which is the degree (or, with weights, the strength) of the next section. Nodes can be dragged with a mouse or finger, or moved with the arrow keys once focused.</figcaption>
+  <figcaption>One small graph as a drawing and as an adjacency matrix; the last column is each row’s sum, the degree. Hover over or click a cell to light or change its edge, and drag nodes or move them with the arrow keys.</figcaption>
 </figure>
 
-The matrix on the right is called the **adjacency matrix**, $A$, and it is the same information as the drawing in a different form: $a_{ij} = 1$ if nodes $i$ and $j$ are joined and $0$ if not, or the weight of the edge in a weighted graph. Computers work with the matrix, which is why most of the formulas below are written in terms of $a_{ij}$. People work with the drawing, and the drawing has a trap in it.
-
-Drag a few people around, or press “Redraw the picture”. The matrix does not change, because the graph has not changed. A drawing of a graph is one of infinitely many, and where a node sits on the page carries no information unless someone has decided that it should. This is easy to forget when reading network figures. When a network figure in a paper puts two nodes close together, it is tempting to read closeness as similarity, and sometimes the layout algorithm has made that roughly true; but the data is the list of edges, and everything else is a choice made to help the eye. The tangle at the top of the post is the extreme case. I will keep coming back to the question of what a picture can and cannot tell you, because it matters a great deal once the nodes are diseases.
+The table is the **adjacency matrix** $A$: $a_{ij} = 1$ if nodes $i$ and $j$ are joined and $0$ if not, or the edge’s weight in a weighted graph. The formulas below use it. Now drag a few people around, or press “Redraw the picture”. The matrix does not change, because the graph has not. Where a node sits on the page carries no information unless someone decided that it should. It is tempting to read two nearby nodes in a paper’s figure as similar, but the data is the list of edges, and the layout is a choice made to help the eye.
 
 ## Who has the most friends?
 
-The first question anyone asks about a network is who has the most connections. The **degree** of a node $u$ is the number of edges touching it,
+The first question anyone asks of a network is who has the most connections. The **degree** of a node $u$ is the number of edges touching it, the row sum of the adjacency matrix:
 
 $$
-k_u = \sum_{v} a_{uv},
+k_u = \sum_{v} a_{uv}.
 $$
 
-which is just the row sum of the adjacency matrix. In a weighted graph there is a second answer: the **weighted degree**, or strength, adds up the weights instead of counting the edges,
+In a weighted graph, the **weighted degree**, or strength, adds up the weights instead, where $w_{uv}$ is the weight of the edge between $u$ and $v$ (zero if there is none):
 
 $$
-s_u = \sum_{v} w_{uv},
+s_u = \sum_{v} w_{uv}.
 $$
-
-where $w_{uv}$ is the weight of the edge between $u$ and $v$ (zero if there is none). The two can disagree, and the difference between them is worth noticing.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Counting friends, and weighing them</div>
@@ -314,22 +308,20 @@ where $w_{uv}$ is the weight of the edge between $u$ and $v$ (zero if there is n
     <button class="tbi-btn" id="tbi2-deg-paradox" type="button" aria-pressed="false">Ask everyone about their friends</button>
   </div>
   <div class="tbi-readout" id="tbi2-deg-read" aria-live="polite"></div>
-  <figcaption>An invented friendship network with invented weights between 0 and 1. Node size follows the selected measure. Click or tab to a person to see their sum written out. “Ask everyone about their friends” labels each person with their own number of friends and their friends’ average.</figcaption>
+  <figcaption>An invented network with invented weights between 0 and 1; node size follows the selected measure. Click or tab to a person to see their sum. The third button labels everyone with their own friend count and their friends’ average.</figcaption>
 </figure>
 
-Ravi has the most friends, but they are all acquaintances; Mina has fewer, and they are close. Neither number is the right one in general, and which you want depends on the question. If you want to know who hears gossip from the most directions, count. If you want to know whose absence would be felt most, weigh. In a comorbidity network the weights are measures of how strongly two conditions are associated, so a condition with a high degree is associated with many others, and a condition with a high weighted degree has strong associations, which need not be the same conditions at all.
+Ravi has the most friends, but they are all acquaintances; Mina has fewer, and they are close. To know who hears gossip from the most directions, count. To know whose absence would be felt most, weigh. In a comorbidity network, a high degree means a condition is associated with many others, and a high weighted degree means its associations are strong. These need not be the same conditions.
 
-The third button shows something that surprises most people. Scott Feld pointed out in 1991 that most people have fewer friends than their friends do, on average <d-cite key="feld1991friends"></d-cite>, and in this little network it is true of most of the ten. It sounds like a statement about popularity and self-esteem, though it follows from arithmetic alone. A person with many friends appears in many friends' lists, so when you average over friends you count the popular people again and again. Averaging over edges rather than over people gives $\langle k^2 \rangle / \langle k \rangle$, which is never less than the ordinary mean $\langle k \rangle$ and is larger whenever degrees vary at all. The same bias applies to anything sampled by following edges. If you find patients by asking a patient to name others, or meet conditions by following them from a condition you already know, you will meet the well-connected ones first.
+The third button shows Scott Feld’s 1991 observation that most people have fewer friends than their friends do, on average <d-cite key="feld1991friends"></d-cite>. It follows from arithmetic alone. Popular people appear in many friends’ lists, so averaging over friends counts them again and again. The average over edges is $\langle k^2 \rangle / \langle k \rangle$, which exceeds the ordinary mean $\langle k \rangle$ whenever degrees vary. Anything found by following edges, patients or conditions, shows the same bias towards the well connected.
 
 ## How much could be connected, and is?
 
-The next question is about the network as a whole: how full is it? Among $V$ nodes there are $V(V-1)/2$ possible pairs, and the **density** is the share of them that are actually joined,
+Among $V$ nodes there are $V(V-1)/2$ possible pairs, and the **density** is the share of them that are joined by the $E$ edges:
 
 $$
-\text{density} = \frac{2E}{V(V-1)},
+\text{density} = \frac{2E}{V(V-1)}.
 $$
-
-where $E$ is the number of edges. The factor of 2 is there because each edge is one of the $V(V-1)/2$ pairs.
 
 <figure class="tbi-fig tbi2-fig l-body">
   <div class="tbi-kicker">The edges that are, among the edges that could be</div>
@@ -340,14 +332,14 @@ where $E$ is the number of edges. The factor of 2 is there because each edge is 
   </div>
   <div class="tbi2-meter" aria-hidden="true"><span id="tbi2-dens-fill"></span></div>
   <div class="tbi-readout" id="tbi2-dens-read" aria-live="polite"></div>
-  <figcaption>Faint dotted lines are every pair that could be joined; solid lines are the edges present, added in a fixed random order. Add nodes with the edges held fixed and watch the density fall.</figcaption>
+  <figcaption>Faint dotted lines are every possible pair; solid lines are the edges present. Add nodes with the edges held fixed and watch the density fall.</figcaption>
 </figure>
 
-I think of the faint lines as ghosts, the friendships that could exist and don't. Density is the fraction of ghosts that have become real. Adding nodes without adding edges makes a network sparser very quickly, because the number of possible pairs grows with the square of the number of nodes. Most real networks are very sparse for exactly this reason: no one can know everyone in a city. A disease network has only a couple of dozen nodes, so its density can be much higher, and in Part 3 the interesting question will be less “how dense is it?” than “which of the ghosts became real, and why those?”
+I think of the faint lines as ghosts, friendships that could exist and don’t. Possible pairs grow with the square of the number of nodes, so most real networks are very sparse: no one can know everyone in a city. A disease network has only a couple of dozen nodes, so its density can be much higher. In Part 3 the interesting question is which ghosts became real, and why those.
 
 ## How far apart is everyone?
 
-Two nodes that are not joined directly may still be joined through others. The **distance** $\delta(v_i, v_j)$ between them is the number of edges on the shortest path from one to the other. Finding it is easier than it sounds, and the method, **breadth-first search**, has a lovely physical picture. Drop a stone into a pond at the starting node: the first ripple reaches its neighbours, the second reaches their neighbours, and so on, and the ripple that first touches a node tells you how far away it is.
+The **distance** $\delta(v_i, v_j)$ between two nodes is the number of edges on the shortest path between them. The method for finding it, **breadth-first search**, has a lovely physical picture. Drop a stone into a pond at the starting node. The first ripple reaches its neighbours, the second their neighbours, and the ripple that first touches a node tells you how far away it is.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">A ripple from one node, and every distance at once</div>
@@ -359,32 +351,30 @@ Two nodes that are not joined directly may still be joined through others. The *
     <button class="tbi-btn" id="tbi2-path-reset" type="button">Start again</button>
   </div>
   <div class="tbi-readout" id="tbi2-path-read" aria-live="polite"></div>
-  <figcaption>Click or tab to a node and press Enter to start a ripple: nodes darken in order of distance and are labelled with the number of steps. Choose a second node to see every shortest path between the two. The histogram counts all 153 pairs by distance; the blue part is the pairs that involve your starting node. Shortcuts are drawn dashed.</figcaption>
+  <figcaption>Click or tab to a node and press Enter to start a ripple, then choose a second node to see every shortest path between them. The histogram counts all 153 pairs by distance. Shortcuts are dashed.</figcaption>
 </figure>
 
-Two numbers summarise all the distances in a connected network. The **average path length** is the mean over every pair,
+The **average path length** is the mean distance over every pair,
 
 $$
 \bar{\delta} = \frac{2}{V(V-1)} \sum_{i \lt j} \delta(v_i, v_j),
 $$
 
-and the **diameter** is the largest distance between any pair, $D = \max_{i,j} \delta(v_i, v_j)$: the furthest apart two nodes can be. In the histogram the average is the dashed line and the diameter is the right-most bar.
+and the **diameter** $D = \max_{i,j} \delta(v_i, v_j)$ is the largest. In the histogram they are the dashed line and the right-most bar. Now press “Add a shortcut”. One edge between far corners pulls the whole histogram left, because it shortens every journey that can use it. Hold on to that for the small-world idea later.
 
-Now press “Add a shortcut”. A single edge between far corners pulls the whole histogram to the left and cuts the average by a surprising amount, because it shortens not one journey but every journey that can use it. Hold on to that, because it is the heart of the small-world idea later on.
+The most famous path-length measurement was made with letters. In the 1960s Stanley Milgram and Jeffrey Travers asked 296 people to get a document to a Massachusetts stockbroker through first-name acquaintances. The 64 chains that arrived took an average of 5.2 intermediaries <d-cite key="travers1969experimental"></d-cite>, the source of “six degrees of separation”. In 2012 the same quantity for Facebook’s roughly 721 million active users came out at 4.74 <d-cite key="backstrom2012four"></d-cite>.
 
-The most famous measurement of a path length was made with letters. In the 1960s Stanley Milgram and Jeffrey Travers asked 296 people in Nebraska and Boston to get a document to a stockbroker in Massachusetts by passing it only to someone they knew on first-name terms. Sixty-four of the chains arrived, and those took an average of 5.2 intermediaries <d-cite key="travers1969experimental"></d-cite>, which is where “six degrees of separation” comes from (a phrase the paper did not use, and an average over the chains that finished, which were probably the shorter ones). In 2012 a team at Facebook and the University of Milan reported the same quantity computed directly for all of Facebook's roughly 721 million active users, and the average distance came out at 4.74 <d-cite key="backstrom2012four"></d-cite>.
-
-For diseases, a short path between two conditions would mean they are linked through a few intermediate conditions that each co-occur with the next. I want to be careful here, because it is very easy to read a path as a mechanism, as if one condition led to the next and then the next. In an undirected co-occurrence network a path is only a chain of associations. It suggests where to look; it does not show what happens.
+For diseases, a short path links two conditions through a few intermediates, each co-occurring with the next. It is easy to read such a path as a mechanism, one condition leading to the next. In an undirected co-occurrence network it is only a chain of associations, which suggests where to look but does not show what happens.
 
 ## Are my friends friends with each other?
 
-Pick a person and look only at their friends. Do those friends know each other? In some circles nearly everyone does, and in others the person is the only thing the friends have in common. The **clustering coefficient** of a node $u$ measures this. If $u$ has $k_u$ neighbours, they could share $k_u(k_u-1)/2$ edges among themselves; if $E_u$ of those exist, then
+Pick a person and look only at their friends. Do those friends know each other? If node $u$ has $k_u$ neighbours, they could share $k_u(k_u-1)/2$ edges. If $E_u$ of those exist, the **clustering coefficient** is
 
 $$
 C_u = \frac{2E_u}{k_u(k_u-1)}, \qquad 0 \le C_u \le 1.
 $$
 
-Every edge between two of $u$'s neighbours closes a **triangle** through $u$, so $E_u$ is also the number of triangles that $u$ sits in. The network's **average clustering** is the mean of $C_u$ over all nodes, $\bar{C} = \frac{1}{n} \sum_u C_u$.
+Each edge between two neighbours closes a **triangle** through $u$, so $E_u$ also counts $u$’s triangles. The **average clustering** is the mean over all nodes, $\bar{C} = \frac{1}{n} \sum_u C_u$.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Closing triangles</div>
@@ -393,22 +383,22 @@ Every edge between two of $u$'s neighbours closes a **triangle** through $u$, so
     <button class="tbi-btn" id="tbi2-cc-reset" type="button">Start again</button>
   </div>
   <div class="tbi-readout" id="tbi2-cc-read" aria-live="polite"></div>
-  <figcaption>Choose a person (click, tap or press Enter) to look at the network from where they stand. Dashed lines are friendships that could exist among their friends; click one to introduce the two, and a triangle closes. Click a solid line between two of their friends to undo it. An invented network.</figcaption>
+  <figcaption>An invented network. Choose a person, then click a dashed line to introduce two of their friends and close a triangle, or a solid one to undo it.</figcaption>
 </figure>
 
-Clustering is density again, but local: it is the density of the little network formed by one node's neighbours. That is why it says something different from the global density. A network can be sparse overall and still be made of tight knots, and social networks usually are, because friends introduce their friends to each other. One detail matters for reading the numbers in Part 3: a node with fewer than two neighbours has no pairs to close, and conventions differ on what to do with it. networkx, the Python library the analysis used, gives it $C_u = 0$ and still includes it in the average <d-cite key="hagberg2008networkx"></d-cite>, so a few dangling nodes pull the average down; Gephi, a widely used program for drawing networks, leaves such nodes out. For the network in my thesis the two conventions give 0.38 and 0.42, and the 0.42 the thesis reported is the second kind.
+Clustering is density again, but local. A network can be sparse overall and still made of tight knots, as social networks usually are, because friends introduce their friends. A node with fewer than two neighbours has no pairs to close. networkx, the Python library the analysis used, scores it 0 and keeps it in the average <d-cite key="hagberg2008networkx"></d-cite>, while Gephi leaves it out. For the network in my thesis these conventions give 0.38 and 0.42, and the thesis reported the second.
 
-In a disease network, a triangle is three conditions where each pair co-occurs more than chance would predict. A condition with many triangles sits inside a knot of conditions that tend to come together. Whether that knot reflects a shared cause, a shared treatment, a shared way of being diagnosed, or something else entirely is not something the triangle can tell you, but it is a good place to start asking.
+In a disease network, a triangle is three conditions where each pair co-occurs more than chance would predict. It cannot say whether the knot reflects a shared cause, a shared treatment or a shared way of being diagnosed, but it is a good place to start asking.
 
 ## Do hubs hold hands?
 
-Once you know some nodes have many connections and some few, a natural question is who connects to whom. Do the well-connected nodes link to each other, or do they mostly link to the poorly connected ones? This is **degree assortativity**, and Mark Newman's way of measuring it is direct <d-cite key="newman2002assortative"></d-cite>. Take every edge, write down the degree at each end, and compute the ordinary correlation between the two columns:
+Do well-connected nodes link to each other, or mostly to poorly connected ones? This is **degree assortativity**, and Mark Newman measured it directly <d-cite key="newman2002assortative"></d-cite>. Take every edge, write down the degree at each end, and compute the correlation between the two columns:
 
 $$
 r = \frac{\sum_{e} j_e k_e / M - \left[ \sum_{e} \tfrac{1}{2}(j_e + k_e) / M \right]^2}{\sum_{e} \tfrac{1}{2}(j_e^2 + k_e^2) / M - \left[ \sum_{e} \tfrac{1}{2}(j_e + k_e) / M \right]^2},
 $$
 
-where the sums run over the $M$ edges and $j_e$, $k_e$ are the degrees of the two nodes that edge $e$ joins. It looks heavy, but it is nothing more than a Pearson correlation coefficient, and it runs from $-1$ to $+1$. Positive means hubs attach to hubs; negative means hubs attach to the periphery. My thesis wrote it in the language networkx uses, comparing the joint distribution of degrees at the two ends of an edge with what independence would give, $P(k_i, k_j) = P(k_i)P(k_j)$; it comes to the same number.
+where $j_e$ and $k_e$ are the degrees at the two ends of edge $e$, over $M$ edges. It is just a Pearson correlation, from $-1$ (hubs attach to the periphery) to $+1$ (hubs attach to hubs).
 
 <figure class="tbi-fig tbi2-fig l-page">
   <div class="tbi-kicker">Rewiring a network without changing anyone's degree</div>
@@ -422,20 +412,16 @@ where the sums run over the $M$ edges and $j_e$, $k_e$ are the degrees of the tw
   </div>
   <svg id="tbi2-asr-line" class="tbi2-scroll-ok" role="group" aria-label="A number line of assortativity from minus 0.6 to plus 0.6, with real networks marked and this network's value shown by a triangle."></svg>
   <div class="tbi-readout" id="tbi2-asr-read" aria-live="polite"></div>
-  <figcaption>Left: a network grown by preferential attachment, so that it has a few hubs. Right: one dot for each pair of degrees found at the two ends of an edge (each edge counted both ways round); assortativity is the correlation in this plot. The slider rewires the network by repeatedly swapping the ends of two edges, a move that leaves every node's degree exactly as it was. Below: the values Newman reported for real networks <d-cite key="newman2002assortative"></d-cite>; hover over, tap or tab to a mark for its value.</figcaption>
+  <figcaption>Left: a network with a few hubs. Right: one dot per pair of degrees at the ends of an edge; assortativity is the correlation here. The slider swaps edge ends, leaving every degree unchanged. Below: Newman’s values for real networks <d-cite key="newman2002assortative"></d-cite>; hover over, tap or tab to a mark.</figcaption>
 </figure>
 
-The rewiring in the figure is the important part, because it shows that assortativity is a property of the wiring and not of the degrees. Every node keeps exactly the number of edges it started with, yet the network can be pushed from hubs that avoid each other to hubs that cling together, and the cloud of dots in the scatter plot tilts with it. When you push hard enough, the hubs fold into a dense core and the low-degree nodes are left to link among themselves in long strings.
-
-Newman found that social networks tend to be assortative and technological and biological networks tend to be disassortative <d-cite key="newman2002assortative"></d-cite>, and the marks under the figure show some of his values. One way to read the difference: in a network of collaborators, prolific people work with prolific people, whereas in the internet or a protein network, hubs are, in a sense, there to serve the periphery. For a disease network, positive assortativity would mean that conditions associated with many others tend to be associated with each other, forming a core of highly comorbid conditions, while the rarer, less connected conditions sit in their own corners. One caution I would give my undergraduate self: on a network of a couple of dozen nodes, this coefficient rests on few edges and can move a long way if a handful of them change.
+The rewiring shows that assortativity belongs to the wiring, not the degrees. Every node keeps its number of edges, yet the hubs can be pushed from avoiding each other into a dense core. Newman found that social networks tend to be assortative, and technological and biological ones disassortative <d-cite key="newman2002assortative"></d-cite>. In a disease network, positive assortativity would mean a core of highly comorbid conditions associated with each other. One caution I would give my undergraduate self: on a couple of dozen nodes, this coefficient rests on few edges and can swing if a handful change.
 
 ## Who matters?
 
-“Which node is most important?” is the question people most want a network to answer, and it does not have one answer. It has several, each a different way of making “important” precise, and they are known collectively as **centralities**. My research used three.
+“Which node is most important?” has no single answer. There are several **centralities**, each making “important” precise in a different way, and my research used three. **Degree centrality** is the simplest: the degree, usually divided by $n-1$ so that a node connected to everyone scores 1.
 
-**Degree centrality** is the simplest: a node matters if it has many connections. It is the degree, usually divided by $n-1$ so that a node connected to everyone scores 1. The thesis wrote it via the neighbourhood $N(u) = \lbrace v \in V : uv \in E \rbrace$, the set of nodes joined to $u$, whose size is the degree.
-
-**Betweenness centrality** asks a different question: how much of the traffic in the network has to pass through this node? Picture everyone sending a message to everyone else along the shortest route available. A node that sits on many of those routes is a toll booth, a broker, a bridge between parts of the network that would otherwise have to go a long way round. Make a guess before anything is revealed.
+**Betweenness centrality** asks how much traffic passes through a node. Picture everyone sending a message to everyone else along the shortest route. A node on many of those routes is a toll booth between parts of the network. Make a guess before anything is revealed.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">The toll booth</div>
@@ -450,28 +436,28 @@ Newman found that social networks tend to be assortative and technological and b
   </div>
   <div class="tbi-readout" id="tbi2-bt-read" aria-live="polite"></div>
   <div class="tbi2-bars" id="tbi2-bt-bars" aria-label="Highest betweenness"></div>
-  <figcaption>An invented network. Click, tap or tab to the person you think lies on the most shortest paths. After the reveal, node size shows normalised betweenness and the bars list the top six. “Send travellers” routes random journeys along randomly chosen shortest paths (each dot is one traveller), and the glow around each person grows with the traffic through them. “Close Bea” removes her.</figcaption>
+  <figcaption>An invented network. Click, tap or tab to your guess. After the reveal, node size shows normalised betweenness. “Send travellers” routes random journeys along shortest paths; “Close Bea” removes her.</figcaption>
 </figure>
 
-Most people pick Hal or Rosa, because they are the obvious hubs, with six connections each. But Bea, with four, carries more than half of all the shortest paths between other pairs, because every journey from one side to the other has to go through her. Close her and the network falls into two islands. Hal and Rosa, for all their friends, are each only the centre of their own half.
+Most people pick Hal or Rosa, the obvious hubs with six connections each. But Bea, with four, carries more than half of all the shortest paths between other pairs, because every journey from one side to the other goes through her. Close her and the network falls into two islands.
 
-Formally, if $\sigma_{uv}$ is the number of shortest paths between $u$ and $v$ and $\sigma_{uv}(w)$ is the number of those that pass through $w$, the betweenness of $w$ is
+Formally, if $\sigma_{uv}$ is the number of shortest paths between $u$ and $v$, and $\sigma_{uv}(w)$ the number passing through $w$, then
 
 $$
 C_B(w) = \sum_{u \neq v \neq w} \frac{\sigma_{uv}(w)}{\sigma_{uv}},
 $$
 
-so that each pair contributes the fraction of its shortest paths that $w$ lies on <d-cite key="freeman1977set"></d-cite>. Computing this naively means finding every shortest path between every pair; the trick that makes it fast, and that this page uses, is Ulrik Brandes's 2001 algorithm, which runs one breadth-first search per node and accumulates the fractions on the way back <d-cite key="brandes2001faster"></d-cite>.<d-footnote>A note for anyone comparing numbers. The thesis writes the sum over $(u,v) \in V^2$, which counts each pair twice in an undirected graph. networkx sums over unordered pairs and, by default, divides by $(n-1)(n-2)/2$, the number of pairs not involving $w$, so that a value of 1 means $w$ is on every shortest path between every other pair (the centre of a star). The betweenness values in my thesis and papers, and in Part 3, are normalised this way. In this figure Bea’s 0.55 means that 55% of the pairs’ shortest-path traffic runs through her.</d-footnote>
+so each pair contributes the fraction of its shortest paths that $w$ lies on <d-cite key="freeman1977set"></d-cite>. This page uses Ulrik Brandes’s fast algorithm to compute it <d-cite key="brandes2001faster"></d-cite>.<d-footnote>A note for anyone comparing numbers. The betweenness values in my thesis and papers, and in Part 3, follow networkx: the sum runs over unordered pairs and is divided by $(n-1)(n-2)/2$, the number of pairs not involving $w$. A value of 1 means $w$ is on every shortest path between every other pair, as at the centre of a star. In this figure Bea’s 0.55 means that 55% of the pairs’ shortest-path traffic runs through her.</d-footnote>
 
-Milgram's letters contain a real toll booth. Of the 64 chains that reached the stockbroker, 16 reached him through the same person, a clothing merchant in his home town, and two business associates accounted for another 15 between them <d-cite key="travers1969experimental"></d-cite>. Half of all the successful chains funnelled through three people. In a disease network a high-betweenness condition is one that sits between groups of conditions that otherwise rarely meet. The papers made a point of this because betweenness did not simply track how common a condition was: some conditions were rare after mild TBI and yet sat on many of the network's shortest paths. I will come back to what that might mean in Part 3.
+Milgram’s letters had a real toll booth: 16 of the 64 chains reached the stockbroker through the same clothing merchant <d-cite key="travers1969experimental"></d-cite>. In a disease network, a high-betweenness condition sits between groups of conditions that otherwise rarely meet. The papers stressed this because betweenness did not simply track how common a condition was. Some rare conditions sat on many shortest paths, and Part 3 comes back to what that might mean.
 
-**Eigenvector centrality** gives the third answer, and it is the hardest of the three to get a feel for. It says you are important if your neighbours are important. That sounds circular, and it is, but the circle can be solved. Give every node a score $x_v$ and ask that each score be proportional to the sum of its neighbours' scores:
+**Eigenvector centrality** says you are important if your neighbours are important. That is circular, but the circle can be solved. Ask that each node’s score $x_v$ be proportional to the sum of its neighbours’ scores:
 
 $$
 x_v = \frac{1}{\lambda} \sum_{t \in M(v)} x_t = \frac{1}{\lambda} \sum_{t \in V} a_{vt}\, x_t,
 $$
 
-where $M(v)$ is the set of $v$'s neighbours and $\lambda$ is a constant. Written with the adjacency matrix, this is the eigenvector equation $A\mathbf{x} = \lambda \mathbf{x}$, and choosing the largest eigenvalue guarantees, for a connected network, a solution in which every score is positive <d-cite key="bonacich1972factoring"></d-cite>. The way to find it is to stop solving and start iterating. Give everyone a score of 1, then let everyone pass their score to their neighbours, and repeat. I picture a drop of dye in water: it pools wherever the channels are densest, and after enough rounds the pattern stops changing.
+where $M(v)$ is the set of $v$’s neighbours. This is the eigenvector equation $A\mathbf{x} = \lambda \mathbf{x}$. Taking the largest eigenvalue guarantees, for a connected network, a solution with every score positive <d-cite key="bonacich1972factoring"></d-cite>. To find it, give everyone a score of 1, let everyone pass their score to their neighbours, and repeat. I picture dye in water, pooling wherever the channels are densest until the pattern settles.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Importance by association</div>
@@ -493,16 +479,16 @@ where $M(v)$ is the set of $v$'s neighbours and $\lambda$ is a constant. Written
     <button class="tbi-btn" id="tbi2-ev-reset" type="button">Start again</button>
   </div>
   <div class="tbi-readout" id="tbi2-ev-read" aria-live="polite"></div>
-  <figcaption>Each round, every node keeps its score and adds its neighbours’ scores; the scores are then rescaled so that the highest is 1. Node size and the labels show the current scores, and the chart tracks them round by round, with Pat in blue and Quinn in amber. Keeping your own score (iterating with $A + I$ rather than $A$) is what networkx does too: it stops the scores see-sawing on star-shaped parts of the graph and does not change where they end up.</figcaption>
+  <figcaption>Each round, every node keeps its score and adds its neighbours’, and the scores are rescaled so the highest is 1. Keeping your own score (iterating with $A + I$), as networkx does, stops see-sawing without changing the end result. Pat is blue and Quinn amber.</figcaption>
 </figure>
 
-After one round the scores are just degree plus one, and Pat leads easily. By the fourth round Quinn has overtaken Pat, because Quinn's three friends are in the dense core and their scores keep growing, while Pat's six friends know no one else and have nothing to pass back. Eigenvector centrality remembers who your friends are, and their friends, all the way out. The same idea, with some important modifications for direction and for pages that link nowhere, is at the heart of PageRank, the method Google was founded on <d-cite key="brin1998anatomy"></d-cite>. In a disease network a condition with high eigenvector centrality is associated with conditions that are themselves highly associated: it is embedded in the core. In the published version of my work, degree and eigenvector centrality turned out to be highly correlated across conditions, while betweenness told a different story <d-cite key="mehta2025exploring"></d-cite>, which is part of why the papers leaned on betweenness.
+After one round the scores are just degree plus one, and Pat leads. By the fourth round Quinn has overtaken him. Quinn’s three friends are in the dense core and keep growing, while Pat’s six friends know no one else and have nothing to pass back. A modified version of this idea is at the heart of PageRank, the method Google was founded on <d-cite key="brin1998anatomy"></d-cite>. In my published work, degree and eigenvector centrality were highly correlated across conditions, while betweenness told a different story <d-cite key="mehta2025exploring"></d-cite>. That is part of why the papers leaned on betweenness.
 
 ## Small worlds
 
-Two observations from earlier sections sit uneasily together. Social networks are full of triangles, with friends of friends being friends, which makes them locally dense and, you might think, slow to cross: a world of tight villages. Yet the average distance between two people is tiny. How can a network be both cliquish and small?
+Social networks are full of triangles, which should make them locally dense and slow to cross, like a world of tight villages. Yet the average distance between two people is tiny. How can a network be both cliquish and small?
 
-In 1998 Duncan Watts and Steven Strogatz answered this with a model simple enough to play with <d-cite key="watts1998collective"></d-cite>. Start with a ring of nodes, each joined to its nearest neighbours on either side. This is the village: lots of triangles, and a long way round to the other side. Now go through the edges and, with some probability $p$, cut one end loose and reattach it to a node chosen at random. At $p = 0$ you have the ring; at $p = 1$ you have a random network. The question is what happens in between.
+In 1998 Duncan Watts and Steven Strogatz answered with a simple model <d-cite key="watts1998collective"></d-cite>. Start with a ring of nodes, each joined to its nearest neighbours: the village, with lots of triangles and a long way round. Then, with probability $p$, cut one end of each edge loose and reattach it at random. At $p = 0$ you have the ring, and at $p = 1$ a random network.
 
 <figure class="tbi-fig tbi2-fig l-page">
   <div class="tbi-kicker">From a ring to a random graph</div>
@@ -520,16 +506,16 @@ In 1998 Duncan Watts and Steven Strogatz answered this with a model simple enoug
     <span><span class="tbi2-legend-line" style="background: var(--tbi-metab)"></span>Average path length, as a share of the ring’s</span>
   </div>
   <div class="tbi-readout" id="tbi2-ws-read" aria-live="polite"></div>
-  <figcaption>The curves are computed in your browser when the figure comes into view: for each of 17 values of $p$, 20 random rewirings of a ring of $n = 100$ nodes with $k = 6$ neighbours each, averaged and divided by the ring’s own values. (Watts and Strogatz used $n = 1000$ and $k = 10$, so their curves are smoother and the drop sits further left <d-cite key="watts1998collective"></d-cite>.) The large dots are the single network drawn on the left. The slider is logarithmic.</figcaption>
+  <figcaption>Computed in your browser: 20 random rewirings of a 100-node ring ($k = 6$) at each of 17 values of $p$, relative to the ring. Watts and Strogatz used a larger ring, so their drop sits further left <d-cite key="watts1998collective"></d-cite>. The slider is logarithmic.</figcaption>
 </figure>
 
-The path length collapses long before the clustering does. A rewiring probability of a few in a hundred is enough to bring the average distance most of the way down to that of a random network, because each rewired edge is a shortcut like the one you added in the path-length figure, and shortcuts help everyone. But a few shortcuts barely disturb the triangles, so the network still looks like a village from the inside. That window, high clustering and short paths together, is what Watts and Strogatz called a **small world**, and they showed that real networks sat in it: the collaboration network of film actors, the power grid of the western United States and the nervous system of the worm _C. elegans_ all had clustering far above that of a random network of the same size, with average path lengths only a little longer <d-cite key="watts1998collective"></d-cite>. The worldwide airline network is a later example. Its cities are on average 4.4 flights apart, yet its clustering is 0.62, against 0.049 for a randomised version of the same network <d-cite key="guimera2005worldwide"></d-cite>.
+The path length collapses long before the clustering does. A few rewired edges in a hundred act as shortcuts for everyone, but barely disturb the triangles. Watts and Strogatz called this window of high clustering and short paths a **small world**. Film actors, the western US power grid and the nervous system of the worm _C. elegans_ all sat in it <d-cite key="watts1998collective"></d-cite>. So does the worldwide airline network, whose cities are on average 4.4 flights apart, with clustering of 0.62 against 0.049 when randomised <d-cite key="guimera2005worldwide"></d-cite>.
 
-That comparison against a random network of the same size is the part that matters, and my thesis did not make it. It described the TBI comorbidity network as having “a relatively small-world structure” on the strength of its clustering and its short average path. Rebuilding the analysis for this series, I made the comparison against 500 random networks with the same 25 nodes and 69 edges. The thesis network’s average clustering is 0.38 (0.42 by the convention the thesis used) against 0.23 for the random networks, and its average path length is 2.31 against 1.99. The clustering is well above chance; the short paths say less, because a network this dense has short paths almost however it is wired. So the claim holds, modestly. Part 3 makes the same comparison for the published network.
+The comparison against a random network of the same size is what matters, and my thesis did not make it. It described the TBI comorbidity network as “a relatively small-world structure” on the strength of its clustering and short paths. Rebuilding the analysis for this series, I compared it with 500 random networks with the same 25 nodes and 69 edges. Its average clustering is 0.38 (0.42 by the thesis’s convention), against 0.23 at random. Its average path length is 2.31, against 1.99. The clustering is well above chance, but the short paths say less, because a network this dense has short paths almost however it is wired. So the claim holds, modestly, and Part 3 tests the published network the same way.
 
 ## Islands
 
-The last idea is about groups. Many networks are made of communities, sets of nodes much more densely connected to each other than to the rest, and finding them is one of the most common things people do with a network. One of the most intuitive methods, from Michelle Girvan and Mark Newman <d-cite key="girvan2002community"></d-cite>, uses betweenness backwards. The edges that link communities are the bridges, so they carry many shortest paths; remove the busiest edge, recompute, and repeat, and the network falls apart along its natural seams.
+Many networks are made of communities, groups of nodes more densely connected to each other than to the rest. Michelle Girvan and Mark Newman found them by using betweenness backwards <d-cite key="girvan2002community"></d-cite>. Edges between communities carry many shortest paths, so remove the busiest edge, recompute, and repeat. The network falls apart along its natural seams.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Cutting the busiest edge, again and again</div>
@@ -539,14 +525,14 @@ The last idea is about groups. Many networks are made of communities, sets of no
     <button class="tbi-btn" id="tbi2-gn-reset" type="button">Start again</button>
   </div>
   <div class="tbi-readout" id="tbi2-gn-read" aria-live="polite"></div>
-  <figcaption>An invented network with three groups planted in it. Edge thickness is edge betweenness, recomputed after every removal; the edge about to go is highlighted first. Once the network breaks, nodes are coloured by the piece they are in.</figcaption>
+  <figcaption>An invented network with three planted groups. Edge thickness is edge betweenness, recomputed after each removal; nodes are coloured by piece once it breaks.</figcaption>
 </figure>
 
-The study in Part 3 uses a cousin of this idea that removes the busiest _nodes_ rather than edges, and then puts each removed node back into every group it touched, so that a condition can belong to more than one cluster. Part 3 steps through it.
+Part 3 uses a cousin of this method that removes the busiest _nodes_ instead, then puts each back into every group it touched, so a condition can belong to more than one cluster.
 
 ## One graph, many worlds
 
-By now there are enough measures to see the real payoff of recasting. Once a problem is a graph, the same handful of numbers can be computed for it, but what they mean depends entirely on what the nodes and edges stand for. Below is one small network and four measures, and you can choose what it represents.
+Once a problem is a graph, the same numbers can be computed for it, but what they mean depends on what the nodes and edges stand for. Choose what this small network represents.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-controls" style="margin-top: 0">
@@ -572,16 +558,16 @@ By now there are enough measures to see the real payoff of recasting. Once a pro
     <div><svg id="tbi2-gal" class="tbi2-scroll-ok" role="img" aria-label="A 13-node network."></svg></div>
     <div class="tbi2-gal-panel" id="tbi2-gal-panel" aria-live="polite"></div>
   </div>
-  <figcaption>The network never changes; only the reading does. Each measure picks out a different node: G has the most connections, F carries the most traffic, C sits in the densest knot, and several nodes have perfectly clustered neighbourhoods. The interpretations are mine, as illustrations, with the cited studies as examples of each idea in real networks.</figcaption>
+  <figcaption>The network never changes; only the reading does. The interpretations are my illustrations, with the cited studies as real examples.</figcaption>
 </figure>
 
-Some of the most striking uses of graphs in medicine have been exactly this kind of recasting. In 2007 Goh and colleagues built a “human disease network” from 1,284 disorders and 1,777 genes, joining two disorders whenever a gene was implicated in both <d-cite key="goh2007human"></d-cite>. Nothing about that network required new data; it was a new way of looking at a catalogue that already existed, and it showed disorders clustering by shared genetic origin. Two years later Hidalgo and colleagues built a phenotypic disease network from the disease histories of more than 30 million patients, linking diseases that co-occurred in the same people, and found that patients tended to develop diseases close in the network to those they already had <d-cite key="hidalgo2009dynamic"></d-cite>. That is very nearly the kind of network my research built for mild TBI, on a much smaller scale, and the field that grew around these ideas is now often called network medicine <d-cite key="barabasi2011network"></d-cite>.
+Some of the most striking uses of graphs in medicine are recastings like this. In 2007 Goh and colleagues joined 1,284 disorders whenever one of 1,777 genes was implicated in both <d-cite key="goh2007human"></d-cite>. That needed no new data, and it showed disorders clustering by shared genetic origin. Hidalgo and colleagues linked diseases that co-occurred in the histories of more than 30 million patients, and found that patients tended to develop diseases close in the network to those they already had <d-cite key="hidalgo2009dynamic"></d-cite>. That is very nearly what my research built for mild TBI, on a much smaller scale, in what is now often called network medicine <d-cite key="barabasi2011network"></d-cite>.
 
-The recasting also works with people as the nodes. Christakis and Fowler followed a network of 12,067 people from the Framingham Heart Study over three decades and reported that a person's chance of becoming obese rose by 57% if a friend became obese <d-cite key="christakis2007spread"></d-cite>, a finding that started a long and useful argument about how much of that is contagion and how much is people choosing similar friends. Epidemics are the clearest case of all. On networks where a few nodes have enormous numbers of contacts, Pastor-Satorras and Vespignani showed that an infection need not cross any threshold of infectiousness to persist <d-cite key="pastorsatorras2001epidemic"></d-cite>, which is a formal version of why super-spreaders matter. And the same structure that makes such networks robust to random failures makes them fragile to the targeted loss of their hubs <d-cite key="albert2000error"></d-cite>, which is why it matters so much to know which nodes those are.
+Hubs matter beyond medicine too. On networks where a few nodes have enormous numbers of contacts, an infection need not cross any threshold of infectiousness to persist <d-cite key="pastorsatorras2001epidemic"></d-cite>, a formal version of why super-spreaders matter. Such networks are robust to random failures but fragile to the targeted loss of their hubs <d-cite key="albert2000error"></d-cite>.
 
 ## From people to diseases
 
-Everything so far has been about networks where the nodes were obvious: people, airports, land masses. The research in Part 3 makes one more recasting, and it is the least obvious of all. The raw data is a table of people, each with a list of conditions they do or do not have. Nobody hands you a network. You have to decide that the conditions will be the nodes, and that two conditions are connected when they turn up together in the same people.
+So far the nodes have been obvious. Part 3 makes the least obvious recasting of all. The raw data is a table of people, each with conditions they do or do not have, and nobody hands you a network. You have to decide that conditions are the nodes, and that two are connected when they turn up in the same people.
 
 <figure class="tbi-fig tbi2-fig l-body-outset">
   <div class="tbi-kicker">Turning people into a disease network</div>
@@ -595,14 +581,14 @@ Everything so far has been about networks where the nodes were obvious: people, 
     <button class="tbi-btn" id="tbi2-pd-reset" type="button">Start again</button>
   </div>
   <div class="tbi-readout" id="tbi2-pd-read" aria-live="polite"></div>
-  <figcaption>Ten invented people, not patients and not data from the study: an illustration of the construction only. Each person you add draws or thickens an edge between every pair of conditions they have, and each condition grows with the number of people who have it. Colours follow the condition groups used throughout the series.</figcaption>
+  <figcaption>Ten invented people, not patients or study data: an illustration of the construction only. Each person added draws or thickens an edge between every pair of their conditions.</figcaption>
 </figure>
 
-Add everyone and look at what you get. Depression ends up connected to almost everything, but that is partly because depression is the most common condition among these ten invented people; a common condition will co-occur with lots of others by chance alone. Counting shared people is therefore not quite the right weight for an edge. What you want to know is whether two conditions occur together _more than you would expect if they had nothing to do with each other_, and that is a question about the people who have neither as well as the people who have both, which is why Person 10, who adds nothing to the drawing, still matters. Part 3 answers it with a correlation coefficient for yes-or-no data and a significance test, and only draws an edge when the association is unlikely to be a coincidence.
+Add everyone, and depression ends up connected to almost everything, partly because it is the most common condition here. A common condition co-occurs with many others by chance alone. What you want to know is whether two conditions occur together _more than if they had nothing to do with each other_. That depends on the people who have neither as well as those who have both, which is why Person 10, who adds nothing to the drawing, still matters. Part 3 answers it with a correlation coefficient for yes-or-no data and a significance test, and draws an edge only when the association is unlikely to be coincidence.
 
-Once that network exists, every measure in this post becomes a question about brain injury. What would a hub be: a condition so entangled with others that treating it might ease several more? What would a bridge be: a condition that links, say, mental health conditions to cardiovascular ones, so that it sits between two specialities that rarely talk? What would a triangle be: three conditions that keep company, and what might they share? Would the network be assortative, with the most comorbid conditions clinging together in a core? Would it look different for younger and older people? And how much of what we see would reflect the biology of an injured brain, rather than who gets diagnosed with what, and who stays in a study long enough to be asked?
+Once that network exists, every measure here becomes a question about brain injury. Would a hub be a condition so entangled that treating it might ease several others? Would a bridge sit between mental health and cardiovascular conditions, and between specialities that rarely talk? Would the network differ between younger and older people? And how much of it would reflect an injured brain, rather than who gets diagnosed, and who stays in a study long enough to be asked?
 
-Some of those questions the study could answer, and some it could not, and Part 3 tries to be clear about which are which.
+Some of those questions the study could answer and some it could not, and Part 3 tries to be clear about which are which.
 
 <nav class="tbi-series" aria-label="Series">
   <a href="{{ '/blog/2026/tbi-part-1-the-quiet-injury/' | relative_url }}"><span class="tbi-series-num">Part 1</span><span class="tbi-series-title">The quiet injury</span></a>
