@@ -1,7 +1,6 @@
 // Atmospheric Clarity — ambient visual details
 // Hero layout, radial glows, concentric rings, gradient separators, dark-mode body gradient
 
-
 // Mobile: center image and header only
 @media (max-width: 575px) {
   .about .post-header {
@@ -26,7 +25,7 @@ html[data-theme="dark"] body {
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -45,7 +44,7 @@ html[data-theme="dark"] body {
 }
 
 :root {
-  --atmo-glow-1: rgba(100, 130, 180, 0.10);
+  --atmo-glow-1: rgba(100, 130, 180, 0.1);
   --atmo-glow-2: rgba(140, 100, 160, 0.06);
   --atmo-ring-color: rgba(100, 130, 180, 0.12);
   --atmo-separator-color: rgba(0, 0, 0, 0.06);
@@ -54,7 +53,7 @@ html[data-theme="dark"] body {
 html[data-theme="dark"] {
   --atmo-glow-1: rgba(60, 120, 180, 0.24);
   --atmo-glow-2: rgba(100, 65, 145, 0.14);
-  --atmo-ring-color: rgba(100, 140, 200, 0.10);
+  --atmo-ring-color: rgba(100, 140, 200, 0.1);
   --atmo-separator-color: rgba(255, 255, 255, 0.07);
 }
 
@@ -74,10 +73,21 @@ html[data-theme="dark"] {
     border-radius: 50%;
     border: 1px solid var(--atmo-ring-color);
 
-    &:nth-child(1) { inset: 0; }
-    &:nth-child(2) { inset: 25px; opacity: 0.7; }
-    &:nth-child(3) { inset: 50px; opacity: 0.4; }
-    &:nth-child(4) { inset: 75px; opacity: 0.2; }
+    &:nth-child(1) {
+      inset: 0;
+    }
+    &:nth-child(2) {
+      inset: 25px;
+      opacity: 0.7;
+    }
+    &:nth-child(3) {
+      inset: 50px;
+      opacity: 0.4;
+    }
+    &:nth-child(4) {
+      inset: 75px;
+      opacity: 0.2;
+    }
   }
 }
 
@@ -91,7 +101,7 @@ html[data-theme="dark"] {
 
 // Homepage section titles
 .atmo-section-title {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 2px;
@@ -117,7 +127,9 @@ html[data-theme="dark"] {
     border-radius: 8px;
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
       border-color: var(--global-theme-color);
@@ -144,7 +156,7 @@ html[data-theme="dark"] {
   }
 
   th {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.7rem;
     font-weight: 400;
     color: var(--global-text-color-dim);
@@ -159,7 +171,7 @@ html[data-theme="dark"] {
   }
 
   .news-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 0.95rem;
     color: var(--global-text-color);
@@ -178,7 +190,7 @@ html[data-theme="dark"] {
     padding-top: 1rem;
   }
   .cv-hero-kicker {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 2.5px;
@@ -187,7 +199,7 @@ html[data-theme="dark"] {
     margin-bottom: 1.1rem;
   }
   .cv-hero-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: 2.6rem;
     line-height: 1.15;
@@ -200,7 +212,7 @@ html[data-theme="dark"] {
     }
   }
   .cv-hero-lede {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.98rem;
     line-height: 1.7;
@@ -223,7 +235,7 @@ html[data-theme="dark"] {
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.02);
     color: var(--global-text-color);
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.82rem;
     letter-spacing: 0.4px;
     text-decoration: none;
@@ -235,12 +247,12 @@ html[data-theme="dark"] {
     color: var(--global-theme-color);
   }
   .cv-pdf-icon {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.72rem;
     opacity: 0.7;
   }
   .cv-hero-meta {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.72rem;
     color: var(--global-text-color-dim);
     letter-spacing: 0.5px;
@@ -248,8 +260,12 @@ html[data-theme="dark"] {
 
   // Drop the old .card styling on CV sections
   .cv {
-    .card { display: contents; }
-    .card-title { display: none; }
+    .card {
+      display: contents;
+    }
+    .card-title {
+      display: none;
+    }
   }
 
   .cv-section {
@@ -265,7 +281,7 @@ html[data-theme="dark"] {
     margin-top: 1.5rem;
   }
   .cv-section-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: 1.6rem;
     color: var(--global-text-color);
@@ -276,7 +292,7 @@ html[data-theme="dark"] {
 
 // ============ TOC sidebar — scroll-progress visual ============
 nav#toc-sidebar {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 0.78rem;
   letter-spacing: 0.2px;
 
@@ -287,10 +303,12 @@ nav#toc-sidebar {
   ul ul {
     padding-left: 0.85rem;
     font-size: 0.74rem;
-    display: block;  // override bootstrap-toc collapsing inactive branches
+    display: block; // override bootstrap-toc collapsing inactive branches
   }
   // Ensure all nested lists stay expanded
-  li > ul { display: block; }
+  li > ul {
+    display: block;
+  }
 
   a {
     display: block;
@@ -298,7 +316,10 @@ nav#toc-sidebar {
     border-left: 1px solid var(--global-divider-color);
     text-decoration: none;
     color: var(--global-text-color);
-    transition: color 0.25s ease, border-color 0.25s ease, padding-left 0.2s ease;
+    transition:
+      color 0.25s ease,
+      border-color 0.25s ease,
+      padding-left 0.2s ease;
     line-height: 1.4;
   }
   a:hover {
@@ -364,7 +385,7 @@ nav#toc-sidebar {
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.78rem;
     color: var(--global-text-color-light);
     margin-bottom: 0.9rem;
@@ -412,7 +433,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 1.7rem;
     line-height: 1.25;
@@ -422,7 +443,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-institution {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.9rem;
     color: var(--global-text-color-light);
@@ -437,7 +458,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-description {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
     line-height: 1.75;
@@ -449,7 +470,7 @@ nav#toc-sidebar {
     list-style: none;
     padding: 0;
     margin: 0 0 1rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.95rem;
     line-height: 1.7;
@@ -461,7 +482,7 @@ nav#toc-sidebar {
       margin-bottom: 0.5rem;
     }
     > li::before {
-      content: '—';
+      content: "—";
       position: absolute;
       left: 0;
       color: var(--global-text-color-dim);
@@ -483,7 +504,7 @@ nav#toc-sidebar {
       margin-bottom: 0.25rem;
     }
     > li::before {
-      content: '·';
+      content: "·";
       position: absolute;
       left: 0;
       color: var(--global-text-color-dim);
@@ -491,7 +512,7 @@ nav#toc-sidebar {
   }
 
   .atmo-cv-pill-label {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.62rem;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -505,7 +526,7 @@ nav#toc-sidebar {
     font-weight: 500;
 
     &::before {
-      content: '◆';
+      content: "◆";
       color: var(--global-theme-color);
       opacity: 0.7;
     }
@@ -532,7 +553,7 @@ nav#toc-sidebar {
     padding: 0.38rem 0.7rem;
     border: 1px solid rgba(135, 206, 235, 0.4);
     border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.78rem;
     color: var(--global-text-color);
@@ -541,7 +562,10 @@ nav#toc-sidebar {
     cursor: default;
     position: relative;
 
-    i { opacity: 0.7; font-size: 0.72rem; }
+    i {
+      opacity: 0.7;
+      font-size: 0.72rem;
+    }
 
     &.has-tooltip {
       cursor: help;
@@ -576,7 +600,7 @@ nav#toc-sidebar {
     padding: 0.42rem 0.7rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 400;
     font-size: 0.78rem;
     color: var(--global-text-color);
@@ -585,7 +609,10 @@ nav#toc-sidebar {
     cursor: default;
     position: relative;
 
-    i { opacity: 0.75; font-size: 0.72rem; }
+    i {
+      opacity: 0.75;
+      font-size: 0.72rem;
+    }
 
     &.has-tooltip {
       cursor: help;
@@ -612,7 +639,7 @@ nav#toc-sidebar {
     border: 1px solid var(--global-divider-color);
     border-radius: 6px;
     padding: 0.55rem 0.7rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.75rem;
     font-weight: 400;
     line-height: 1.45;
@@ -623,12 +650,16 @@ nav#toc-sidebar {
     text-transform: none;
     letter-spacing: normal;
     opacity: 0;
-    transition: opacity 0.18s ease, transform 0.18s ease;
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease;
     pointer-events: none;
     z-index: 10;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
 
-    &::before { content: none; }
+    &::before {
+      content: none;
+    }
   }
 
   .atmo-cv-media {
@@ -645,10 +676,16 @@ nav#toc-sidebar {
     aspect-ratio: 16 / 9;
     border-radius: 6px;
     overflow: hidden;
-    iframe, video { width: 100%; height: 100%; border: none; display: block; }
+    iframe,
+    video {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
   }
   .atmo-cv-media-caption {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.78rem;
     color: var(--global-text-color-dim);
     margin-bottom: 0.5rem;
@@ -664,7 +701,7 @@ nav#toc-sidebar {
     padding: 0.4rem 0.85rem;
     border: 1px solid var(--global-divider-color);
     border-radius: 5px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.78rem;
     color: var(--global-text-color);
     text-decoration: none;
@@ -721,14 +758,13 @@ nav#toc-sidebar {
   }
 }
 
-
 .blog-page {
   position: relative;
   padding-bottom: 7rem;
 
   // Fixed to the viewport so the glows never meet the edge of the content box
   &::before {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
     pointer-events: none;
@@ -778,7 +814,7 @@ nav#toc-sidebar {
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 2.5px;
@@ -797,7 +833,7 @@ nav#toc-sidebar {
   }
 
   .blog-hero-count {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     letter-spacing: 1px;
     text-transform: none;
     padding-left: 0.9rem;
@@ -805,7 +841,7 @@ nav#toc-sidebar {
   }
 
   .blog-hero-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: clamp(2.6rem, 6.2vw, 4.6rem);
     line-height: 1.04;
@@ -832,7 +868,7 @@ nav#toc-sidebar {
   }
 
   .blog-hero-lede {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 300;
     font-size: 1.05rem;
     line-height: 1.75;
@@ -871,7 +907,7 @@ nav#toc-sidebar {
 
     // Cursor-following light
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
@@ -897,7 +933,6 @@ nav#toc-sidebar {
       .blog-entry-arrow {
         transform: translateX(6px);
       }
-
     }
   }
 
@@ -971,7 +1006,7 @@ nav#toc-sidebar {
     left: 1.75rem;
     right: 1.75rem;
     bottom: 1.25rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.72rem;
     letter-spacing: 0.4px;
     color: var(--global-text-color-dim);
@@ -982,7 +1017,7 @@ nav#toc-sidebar {
     inset: 0;
     display: grid;
     place-items: center;
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-style: italic;
     font-weight: 300;
     font-size: 9rem;
@@ -993,20 +1028,20 @@ nav#toc-sidebar {
   .blog-entry-date {
     display: flex;
     gap: 0.9rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.7rem;
     letter-spacing: 0.5px;
     color: var(--global-text-color-dim);
     margin-bottom: 1.1rem;
 
     span::before {
-      content: '·';
+      content: "·";
       margin-right: 0.9rem;
     }
   }
 
   .blog-entry-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 1.75rem;
     line-height: 1.18;
@@ -1021,7 +1056,7 @@ nav#toc-sidebar {
   }
 
   .blog-entry-description {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-weight: 300;
     font-size: 0.95rem;
     line-height: 1.75;
@@ -1033,7 +1068,7 @@ nav#toc-sidebar {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: 0.6px;
@@ -1052,7 +1087,7 @@ nav#toc-sidebar {
     margin: 1rem 0 0 0.25rem;
 
     a {
-      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-family: "Space Grotesk", system-ui, sans-serif;
       font-size: 0.68rem;
       letter-spacing: 0.4px;
       color: var(--global-text-color-dim);
@@ -1060,7 +1095,9 @@ nav#toc-sidebar {
       padding: 0.25rem 0.7rem;
       border-radius: 999px;
       border: 1px solid var(--atmo-separator-color);
-      transition: color 0.2s ease, border-color 0.2s ease;
+      transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
 
       &:hover {
         color: var(--global-theme-color);
@@ -1073,7 +1110,7 @@ nav#toc-sidebar {
     background: transparent;
     border-color: var(--atmo-separator-color);
     color: var(--global-text-color-light);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.8rem;
   }
   .pagination .page-item.active .page-link {
@@ -1186,7 +1223,7 @@ nav#toc-sidebar {
   border: 1px solid var(--atmo-separator-color);
   background: var(--global-bg-color);
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.3);
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 0.75rem;
   line-height: 1.45;
   color: var(--global-text-color-light);

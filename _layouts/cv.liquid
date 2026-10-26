@@ -9,7 +9,10 @@ layout: default
       {% endif %}
       <h1 class="cv-hero-title">
         {% if page.hero_title_strong or page.hero_title_rest %}
-          {% if page.hero_title_strong %}<strong>{{ page.hero_title_strong }}</strong>{% endif %}{% if page.hero_title_rest %} {{ page.hero_title_rest }}{% endif %}
+          {% if page.hero_title_strong -%}
+            <strong>{{ page.hero_title_strong }}</strong>
+          {%- endif -%}
+          {%- if page.hero_title_rest %} {{ page.hero_title_rest }}{% endif %}
         {% else %}
           {{ page.title }}
         {% endif %}
