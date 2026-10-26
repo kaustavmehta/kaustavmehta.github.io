@@ -215,7 +215,7 @@ Much of the spread comes from mild injury, which is most injury and often never 
 
 One self-reported estimate puts lifetime prevalence at up to 40% of adults <d-cite key="critchley2020epi"></d-cite>. I find that hard to square with how rarely anyone mentions having had one. I suspect much of it is the kind of thing people describe as “I hit my head” and then stop thinking about.
 
-Who gets hurt, and how, depends on where they live and how old they are. In high-income countries most TBI comes from falls, “particularly in older people (aged ≥65 years), who often have comorbidities” <d-cite key="maas2022lancet"></d-cite>. In the United States, rates were highest in people aged 75 and over <d-cite key="taylor2017mmwr"></d-cite>. In low- and middle-income countries road traffic dominates, “particularly those involving motorcyclists” <d-cite key="maas2022lancet"></d-cite>.
+Who gets hurt depends on where people live and how old they are. In high-income countries most TBI comes from falls, “particularly in older people (aged ≥65 years), who often have comorbidities” <d-cite key="maas2022lancet"></d-cite>. In the United States, rates were highest in people aged 75 and over <d-cite key="taylor2017mmwr"></d-cite>. In low- and middle-income countries road traffic dominates, “particularly those involving motorcyclists” <d-cite key="maas2022lancet"></d-cite>.
 
 <figure class="tbi-fig l-body-outset">
   <div class="tbi-kicker">How the injuries happen, by source</div>
@@ -228,7 +228,7 @@ Who gets hurt, and how, depends on where they live and how old they are. In high
     <span><span class="tbi-swatch" style="background: var(--tbi-other); opacity: 0.55"></span>Other</span>
     <span><span class="tbi-swatch" style="border: 1px solid var(--tbi-ink-2)"></span>Not broken down in the source</span>
   </div>
-  <figcaption>Data: shares of TBI by cause, as each source reports them <d-cite key="maas2022lancet,dewan2019jns,gururaj2002,massenburg2017india,tbims2022profile"></d-cite>. The sources define their categories differently (the US database’s “vehicular” includes more than road crashes), so compare shapes rather than decimals. Hover over, tap or tab to a segment for its source.</figcaption>
+  <figcaption>Data: shares of TBI by cause, as each source reports them <d-cite key="maas2022lancet,dewan2019jns,gururaj2002,massenburg2017india,tbims2022profile"></d-cite>. The sources define categories differently, so compare shapes rather than decimals. Hover over, tap or tab to a segment for its source.</figcaption>
 </figure>
 
 India deserves its own paragraph, partly because I live here and partly because the numbers are so thin. The most-cited estimate is still from 2002: “nearly 1.5 to 2 million persons are injured” every year, mostly on the roads <d-cite key="gururaj2002"></d-cite>. That a twenty-year-old figure is still the reference point is itself a finding. A 2017 review of 72 Indian hospital studies found a mean in-hospital mortality of 24.6%, and judged the quality of reporting low <d-cite key="massenburg2017india"></d-cite>.
@@ -265,14 +265,14 @@ The model below is a real brain surface, reconstructed from MRI. Turn it, open t
 <figure class="tbi-fig tbi1-brain-fig l-page">
   <div class="tbi-kicker">The brain, region by region</div>
   <div class="tbi-brain" id="tbi-brain" data-mode="explore"></div>
-  <figcaption id="tbi1-brain-cap-explore">Anatomy, not a schematic: FreeSurfer’s fsaverage cortex (an average of 40 adult brains reconstructed from MRI) with the Destrieux, Harvard-Oxford and Juelich atlases. The skull is simplified, and the region descriptions are my summaries. Drag to turn, choose a region, and use Skull, See-through and Cutaway to look inside.</figcaption>
+  <figcaption id="tbi1-brain-cap-explore">Anatomy, not a schematic: FreeSurfer’s fsaverage cortex (an average of 40 adult brains from MRI) with the Destrieux, Harvard-Oxford and Juelich atlases. The skull is simplified, and the region descriptions are my summaries. Drag to turn, choose a region, and use Skull, See-through and Cutaway.</figcaption>
 </figure>
 
-The brain does not divide its work this neatly, but the broad strokes matter. The frontal lobes, especially their underside, are heavily involved in planning, holding back impulses and regulating emotion. The temporal lobes hold the machinery for forming new memories and processing emotion. Both sit on the rough parts of the skull floor. If you were designing a skull to protect personality, mood and memory, you would not put them there.
+The brain does not divide its work neatly, but roughly, the frontal lobes, especially their underside, are heavily involved in planning, holding back impulses and regulating emotion. The temporal lobes hold the machinery for forming new memories and processing emotion. Both sit on the rough parts of the skull floor. If you were designing a skull to protect personality, mood and memory, you would not put them there.
 
 ## What a blow does
 
-Now strike the box. The skull is pushed one way, and for an instant the loosely held brain stays where it was. The skull’s inner wall catches up and compresses it on the struck side. When the skull stops, the brain carries on and meets the far wall. The bruise at the site of the blow is called a coup injury, and the one opposite a contrecoup injury. Most non-penetrating injury comes from “rapid acceleration or deceleration of the head, with or without impact” <d-cite key="hilton2020neuropath"></d-cite>. The motion is what hurts the brain, and the skull does not need to break.
+Now strike the box. The skull moves, and for an instant the loosely held brain stays where it was. The skull’s inner wall catches up and compresses it on the struck side. When the skull stops, the brain carries on and meets the far wall. The bruise at the site of the blow is called a coup injury, and the one opposite a contrecoup injury. Most non-penetrating injury comes from “rapid acceleration or deceleration of the head, with or without impact” <d-cite key="hilton2020neuropath"></d-cite>. The motion is what hurts the brain, and the skull does not need to break.
 
 Below is a deliberately crude model, a soft body in fluid inside a rigid shell with a ridged floor at the front. It is not a simulation of a brain, but it obeys the same rule: a soft, loosely held thing lags behind its container.
 
@@ -301,14 +301,14 @@ The 3D model does the same on real anatomy.
 <figure class="tbi-fig tbi1-brain-fig l-page">
   <div class="tbi-kicker">Coup, contrecoup and shear on a real brain surface</div>
   <div class="tbi-brain" id="tbi-brain-impact" data-mode="impact" data-scenario="back"></div>
-  <figcaption id="tbi1-brain-cap-impact">An illustration on MRI-derived anatomy, using toy mechanics rather than a finite-element simulation; severity is unitless and the times are illustrative. The pattern it reproduces, frontal and temporal bruising and deeper axonal injury with harder rotation, comes from the work cited in the text <d-cite key="bigler2007,gennarelli1982,adams1989dai"></d-cite>. Choose the blow, press Strike, and scrub the timeline to replay. The skull is intact every time.</figcaption>
+  <figcaption id="tbi1-brain-cap-impact">An illustration on MRI-derived anatomy, with toy mechanics rather than a finite-element simulation; severity is unitless and the times are illustrative. The pattern it reproduces comes from the work cited in the text <d-cite key="bigler2007,gennarelli1982,adams1989dai"></d-cite>. Choose the blow, press Strike, and scrub the timeline to replay. The skull is intact every time.</figcaption>
 </figure>
 
 ## When the head turns
 
 Surface bruises are only half the story, and for mild injury probably the smaller half. In 1943 the physicist A. H. S. Holbourn argued that brain tissue is very hard to compress but very easy to shear, so rotation damages it more than straight-line motion does <d-cite key="holbourn1943"></d-cite>. Twist a plate of jelly quickly and the edge goes with the plate while the middle lags, stretching the jelly in between. Ommaya and Gennarelli later proposed that harder rotation shears progressively deeper structures <d-cite key="ommaya1974"></d-cite>.
 
-The experimental evidence is from monkeys, and it is not pleasant to read, but it is clear. In 1982 Gennarelli and colleagues rotated the heads of 45 primates without any impact, varying only the direction. Front-to-back rotation mostly caused a brief coma, and every concussed animal recovered. Sideways rotation left 20 animals in coma for more than six hours, with the axonal damage seen in severe human injury. The authors concluded that “axonal damage produced by coronal head acceleration is a major cause of prolonged traumatic coma and its sequelae” <d-cite key="gennarelli1982"></d-cite>. Nothing had struck any of those skulls.
+The evidence is from monkeys, unpleasant to read but clear. In 1982 Gennarelli and colleagues rotated the heads of 45 primates without any impact, varying only the direction. Front-to-back rotation mostly caused a brief coma, and every concussed animal recovered. Sideways rotation left 20 animals in coma for more than six hours, with the axonal damage seen in severe human injury. The authors concluded that “axonal damage produced by coronal head acceleration is a major cause of prolonged traumatic coma and its sequelae” <d-cite key="gennarelli1982"></d-cite>. Nothing had struck any of those skulls.
 
 How hard is the motion in an ordinary concussion? The best numbers come from American football, where impacts can be filmed, reconstructed or recorded by helmet sensors.
 
@@ -320,7 +320,7 @@ How hard is the motion in an ordinary concussion? The best numbers come from Ame
   </div>
   <svg id="tbi1-accel" viewBox="0 0 640 190" role="img" aria-label="Head accelerations in concussive and non-concussive football impacts"></svg>
   <div class="tbi1-readout tbi-readout" id="tbi1-accel-read" aria-live="polite"></div>
-  <figcaption>Data. Straight-line: 31 reconstructed professional impacts <d-cite key="pellman2003"></d-cite> and 13 concussions recorded by helmet sensors in college players <d-cite key="guskiewicz2007"></d-cite>. Rotational: averages over 300,977 non-concussive and 57 concussive impacts, and the level at which the fitted risk of concussion reaches 50% <d-cite key="rowson2012rot"></d-cite>. One g is the acceleration of gravity. Hover over, tap or tab to a marker.</figcaption>
+  <figcaption>Data. Straight-line: 31 reconstructed professional impacts <d-cite key="pellman2003"></d-cite> and 13 concussions recorded by helmet sensors in college players <d-cite key="guskiewicz2007"></d-cite>. Rotational: averages over 300,977 non-concussive and 57 concussive impacts, and the level of 50% fitted concussion risk <d-cite key="rowson2012rot"></d-cite>. Hover over, tap or tab to a marker.</figcaption>
 </figure>
 
 A concussed professional player’s head took, on average, about 98 times the acceleration of gravity for about 15 milliseconds <d-cite key="pellman2003"></d-cite>. What I find more telling is the overlap. Concussive impacts in college players ranged from about 61 g to 169 g, and clinical severity had nothing to do with impact size <d-cite key="guskiewicz2007"></d-cite>. The same blow can concuss one person and not the next.
@@ -448,7 +448,7 @@ The most widely used measure of severity is the Glasgow Coma Scale, published by
       <div class="tbi1-scale" id="tbi1-gcs-scale" aria-hidden="true"></div>
     </div>
   </div>
-  <figcaption>The components in the official wording <d-cite key="gcs_website"></d-cite>, with the severity bands from my thesis and both papers <d-cite key="mehta2023thesis,sudhakar2023frontiers,mehta2025bmc"></d-cite>. Choose a response in each column; arrow keys move within a column. If a component is “not testable”, the official guidance is not to report a total.</figcaption>
+  <figcaption>The components in the official wording <d-cite key="gcs_website"></d-cite>, with the severity bands from my thesis and both papers <d-cite key="mehta2023thesis,sudhakar2023frontiers,mehta2025bmc"></d-cite>. Choose a response in each column; arrow keys move within a column.</figcaption>
 </figure>
 
 Play with it and something odd shows up. Eyes opening to speech, confused talk and obeying commands give 3 + 4 + 6 = 13, which is mild. Eyes open spontaneously, orientated talk, but only localising to pressure give 4 + 5 + 5 = 14, also mild, and milder. Very different people land on the same total. Forty years on, Teasdale himself wrote that “individual patients are best described by the three components of the coma scale; whereas the derived total coma score should be used to characterise groups” <d-cite key="teasdale2014"></d-cite>. That caveat applies to my own work, which used a single total taken at admission.
@@ -474,11 +474,11 @@ Large studies have since found it worse than that. TRACK-TBI followed 1,154 peop
 
 At two weeks, 87% of the mild TBI group reported some limitation. At twelve months 53% still did, against 38% of the orthopaedic patients <d-cite key="nelson2019jamaneurol"></d-cite>. The comparison group answers the obvious objection. Any injury bad enough for a trauma centre is disruptive, so some of that 53% has nothing to do with the brain, but the excess is harder to explain away. At three and six months, about a fifth of the mild TBI group had probable post-traumatic stress disorder (PTSD) or major depression. In the orthopaedic group it was roughly a tenth <d-cite key="stein2019jamapsych"></d-cite>. In Europe, CENTER-TBI found that 30% of people sent home from the emergency department had not fully recovered at six months <d-cite key="steyerberg2019centertbi"></d-cite>.
 
-These are the people most likely to be told they are fine and sent home. In CENTER-TBI only 26% were given written information, and 6% a follow-up appointment <d-cite key="maas2022lancet"></d-cite>. The blunt labels cut the other way too. In TRACK-TBI, 52.4% of people with severe TBI and 75% with moderate TBI had a favourable outcome by twelve months <d-cite key="mccrea2021jamaneurol"></d-cite>. The label given at admission is a rough guide to what follows, in both directions.
+Yet in CENTER-TBI only 26% were given written information, and 6% a follow-up appointment <d-cite key="maas2022lancet"></d-cite>. The blunt labels cut the other way too. In TRACK-TBI, 52.4% of people with severe TBI and 75% with moderate TBI had a favourable outcome by twelve months <d-cite key="mccrea2021jamaneurol"></d-cite>. The label given at admission is a rough guide to what follows, in both directions.
 
 ## A process, not an event
 
-In 2010 Brent Masel and Douglas DeWitt published a paper whose title is the argument: “Traumatic brain injury: a disease process, not an event”. They argued that TBI “increases long-term mortality and reduces life expectancy”, and linked it to illnesses in and beyond the brain. Their aim was not to discourage patients, “but rather to emphasize that TBI should be managed as a chronic disease” <d-cite key="masel2010"></d-cite>. Outcomes can improve or worsen “up to two decades after injury” <d-cite key="wilson2017lancetneurol"></d-cite>. Between one and five years after injury, “decline occurs as frequently as improvement” <d-cite key="maas2022lancet"></d-cite>.
+In 2010 Brent Masel and Douglas DeWitt published a paper whose title is the argument: “Traumatic brain injury: a disease process, not an event”. They argued that TBI “increases long-term mortality and reduces life expectancy”, and linked it to illnesses in and beyond the brain. Their aim was not to discourage patients, “but rather to emphasize that TBI should be managed as a chronic disease” <d-cite key="masel2010"></d-cite>. Outcomes can improve or worsen “up to two decades after injury” <d-cite key="wilson2017lancetneurol"></d-cite>, and between one and five years, “decline occurs as frequently as improvement” <d-cite key="maas2022lancet"></d-cite>.
 
 The timeline below gathers some of the evidence. It is not one person’s story, and the studies do not follow the same people.
 
@@ -500,7 +500,7 @@ Some of these associations will be causal and some will not. People who fall ove
 
 ## Illnesses that travel together
 
-The word for what that timeline is circling is _comorbidity_. It means two or more conditions in the same person, together or one after the other. By itself, it says nothing about why. Two neighbouring words do claim a cause. A _complication_ is something the injury or its treatment directly brings about, usually soon after (a seizure in the first week). A _sequela_ is a lasting consequence of the injury (memory problems from a damaged temporal lobe). Comorbidity is the more agnostic term. It is the honest one for survey data like mine, which can show that two conditions go together but not how.
+The word for what that timeline is circling is _comorbidity_. It means two or more conditions in the same person, together or one after the other. By itself, it says nothing about why. Two neighbouring words do claim a cause. A _complication_ is something the injury or its treatment directly brings about, usually soon after (a seizure in the first week). A _sequela_ is a lasting consequence of the injury (memory problems from a damaged temporal lobe). Comorbidity is the agnostic term, and the honest one for survey data like mine, which shows that two conditions go together but not how.
 
 Why do conditions go together? I found this the most interesting question in the project, and it is the one my data could answer least. There are at least six routes, and they leave very similar footprints.
 
@@ -524,7 +524,7 @@ Why do conditions go together? I found this the most interesting question in the
   <figcaption>An illustration, not data: 400 simulated people per route, from probabilities I chose. “Expected by chance” is the share with A times the share with B times 400. Every route except chance gives more people with both than expected, and from the counts alone they look alike. Choose a route.</figcaption>
 </figure>
 
-The first is chance: two common conditions will often coincide. The second is causation, as when chronic pain wears someone down into depression. The third is a shared mechanism, such as damage to emotional circuits producing both anxiety and low mood. The fourth is a shared risk factor, or confounder; age, for instance, raises the risk of high blood pressure and cataracts together. The fifth is treatment, where a medicine for one condition brings on another. The sixth is detection, because people already under a doctor’s care get examined and diagnosed more. My project could not tell these apart. Knowing they exist, though, changes how you read every line in a comorbidity network.
+The first is chance, since two common conditions will often coincide. The second is causation, as when chronic pain leads to depression. The third is a shared mechanism, such as damage to emotional circuits producing both anxiety and low mood. The fourth is a shared risk factor, or confounder; age, for instance, raises the risk of high blood pressure and cataracts together. The fifth is treatment, where a medicine for one condition brings on another. The sixth is detection, because people already under a doctor’s care get examined and diagnosed more. My project could not tell these apart. Knowing they exist, though, changes how you read every line in a comorbidity network.
 
 Here is what is known, and what is suspected, about the conditions that follow a brain injury.
 
@@ -547,7 +547,7 @@ Here is what is known, and what is suspected, about the conditions that follow a
   </div>
   <div class="tbi1-family" style="--fam: var(--tbi-neuro)">
     <h3>Neurological</h3>
-    <p>Seizures, sleep disorders and neurodegenerative disease are all associated with TBI <d-cite key="masel2010"></d-cite>, and TBI is a risk factor for epilepsy, stroke and neurodegeneration <d-cite key="wilson2017lancetneurol"></d-cite>. Continuing axonal degeneration is one proposed link <d-cite key="johnson2013axonal"></d-cite>.</p>
+    <p>Seizures, sleep disorders and neurodegenerative disease are all associated with TBI <d-cite key="masel2010"></d-cite>. Continuing axonal degeneration is one proposed link <d-cite key="johnson2013axonal"></d-cite>.</p>
   </div>
   <div class="tbi1-family" style="--fam: var(--tbi-musc)">
     <h3>Pain and the body</h3>
