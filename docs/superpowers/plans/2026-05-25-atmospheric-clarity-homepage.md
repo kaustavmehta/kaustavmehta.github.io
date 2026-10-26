@@ -14,29 +14,30 @@
 
 ## File Map
 
-| File | Action | Responsibility |
-|------|--------|---------------|
-| `assets/fonts/*.woff2` | Create | Self-hosted Newsreader, Space Grotesk, JetBrains Mono font files |
-| `_sass/_fonts.scss` | Create | `@font-face` declarations for all three font families |
-| `_sass/_variables.scss` | Modify | Add new color variables for atmospheric palette |
-| `_sass/_themes.scss` | Modify | Remap CSS custom properties to new colors for both light/dark |
-| `_sass/_base.scss` | Modify | Typography overrides (font-family on body, headings, code) |
-| `_sass/_atmospheric.scss` | Create | Homepage ambient glows, rings, gradient separators, dark-mode body gradient |
-| `_sass/_animations.scss` | Create | Scroll fade-in, hover states, page-load animations, reduced-motion |
-| `assets/css/main.scss` | Modify | Import new `_fonts`, `_atmospheric`, `_animations` partials |
-| `_includes/head.liquid` | Modify | Replace Google Fonts CDN link with nothing (fonts loaded via SCSS) |
-| `_config.yml` | Modify | Update google_fonts URL to empty/remove, set dark as default theme |
-| `_pages/about.md` | Modify | Enable `selected_papers: true`, `latest_posts.enabled: true` |
-| `_bibliography/papers.bib` | Modify | Add `selected={true}` to 2-3 key papers |
-| `_layouts/about.liquid` | Modify | Add atmospheric wrapper, section classes, ambient ring markup |
-| `assets/js/atmospheric.js` | Create | IntersectionObserver scroll animations, ambient parallax |
-| `_includes/scripts.liquid` | Modify | Include atmospheric.js on about page |
+| File                       | Action | Responsibility                                                              |
+| -------------------------- | ------ | --------------------------------------------------------------------------- |
+| `assets/fonts/*.woff2`     | Create | Self-hosted Newsreader, Space Grotesk, JetBrains Mono font files            |
+| `_sass/_fonts.scss`        | Create | `@font-face` declarations for all three font families                       |
+| `_sass/_variables.scss`    | Modify | Add new color variables for atmospheric palette                             |
+| `_sass/_themes.scss`       | Modify | Remap CSS custom properties to new colors for both light/dark               |
+| `_sass/_base.scss`         | Modify | Typography overrides (font-family on body, headings, code)                  |
+| `_sass/_atmospheric.scss`  | Create | Homepage ambient glows, rings, gradient separators, dark-mode body gradient |
+| `_sass/_animations.scss`   | Create | Scroll fade-in, hover states, page-load animations, reduced-motion          |
+| `assets/css/main.scss`     | Modify | Import new `_fonts`, `_atmospheric`, `_animations` partials                 |
+| `_includes/head.liquid`    | Modify | Replace Google Fonts CDN link with nothing (fonts loaded via SCSS)          |
+| `_config.yml`              | Modify | Update google_fonts URL to empty/remove, set dark as default theme          |
+| `_pages/about.md`          | Modify | Enable `selected_papers: true`, `latest_posts.enabled: true`                |
+| `_bibliography/papers.bib` | Modify | Add `selected={true}` to 2-3 key papers                                     |
+| `_layouts/about.liquid`    | Modify | Add atmospheric wrapper, section classes, ambient ring markup               |
+| `assets/js/atmospheric.js` | Create | IntersectionObserver scroll animations, ambient parallax                    |
+| `_includes/scripts.liquid` | Modify | Include atmospheric.js on about page                                        |
 
 ---
 
 ### Task 1: Download and Self-Host Fonts
 
 **Files:**
+
 - Create: `assets/fonts/newsreader-300.woff2`, `assets/fonts/newsreader-300-italic.woff2`, `assets/fonts/newsreader-400.woff2`
 - Create: `assets/fonts/space-grotesk-300.woff2`, `assets/fonts/space-grotesk-400.woff2`, `assets/fonts/space-grotesk-500.woff2`
 - Create: `assets/fonts/jetbrains-mono-400.woff2`
@@ -102,6 +103,7 @@ git commit -m "feat: add self-hosted Newsreader, Space Grotesk, JetBrains Mono f
 ### Task 2: Create Font-Face SCSS Partial
 
 **Files:**
+
 - Create: `_sass/_fonts.scss`
 - Modify: `assets/css/main.scss`
 
@@ -112,56 +114,56 @@ git commit -m "feat: add self-hosted Newsreader, Space Grotesk, JetBrains Mono f
 // Newsreader (headlines), Space Grotesk (body/UI), JetBrains Mono (code)
 
 @font-face {
-  font-family: 'Newsreader';
-  src: url('../fonts/newsreader-300.woff2') format('woff2');
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-300.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Newsreader';
-  src: url('../fonts/newsreader-300-italic.woff2') format('woff2');
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-300-italic.woff2") format("woff2");
   font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Newsreader';
-  src: url('../fonts/newsreader-400.woff2') format('woff2');
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Space Grotesk';
-  src: url('../fonts/space-grotesk-300.woff2') format('woff2');
+  font-family: "Space Grotesk";
+  src: url("../fonts/space-grotesk-300.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Space Grotesk';
-  src: url('../fonts/space-grotesk-400.woff2') format('woff2');
+  font-family: "Space Grotesk";
+  src: url("../fonts/space-grotesk-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Space Grotesk';
-  src: url('../fonts/space-grotesk-500.woff2') format('woff2');
+  font-family: "Space Grotesk";
+  src: url("../fonts/space-grotesk-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'JetBrains Mono';
-  src: url('../fonts/jetbrains-mono-400.woff2') format('woff2');
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -173,13 +175,7 @@ git commit -m "feat: add self-hosted Newsreader, Space Grotesk, JetBrains Mono f
 Add `"fonts"` as the FIRST import, before `"variables"`:
 
 ```scss
-@import
-  "fonts",
-  "variables",
-  "themes",
-  "layout",
-  "base",
-  ...
+@import "fonts", "variables", "themes", "layout", "base", ...;
 ```
 
 - [ ] **Step 3: Remove Google Fonts CDN link from `_includes/head.liquid`**
@@ -200,6 +196,7 @@ With nothing (delete the entire block). Fonts are now loaded via SCSS `@font-fac
 - [ ] **Step 4: Verify site rebuilds without errors**
 
 Check podman logs:
+
 ```bash
 podman logs --tail 5 al-folio-dev
 ```
@@ -218,6 +215,7 @@ git commit -m "feat: self-host fonts via @font-face, remove Google Fonts CDN"
 ### Task 3: Update Color System — Variables and Themes
 
 **Files:**
+
 - Modify: `_sass/_variables.scss`
 - Modify: `_sass/_themes.scss`
 
@@ -227,7 +225,7 @@ Add after the existing color declarations (after line 33, before `// Theme color
 
 ```scss
 // Atmospheric Clarity palette
-$atmo-canvas-light: #FAFAF8;
+$atmo-canvas-light: #fafaf8;
 $atmo-canvas-dark-start: #0c0c14;
 $atmo-canvas-dark-mid: #0e1520;
 $atmo-canvas-dark-end: #0a0e18;
@@ -329,6 +327,7 @@ git commit -m "feat: remap color system to Atmospheric Clarity palette"
 ### Task 4: Apply Typography Overrides
 
 **Files:**
+
 - Modify: `_sass/_base.scss`
 
 - [ ] **Step 1: Add font-family overrides at the top of `_sass/_base.scss`**
@@ -337,17 +336,25 @@ Add immediately after the opening comment block (before the existing `p, h1, h2.
 
 ```scss
 body {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-weight: 400;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Newsreader', Georgia, serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Newsreader", Georgia, serif;
   font-weight: 300;
 }
 
-code, pre, kbd, samp {
-  font-family: 'JetBrains Mono', monospace;
+code,
+pre,
+kbd,
+samp {
+  font-family: "JetBrains Mono", monospace;
 }
 ```
 
@@ -358,14 +365,14 @@ Find the `.post-title` rule in `_base.scss` (search for `post-title`) and ensure
 ```scss
 .post-header {
   .post-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 300;
     font-size: 1.8rem;
     line-height: 1.45;
   }
 
   .desc {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 2.5px;
@@ -384,7 +391,7 @@ Find the `.post` article content rules and add the hero/body typography for the 
 ```scss
 .about .post .clearfix {
   p {
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Space Grotesk", system-ui, sans-serif;
     font-size: 0.95rem;
     font-weight: 300;
     line-height: 1.8;
@@ -407,7 +414,7 @@ Find the navbar styling in `_base.scss` and add font overrides:
 
 ```scss
 .navbar {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
 
   .nav-link {
     font-size: 0.75rem;
@@ -417,7 +424,7 @@ Find the navbar styling in `_base.scss` and add font overrides:
   }
 
   .navbar-brand {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
   }
 }
@@ -426,6 +433,7 @@ Find the navbar styling in `_base.scss` and add font overrides:
 - [ ] **Step 5: Verify typography changes render correctly**
 
 Visit `http://127.0.0.1:8080`. Expected:
+
 - Navbar brand in Newsreader serif
 - Nav links in Space Grotesk
 - Page title (name) in Newsreader
@@ -444,6 +452,7 @@ git commit -m "feat: apply Newsreader + Space Grotesk typography system"
 ### Task 5: Create Atmospheric Visual Layer (Glows, Rings, Gradient Separators)
 
 **Files:**
+
 - Create: `_sass/_atmospheric.scss`
 - Modify: `assets/css/main.scss`
 
@@ -463,7 +472,7 @@ html[data-theme="dark"] body {
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -487,7 +496,7 @@ html[data-theme="dark"] body {
 }
 
 html[data-theme="dark"] {
-  --atmo-glow-1: rgba(60, 120, 180, 0.10);
+  --atmo-glow-1: rgba(60, 120, 180, 0.1);
   --atmo-glow-2: rgba(100, 65, 145, 0.07);
   --atmo-ring-color: rgba(100, 140, 200, 0.08);
   --atmo-separator-color: rgba(255, 255, 255, 0.04);
@@ -509,10 +518,21 @@ html[data-theme="dark"] {
     border-radius: 50%;
     border: 1px solid var(--atmo-ring-color);
 
-    &:nth-child(1) { inset: 0; }
-    &:nth-child(2) { inset: 25px; opacity: 0.7; }
-    &:nth-child(3) { inset: 50px; opacity: 0.4; }
-    &:nth-child(4) { inset: 75px; opacity: 0.2; }
+    &:nth-child(1) {
+      inset: 0;
+    }
+    &:nth-child(2) {
+      inset: 25px;
+      opacity: 0.7;
+    }
+    &:nth-child(3) {
+      inset: 50px;
+      opacity: 0.4;
+    }
+    &:nth-child(4) {
+      inset: 75px;
+      opacity: 0.2;
+    }
   }
 }
 
@@ -526,7 +546,7 @@ html[data-theme="dark"] {
 
 // Homepage section titles
 .atmo-section-title {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-family: "Space Grotesk", system-ui, sans-serif;
   font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 2px;
@@ -552,7 +572,9 @@ html[data-theme="dark"] {
     border-radius: 8px;
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
 
     &:hover {
       border-color: var(--global-theme-color);
@@ -564,7 +586,7 @@ html[data-theme="dark"] {
 // Latest posts on homepage
 .about .latest-posts-table {
   .news-title {
-    font-family: 'Newsreader', Georgia, serif;
+    font-family: "Newsreader", Georgia, serif;
     font-weight: 400;
     font-size: 0.95rem;
     color: var(--global-text-color);
@@ -576,7 +598,7 @@ html[data-theme="dark"] {
   }
 
   th {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     font-size: 0.65rem;
     color: var(--global-text-color-light);
     white-space: nowrap;
@@ -589,15 +611,7 @@ html[data-theme="dark"] {
 Add `"atmospheric"` after `"base"`:
 
 ```scss
-@import
-  "fonts",
-  "variables",
-  "themes",
-  "layout",
-  "base",
-  "atmospheric",
-  "animations",
-  ...
+@import "fonts", "variables", "themes", "layout", "base", "atmospheric", "animations", ...;
 ```
 
 (Add `"animations"` too — we'll create that file in Task 6.)
@@ -622,6 +636,7 @@ git commit -m "feat: add atmospheric visual layer — glows, rings, separators"
 ### Task 6: Create Animations SCSS Partial and JavaScript
 
 **Files:**
+
 - Create: `_sass/_animations.scss`
 - Create: `assets/js/atmospheric.js`
 
@@ -635,7 +650,9 @@ git commit -m "feat: add atmospheric visual layer — glows, rings, separators"
 .atmo-reveal {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 
   &.revealed {
     opacity: 1;
@@ -706,37 +723,39 @@ git commit -m "feat: add atmospheric visual layer — glows, rings, separators"
 ```javascript
 // Atmospheric Clarity — scroll animations and ambient parallax
 (function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   // Scroll reveal via IntersectionObserver
-  var reveals = document.querySelectorAll('.atmo-reveal');
+  var reveals = document.querySelectorAll(".atmo-reveal");
   if (reveals.length > 0) {
     var observer = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+            entry.target.classList.add("revealed");
             observer.unobserve(entry.target);
           }
         });
       },
       { threshold: 0.15 }
     );
-    reveals.forEach(function (el) { observer.observe(el); });
+    reveals.forEach(function (el) {
+      observer.observe(el);
+    });
   }
 
   // Ambient parallax on radial glows
-  var post = document.querySelector('.about .post');
+  var post = document.querySelector(".about .post");
   if (post) {
     var ticking = false;
-    window.addEventListener('scroll', function () {
+    window.addEventListener("scroll", function () {
       if (!ticking) {
         window.requestAnimationFrame(function () {
           var scrollY = window.scrollY;
           var maxScroll = document.body.scrollHeight - window.innerHeight;
           var progress = maxScroll > 0 ? scrollY / maxScroll : 0;
           var shift = (progress - 0.5) * 30; // max ±15px
-          post.style.setProperty('--atmo-parallax-y', shift + 'px');
+          post.style.setProperty("--atmo-parallax-y", shift + "px");
           ticking = false;
         });
         ticking = true;
@@ -751,11 +770,11 @@ git commit -m "feat: add atmospheric visual layer — glows, rings, separators"
 Add to the `.about .post::before` rule, after `background:`:
 
 ```scss
-  &::before {
-    // ... existing properties ...
-    transform: translateY(var(--atmo-parallax-y, 0));
-    transition: transform 0.1s linear;
-  }
+&::before {
+  // ... existing properties ...
+  transform: translateY(var(--atmo-parallax-y, 0));
+  transition: transform 0.1s linear;
+}
 ```
 
 - [ ] **Step 4: Verify both files are syntactically correct**
@@ -778,6 +797,7 @@ git commit -m "feat: add scroll animations and ambient parallax motion"
 ### Task 7: Update About Page Layout and Content
 
 **Files:**
+
 - Modify: `_layouts/about.liquid`
 - Modify: `_pages/about.md`
 - Modify: `_bibliography/papers.bib`
@@ -884,6 +904,7 @@ layout: default
 ```
 
 Key changes from the original:
+
 - Added `about` class to the `.post` wrapper
 - Added `atmo-hero-entrance` class to header, profile, and content
 - Wrapped sections with `atmo-reveal` and `atmo-separator`
@@ -941,6 +962,7 @@ In `sudhakar2023prevalence` entry, add after the `preview` line:
 - [ ] **Step 4: Verify the homepage renders with publications and posts**
 
 Visit `http://127.0.0.1:8080`. Expected:
+
 - Hero section with name, kicker subtitle, profile image
 - Body text below
 - Gradient separator
@@ -961,6 +983,7 @@ git commit -m "feat: update homepage layout with atmospheric sections and enable
 ### Task 8: Include Atmospheric JavaScript and Set Dark Default
 
 **Files:**
+
 - Modify: `_includes/scripts.liquid`
 - Modify: `_config.yml`
 
@@ -1014,11 +1037,13 @@ git commit -m "feat: include atmospheric.js on homepage, set dark as default the
 ### Task 9: Final Polish and Visual Verification
 
 **Files:**
+
 - Possibly adjust: `_sass/_atmospheric.scss`, `_sass/_base.scss`, `_sass/_animations.scss`
 
 - [ ] **Step 1: Desktop visual check**
 
 Visit `http://127.0.0.1:8080` and verify:
+
 - [ ] Warm white canvas (light) or deep gradient (dark) background
 - [ ] Newsreader serif for name heading and publication titles
 - [ ] Space Grotesk for nav, body, kicker, section titles
@@ -1034,6 +1059,7 @@ Visit `http://127.0.0.1:8080` and verify:
 - [ ] **Step 2: Mobile visual check**
 
 Use browser dev tools (F12 → responsive mode → pick a phone size) and verify:
+
 - [ ] Layout stacks properly on narrow screens
 - [ ] Profile image and text don't overlap
 - [ ] Typography is readable at mobile sizes
@@ -1043,6 +1069,7 @@ Use browser dev tools (F12 → responsive mode → pick a phone size) and verify
 - [ ] **Step 3: Fix any visual issues found**
 
 Adjust SCSS values as needed. Common fixes:
+
 - Glow opacity too strong/weak: adjust values in `_atmospheric.scss` `:root` / `html[data-theme="dark"]`
 - Ring positioning: adjust `bottom`/`right` values on `.ambient-rings`
 - Typography sizing: adjust `font-size` in `_base.scss` overrides
@@ -1051,6 +1078,7 @@ Adjust SCSS values as needed. Common fixes:
 - [ ] **Step 4: Reduced motion check**
 
 In browser dev tools, enable "Prefer reduced motion" (Rendering tab in Chrome DevTools, or `about:config` → `ui.prefersReducedMotion` in Firefox). Verify:
+
 - [ ] No scroll animations
 - [ ] No page-load fade
 - [ ] Content appears immediately and fully visible

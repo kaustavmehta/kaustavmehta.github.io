@@ -24,66 +24,66 @@ let applyTheme = (options = {}) => {
   let theme = determineComputedTheme();
 
   let updateTheme = () => {
-  setHighlight(theme);
-  setGiscusTheme(theme);
-  setSearchTheme(theme);
+    setHighlight(theme);
+    setGiscusTheme(theme);
+    setSearchTheme(theme);
 
-  // if mermaid is not defined, do nothing
-  if (typeof mermaid !== "undefined") {
-    setMermaidTheme(theme);
-  }
-
-  // if diff2html is not defined, do nothing
-  if (typeof Diff2HtmlUI !== "undefined") {
-    setDiff2htmlTheme(theme);
-  }
-
-  // if echarts is not defined, do nothing
-  if (typeof echarts !== "undefined") {
-    setEchartsTheme(theme);
-  }
-
-  // if Plotly is not defined, do nothing
-  if (typeof Plotly !== "undefined") {
-    setPlotlyTheme(theme);
-  }
-
-  // if vegaEmbed is not defined, do nothing
-  if (typeof vegaEmbed !== "undefined") {
-    setVegaLiteTheme(theme);
-  }
-
-  document.documentElement.setAttribute("data-theme", theme);
-
-  // Add class to tables.
-  let tables = document.getElementsByTagName("table");
-  for (let i = 0; i < tables.length; i++) {
-    if (theme == "dark") {
-      tables[i].classList.add("table-dark");
-    } else {
-      tables[i].classList.remove("table-dark");
+    // if mermaid is not defined, do nothing
+    if (typeof mermaid !== "undefined") {
+      setMermaidTheme(theme);
     }
-  }
 
-  // Set jupyter notebooks themes.
-  let jupyterNotebooks = document.getElementsByClassName("jupyter-notebook-iframe-container");
-  for (let i = 0; i < jupyterNotebooks.length; i++) {
-    let bodyElement = jupyterNotebooks[i].getElementsByTagName("iframe")[0].contentWindow.document.body;
-    if (theme == "dark") {
-      bodyElement.setAttribute("data-jp-theme-light", "false");
-      bodyElement.setAttribute("data-jp-theme-name", "JupyterLab Dark");
-    } else {
-      bodyElement.setAttribute("data-jp-theme-light", "true");
-      bodyElement.setAttribute("data-jp-theme-name", "JupyterLab Light");
+    // if diff2html is not defined, do nothing
+    if (typeof Diff2HtmlUI !== "undefined") {
+      setDiff2htmlTheme(theme);
     }
-  }
 
-  // Updates the background of medium-zoom overlay.
-  if (typeof medium_zoom !== "undefined") {
-    medium_zoom.update({
-      background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee", // + 'ee' for trasparency.
-    });
-  }
+    // if echarts is not defined, do nothing
+    if (typeof echarts !== "undefined") {
+      setEchartsTheme(theme);
+    }
+
+    // if Plotly is not defined, do nothing
+    if (typeof Plotly !== "undefined") {
+      setPlotlyTheme(theme);
+    }
+
+    // if vegaEmbed is not defined, do nothing
+    if (typeof vegaEmbed !== "undefined") {
+      setVegaLiteTheme(theme);
+    }
+
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // Add class to tables.
+    let tables = document.getElementsByTagName("table");
+    for (let i = 0; i < tables.length; i++) {
+      if (theme == "dark") {
+        tables[i].classList.add("table-dark");
+      } else {
+        tables[i].classList.remove("table-dark");
+      }
+    }
+
+    // Set jupyter notebooks themes.
+    let jupyterNotebooks = document.getElementsByClassName("jupyter-notebook-iframe-container");
+    for (let i = 0; i < jupyterNotebooks.length; i++) {
+      let bodyElement = jupyterNotebooks[i].getElementsByTagName("iframe")[0].contentWindow.document.body;
+      if (theme == "dark") {
+        bodyElement.setAttribute("data-jp-theme-light", "false");
+        bodyElement.setAttribute("data-jp-theme-name", "JupyterLab Dark");
+      } else {
+        bodyElement.setAttribute("data-jp-theme-light", "true");
+        bodyElement.setAttribute("data-jp-theme-name", "JupyterLab Light");
+      }
+    }
+
+    // Updates the background of medium-zoom overlay.
+    if (typeof medium_zoom !== "undefined") {
+      medium_zoom.update({
+        background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee", // + 'ee' for trasparency.
+      });
+    }
   };
 
   if (options.animate) {

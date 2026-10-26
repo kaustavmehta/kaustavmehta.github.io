@@ -136,15 +136,13 @@
 }
 
 .cv-mobile-meta > div:not(:last-child)::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, 
-    var(--global-divider-color) 0%, 
-    transparent 100%);
+  background: linear-gradient(90deg, var(--global-divider-color) 0%, transparent 100%);
   opacity: 0.3;
 }
 
@@ -531,17 +529,17 @@ i.iconlocation {
     min-height: 1.2rem !important;
     touch-action: manipulation;
   }
-  
+
   .date-column {
     max-width: 100%;
     margin-bottom: 1rem;
   }
-  
+
   .date-column .badge {
     font-size: 0.6rem;
     padding: 0.2rem 0.4rem;
   }
-  
+
   p.location {
     font-size: 0.65rem;
   }
@@ -931,13 +929,17 @@ html[data-theme="dark"] .cv-mobile-skill-box:hover {
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--global-divider-color);
 }
 
 .skill-tooltip .skill-tooltip-content::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -1012,7 +1014,7 @@ html[data-theme="dark"] .skill-tooltip .skill-tooltip-content::after {
   justify-content: center;
   background-color: var(--global-bg-color);
   color: var(--global-text-color);
-  border: 1px solid #87CEEB; /* Light blue border */
+  border: 1px solid #87ceeb; /* Light blue border */
   border-radius: 0.3rem;
   padding: 0.35rem 0.7rem;
   font-size: 0.8rem;
@@ -1029,7 +1031,7 @@ html[data-theme="dark"] .skill-tooltip .skill-tooltip-content::after {
 .cv-domain-box .domain-icon {
   font-size: 0.8rem;
   opacity: 0.8;
-  color: #4682B4; /* Steel blue for icons */
+  color: #4682b4; /* Steel blue for icons */
 }
 
 .cv-domain-box .domain-text {
@@ -1037,9 +1039,9 @@ html[data-theme="dark"] .skill-tooltip .skill-tooltip-content::after {
 }
 
 .cv-domain-box:hover {
-  background-color: #87CEEB; /* Light blue background on hover */
+  background-color: #87ceeb; /* Light blue background on hover */
   color: #fff;
-  border-color: #4682B4; /* Steel blue border on hover */
+  border-color: #4682b4; /* Steel blue border on hover */
   transform: translateY(-1px);
 }
 
@@ -1050,13 +1052,13 @@ html[data-theme="dark"] .skill-tooltip .skill-tooltip-content::after {
 /* Dark mode support for domains */
 html[data-theme="dark"] .cv-domain-box {
   background-color: var(--global-card-bg-color);
-  border-color: #87CEEB;
+  border-color: #87ceeb;
 }
 
 html[data-theme="dark"] .cv-domain-box:hover {
-  background-color: #4682B4;
+  background-color: #4682b4;
   color: #fff;
-  border-color: #87CEEB;
+  border-color: #87ceeb;
 }
 
 /* Domain tooltips */
@@ -1083,13 +1085,17 @@ html[data-theme="dark"] .cv-domain-box:hover {
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #87CEEB;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #87ceeb;
 }
 
 .domain-tooltip .domain-tooltip-content::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 50%;
@@ -1110,11 +1116,11 @@ html[data-theme="dark"] .cv-domain-box:hover {
     max-width: 250px;
     font-size: 0.7rem;
   }
-  
+
   .cv-domains-container {
     gap: 0.3rem;
   }
-  
+
   .cv-domain-box {
     font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
@@ -1124,7 +1130,7 @@ html[data-theme="dark"] .cv-domain-box:hover {
 /* Dark mode specific tooltip styling for domains */
 html[data-theme="dark"] .domain-tooltip .domain-tooltip-content {
   background-color: var(--global-card-bg-color);
-  border-color: #87CEEB;
+  border-color: #87ceeb;
 }
 
 html[data-theme="dark"] .domain-tooltip .domain-tooltip-content::after {

@@ -85,7 +85,9 @@ $(document).ready(function () {
         }
         item.setAttribute("data-toc-state", state);
         item.classList.toggle("active", state === "active");
-        $(item).closest("li").toggleClass("active", state === "active");
+        $(item)
+          .closest("li")
+          .toggleClass("active", state === "active");
       });
     };
 

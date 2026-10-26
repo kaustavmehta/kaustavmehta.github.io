@@ -103,7 +103,7 @@
       key_people: Dr. Sudip Roy, Dr. Kalyan Chakrabarti and Dr. Siva Srinivasan
       location: Sri City, AP, India.
       start_date: Jul 2024
-      end_date: 
+      end_date:
       skills:
         - name: AlphaFold
           icon: fa-solid fa-dna
@@ -138,7 +138,7 @@
         - Co-created the Centre for Structure and Dynamics (CSD) Research Lab at Krea University with Dr. Kalyan Chakrabarti and Dr. Sudip Roy.
         - Developed multiple high-performance computing (HPC) pipelines for generating and analyzing large datasets of protein folding trajectories using my custom AlphaFold framework.
         - Benchmarked generated AF-derived datasets of Ubiquitin (1UBQ) against X-ray, NMR, and 11 milliseconds of DE Shaw's molecular dynamics (MD) simulations to validate the biophysical accuracy of the resulting protein energy landscape, distribution of conformations and dynamics.
-      image: 
+      image:
         - assets/img/CV/ubq_AF_example.gif
         # - assets/img/CV/exp12_sic1.gif
         # - assets/img/CV/esyt_multimer.gif
@@ -244,7 +244,7 @@
         - name: Structural Biology
           description: "Investigation of protein structure changes and evolutionary relationships through bioinformatics approaches."
       maindescription: Surveyed literature to determine the state of research on the utility and mechanisms of Extended Synaptotagmin (ESyt) and used another literature survey of Ubiquitin as an analogous point of comparison. DNA and RNA sequences across plant and animal species were analyzed using BLAST and Multiple Sequence Alignment to investigate possible evolutionary correlates by measuring sequence divergence and changes in protein structures (where obtainable).
-      
+
     - title: Research Collaborator — Amyloid Beta Protein Aggregation Simulation
       institution: Krea University
       department: Biological Sciences
@@ -329,11 +329,10 @@
     - start_date: Oct 2020
       end_date: 2022
       title: Krea Research Fellowship Grant
-      maindescription: Awarded a research grant to investigate causative factors of the spread of SARS-CoV-2 in India through a novel approach of data-mining online Indian newspapers. Hired and managed a team of four undergraduate interns to assist in the project. 
+      maindescription: Awarded a research grant to investigate causative factors of the spread of SARS-CoV-2 in India through a novel approach of data-mining online Indian newspapers. Hired and managed a team of four undergraduate interns to assist in the project.
     - year: 2015
       title: Breakthrough Junior Challenge Finalist
       maindescription: Selected as one of the 15 finalists worldwide for the Breakthrough Junior Challenge, an international science communication video competition. My entry was a video explaining the concept of Dark Matter.
-
 # - title: Academic Interests
 #   type: nested_list
 #   contents:
