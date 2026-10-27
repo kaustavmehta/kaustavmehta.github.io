@@ -150,6 +150,9 @@ collections:
     output: true
   projects:
     output: true
+  garden:
+    output: true
+    permalink: /garden/:slug/
 
 # -----------------------------------------------------------------------------
 # Jekyll settings
@@ -221,6 +224,13 @@ defaults:
       path: "assets"
     values:
       sitemap: false
+  - scope:
+      path: ""
+      type: garden
+    values:
+      layout: garden
+      render_with_liquid: false # notes can contain {{ }} in LaTeX
+      bibliography: garden.bib
 
 sass:
   style: compressed
@@ -231,7 +241,7 @@ sass:
 
 jekyll-minifier:
   compress_javascript: false # set to false since we are using terser as the js minifier
-  exclude: ["robots.txt", "assets/js/search/*.js"]
+  exclude: ["robots.txt", "assets/js/search/*.js", "garden/graph.json"]
 
 # -----------------------------------------------------------------------------
 # Terser

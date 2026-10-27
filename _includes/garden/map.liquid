@@ -1,0 +1,95 @@
+{% comment %}
+  The garden as a map, drawn from a map hash made by _plugins/garden.rb.
+
+  include.kind = "band":     a note's place in the garden, under its title. The note
+                             is in colour, its neighbours at 40% saturation, and the
+                             rest of the garden grey and blurred.
+  include.kind = "overview": the whole garden on the index page.
+
+  Sizes are worked out in viewBox units so labels and dots keep roughly the same
+  size on screen whatever the zoom: u is the number of viewBox units per pixel.
+{% endcomment %}
+{%- assign map = include.map -%}
+{%- if map and map.nodes.size > 0 -%}
+  {%- assign vb = map.viewbox | split: ' ' -%}
+  {%- if include.kind == 'band' -%}
+    {%- assign u = vb[3] | plus: 0.0 | divided_by: 210.0 -%}
+    {%- assign aspect = 'xMidYMid slice' -%}
+  {%- else -%}
+    {%- assign u = vb[2] | plus: 0.0 | divided_by: 1100.0 -%}
+    {%- assign aspect = 'xMidYMid meet' -%}
+  {%- endif -%}
+  {%- assign r_current = u | times: 7 | round: 2 -%}
+  {%- assign r_node = u | times: 4.5 | round: 2 -%}
+  {%- assign r_far = u | times: 3.5 | round: 2 -%}
+  {%- assign fs = u | times: 12.5 | round: 2 -%}
+  {%- assign fs_current = u | times: 15 | round: 2 -%}
+  {%- assign sw = u | times: 1 | round: 2 -%}
+  {%- assign gap = u | times: 6 | round: 2 -%}
+  <nav
+    class="gd-map gd-map--{{ include.kind }}"
+    aria-label="{% if include.kind == 'band' %}Where this note sits in the garden{% else %}Map of the garden{% endif %}"
+  >
+    <svg class="gd-map-svg" viewBox="{{ map.viewbox }}" preserveAspectRatio="{{ aspect }}" style="--gd-sw: {{ sw }}px">
+      <defs>
+        <filter id="gd-filter-far" x="-10%" y="-10%" width="120%" height="120%">
+          <feColorMatrix type="saturate" values="0" />
+          <feGaussianBlur stdDeviation="{{ u | times: 1.3 | round: 2 }}" />
+        </filter>
+        <filter id="gd-filter-near">
+          <feColorMatrix type="saturate" values="0.4" />
+        </filter>
+      </defs>
+
+      {%- if include.kind == 'band' %}
+        <g class="gd-map-far" filter="url(#gd-filter-far)">
+          {%- for e in map.edges -%}
+            {%- if e.role == 'far' -%}
+              <line class="gd-map-edge" x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" />
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for n in map.nodes -%}
+            {%- if n.role == 'far' -%}
+              <circle class="gd-map-node{% if n.missing %} is-missing{% endif %}" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ r_far }}" />
+            {%- endif -%}
+          {%- endfor -%}
+        </g>
+      {%- endif %}
+
+      <g class="gd-map-near" filter="url(#gd-filter-near)">
+        {%- for e in map.edges -%}
+          {%- if e.role == 'near' or include.kind == 'overview' -%}
+            <line class="gd-map-edge is-near" x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" />
+          {%- endif -%}
+        {%- endfor -%}
+        {%- for n in map.nodes -%}
+          {%- if n.role == 'neighbor' or n.role == 'all' -%}
+            {%- assign ty = n.y | plus: r_node | plus: fs | plus: gap -%}
+            {%- if n.url and n.missing != true -%}<a href="{{ n.url }}" aria-label="{{ n.title | escape }}">{%- endif -%}
+            <circle class="gd-map-node is-near{% if n.missing %} is-missing{% endif %}" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ r_node }}" />
+            {%- if n.label -%}
+              <text class="gd-map-label{% if n.missing %} is-missing{% endif %}" x="{{ n.x }}" y="{{ ty }}" style="font-size: {{ fs }}px">
+                {{- n.title | escape -}}
+              </text>
+            {%- endif -%}
+            {%- if n.url and n.missing != true -%}</a>{%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </g>
+
+      {%- for n in map.nodes -%}
+        {%- if n.role == 'current' -%}
+          {%- assign ty = n.y | plus: r_current | plus: fs_current | plus: gap -%}
+          <g class="gd-map-current">
+            <circle class="gd-map-halo" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ r_current | times: 2.2 }}" />
+            <circle class="gd-map-node is-current" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ r_current }}" />
+            <text class="gd-map-label is-current" x="{{ n.x }}" y="{{ ty }}" style="font-size: {{ fs_current }}px">
+              {{- n.title | escape -}}
+            </text>
+          </g>
+        {%- endif -%}
+      {%- endfor -%}
+    </svg>
+    <button type="button" class="gd-explore" data-garden-explore>Explore the garden</button>
+  </nav>
+{%- endif -%}

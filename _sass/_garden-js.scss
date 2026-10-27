@@ -1,0 +1,284 @@
+// Garden: styles for hover previews (previews.js) and the explorer (explorer.js).
+// Colours come only from the theme CSS variables.
+
+// ---- Hover preview card ----------------------------------------------------
+
+.gd-preview {
+  position: absolute;
+  z-index: 1060;
+  width: min(320px, calc(100vw - 24px));
+  padding: 0.85rem 1rem 0.9rem;
+  background: var(--global-bg-color);
+  color: var(--global-text-color);
+  border: 1px solid var(--global-divider-color);
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  pointer-events: auto;
+  animation: gd-preview-in 0.14s ease-out;
+
+  &[hidden] {
+    display: none;
+  }
+
+  .gd-preview-title {
+    margin: 0 0 0.3rem;
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--global-text-color);
+  }
+
+  .gd-preview-text {
+    margin: 0;
+    color: var(--global-text-color-light);
+  }
+}
+
+@keyframes gd-preview-in {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// ---- Explorer dialog -------------------------------------------------------
+
+html.gd-explorer-open {
+  overflow: hidden;
+}
+
+dialog.gd-explorer {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(1240px, calc(100vw - 4rem));
+  height: min(820px, calc(100vh - 4rem));
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  overflow: hidden;
+  // Garden accent (falls back to the theme colour) and a muted version of it.
+  --gd-explorer-accent: var(--gd-accent, var(--global-theme-color));
+  --gd-explorer-accent-soft: color-mix(in srgb, var(--gd-explorer-accent) 45%, var(--global-text-color-dim));
+  background: var(--global-bg-color);
+  color: var(--global-text-color);
+  border: 1px solid var(--global-divider-color);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 575.98px) {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .gd-explorer-bar {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.9rem 0.6rem 1.25rem;
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+
+  .gd-explorer-title {
+    margin: 0;
+    font-family: "Newsreader", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--global-text-color);
+  }
+
+  .gd-explorer-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .gd-explorer-btn {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0 0.6rem;
+    background: transparent;
+    color: var(--global-text-color-light);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--global-theme-color);
+      border-color: var(--global-divider-color);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--global-theme-color);
+      outline-offset: 1px;
+    }
+  }
+
+  .gd-explorer-close {
+    font-size: 1.4rem;
+    padding-bottom: 0.15rem;
+  }
+
+  .gd-explorer-stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .gd-explorer-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+
+    &.is-dragging {
+      cursor: grabbing;
+    }
+  }
+
+  // Edges: thin lines that keep their width while zooming.
+  .gd-explorer-edge {
+    stroke: var(--global-divider-color);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    transition: opacity 0.15s;
+
+    &.is-lit {
+      stroke: var(--gd-explorer-accent-soft);
+    }
+
+    &.is-dim {
+      opacity: 0.25;
+    }
+  }
+
+  // Nodes
+  .gd-explorer-node {
+    cursor: pointer;
+    outline: none;
+    transition: opacity 0.15s;
+
+    &.is-dim {
+      opacity: 0.22;
+    }
+
+    &.is-missing {
+      cursor: default;
+    }
+  }
+
+  .gd-explorer-hit {
+    fill: transparent;
+  }
+
+  .gd-explorer-dot {
+    fill: var(--global-text-color-dim);
+    stroke: var(--global-bg-color);
+    stroke-width: 1.5;
+    transition: fill 0.15s;
+  }
+
+  .gd-explorer-node.is-near .gd-explorer-dot {
+    fill: var(--gd-explorer-accent-soft);
+  }
+
+  .gd-explorer-node.is-current .gd-explorer-dot {
+    fill: var(--gd-explorer-accent);
+  }
+
+  .gd-explorer-node.is-missing .gd-explorer-dot {
+    fill: var(--global-bg-color);
+    stroke: var(--global-text-color-dim);
+    stroke-width: 1.2;
+    stroke-dasharray: 2.5 2;
+  }
+
+  .gd-explorer-node.is-lit:not(.is-missing) .gd-explorer-dot {
+    fill: var(--gd-explorer-accent-soft);
+  }
+
+  .gd-explorer-node.is-hover:not(.is-missing) .gd-explorer-dot,
+  .gd-explorer-node:focus-visible:not(.is-missing) .gd-explorer-dot {
+    fill: var(--gd-explorer-accent);
+  }
+
+  .gd-explorer-node:focus-visible .gd-explorer-dot {
+    stroke: var(--gd-explorer-accent);
+    stroke-width: 3;
+  }
+
+  .gd-explorer-label {
+    display: none;
+    fill: var(--global-text-color-light);
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 12px;
+    pointer-events: none;
+    // A halo in the background colour keeps labels legible over lines.
+    paint-order: stroke;
+    stroke: var(--global-bg-color);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+
+    &.is-shown {
+      display: block;
+    }
+  }
+
+  .gd-explorer-node.is-current .gd-explorer-label,
+  .gd-explorer-node.is-near .gd-explorer-label,
+  .gd-explorer-node.is-lit .gd-explorer-label {
+    fill: var(--global-text-color);
+  }
+
+  .gd-explorer-node.is-current .gd-explorer-label {
+    font-weight: 600;
+  }
+
+  .gd-explorer-node.is-missing .gd-explorer-label {
+    font-style: italic;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gd-preview {
+    animation: none;
+  }
+
+  dialog.gd-explorer .gd-explorer-edge,
+  dialog.gd-explorer .gd-explorer-node,
+  dialog.gd-explorer .gd-explorer-dot,
+  dialog.gd-explorer .gd-explorer-btn {
+    transition: none;
+  }
+}

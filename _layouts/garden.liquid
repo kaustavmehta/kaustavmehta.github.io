@@ -1,0 +1,79 @@
+<!doctype html>
+{% comment %}
+  Garden note. Same structure as distill.liquid, plus the note's place in the
+  garden map, backlinks and the garden scripts. Data comes from
+  _plugins/garden.rb (page.garden_id, page.garden_map, page.garden_backlinks,
+  page.last_tended).
+{% endcomment %}
+<html lang="{{ site.lang }}">
+  <head>
+    {% include head.liquid %}
+
+    <!-- Distill js -->
+    <script src="{{ '/assets/js/distillpub/template.v2.js' | relative_url }}"></script>
+    <script src="{{ '/assets/js/distillpub/transforms.v2.js' | relative_url }}"></script>
+  </head>
+
+  <d-front-matter>
+    <script async type="text/json">
+      {
+        "title": {{ page.title | jsonify }},
+        "description": {{ page.description | default: "" | jsonify }},
+        "authors": [],
+        "katex": {
+          "delimiters": [
+            { "left": "$", "right": "$", "display": false },
+            { "left": "$$", "right": "$$", "display": true }
+          ]
+        }
+      }
+    </script>
+  </d-front-matter>
+
+  <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
+    {% include header.liquid %}
+
+    <div
+      class="post distill garden gd-page"
+      data-garden-id="{{ page.garden_id }}"
+      data-graph-url="{{ '/garden/graph.json' | relative_url }}"
+    >
+      <d-title>
+        <div class="gd-kicker"><span class="gd-kicker-line"></span><a href="{{ '/garden/' | relative_url }}">Garden</a></div>
+        <h1>{{ page.title | escape }}</h1>
+        {% if page.description %}
+          <p>{{ page.description | escape }}</p>
+        {% endif %}
+        {% if page.last_tended %}
+          <div class="gd-meta">
+            last tended
+            <time datetime="{{ page.last_tended | date_to_xmlschema }}">{{ page.last_tended | date: '%-d %b %Y' }}</time>
+          </div>
+        {% endif %}
+      </d-title>
+
+      {% include garden/map.liquid map=page.garden_map kind="band" %}
+
+      <d-article>
+        {% include garden/backlinks.liquid placement="side" %}
+        {{ content }}
+        {% include garden/backlinks.liquid placement="end" %}
+      </d-article>
+
+      <d-appendix>
+        <d-footnote-list></d-footnote-list>
+        <d-citation-list></d-citation-list>
+      </d-appendix>
+
+      {% if page.bibliography %}
+        <d-bibliography src="{{ page.bibliography | prepend: '/assets/bibliography/' | relative_url }}"></d-bibliography>
+      {% endif %}
+    </div>
+
+    {% include footer.liquid %}
+
+    {% include distill_scripts.liquid %}
+    <script defer src="{{ '/assets/js/garden/previews.js' | relative_url }}"></script>
+    <script defer src="{{ '/assets/js/garden/explorer.js' | relative_url }}"></script>
+  </body>
+</html>

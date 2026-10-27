@@ -13,3 +13,9 @@ vendor
 .idea
 resources
 .superpowers/
+
+# Obsidian state for the garden vault (settings in app.json and templates.json are kept)
+_garden/.obsidian/*
+!_garden/.obsidian/app.json
+!_garden/.obsidian/templates.json
+_garden/.trash/
