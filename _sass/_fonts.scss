@@ -37,3 +37,21 @@
   font-style: normal;
   font-display: swap;
 }
+
+// Newsreader as a variable font (weights 400–600, optical sizes) for the body
+// text of Distill posts. Subset to Latin; licence in assets/fonts/newsreader-OFL.txt.
+@font-face {
+  font-family: "Newsreader Text";
+  src: url("../fonts/newsreader-text-roman.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Newsreader Text";
+  src: url("../fonts/newsreader-text-italic.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: italic;
+  font-display: swap;
+}

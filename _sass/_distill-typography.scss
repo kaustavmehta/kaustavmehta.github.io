@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Reading typography for Distill posts.
+ *
+ * The essay text is set in Newsreader; captions, figures and interface stay in
+ * Space Grotesk. Selectors only reach direct children of d-article, so text
+ * inside figures and widgets keeps its own styles.
+ ******************************************************************************/
+
+$distill-body-font: "Newsreader Text", Georgia, serif;
+
+.distill {
+  d-title h1 {
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  d-title p {
+    font-family: $distill-body-font;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--global-text-color-light) !important;
+  }
+
+  d-article {
+    > p,
+    > ul > li,
+    > ol > li {
+      font-family: $distill-body-font;
+      font-size: 1.25rem;
+      line-height: 1.6;
+      font-optical-sizing: auto;
+      font-variant-numeric: oldstyle-nums proportional-nums;
+    }
+
+    > p {
+      margin-bottom: 1.1em;
+    }
+
+    > p strong,
+    > p b {
+      font-weight: 600;
+    }
+
+    > h2 {
+      font-weight: 400;
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-top: 3.5rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem;
+    }
+
+    > h3 {
+      font-weight: 400;
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .distill {
+    d-title h1 {
+      font-size: 2.3rem;
+      line-height: 1.1;
+    }
+
+    d-title p {
+      font-size: 1.15rem;
+    }
+
+    d-article {
+      > p,
+      > ul > li,
+      > ol > li {
+        font-size: 1.15rem;
+        line-height: 1.58;
+      }
+
+      > h2 {
+        font-size: 1.65rem;
+        margin-top: 2.75rem;
+      }
+    }
+  }
+}
