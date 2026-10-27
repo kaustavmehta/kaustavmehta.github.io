@@ -552,6 +552,20 @@ Common skills and their suggested FontAwesome icons:
 4. **Ensure skill-description alignment** - only describe skills actually used in the role
 5. **Add department fields** for better institutional context
 
+## Garden (digital garden / wiki)
+
+Notes live in `_garden/` and are published at `/garden/<slug>/`; the index is `_pages/garden.md` at `/garden/`.
+`_garden/` is also an Obsidian vault, so notes are written in Obsidian and read by the site as they are.
+
+- **A note** is `_garden/<Topic title>.md`. The filename is the title (exact case), so `Umbrella inversion.md` becomes `/garden/umbrella-inversion/`. Front matter can be empty (`---` twice); optional keys are `title`, `description` and `bibliography`. Without any front matter Jekyll copies the file instead of rendering it, so keep the two `---` lines (the Obsidian template `_garden/_templates/Note.md` adds them).
+- **Links**: `[[Topic]]`, `[[Topic|label]]`, `[[Topic#Heading]]`. A link to a note that doesn't exist yet renders grey with faint brackets and appears under "Not written yet" on the index.
+- **Embeds**: `![[photo.png]]` (and `|width`), `![[clip.mp4]]` (autoplays muted and loops, for animations), `![[widget.html]]` (an iframe for a self-contained interactive; `|height` in px), `![[Other note]]` (a card linking to it). Files go in `_garden/images/` and `_garden/interactives/`.
+- **Interactive figures** in the blog's style also work: write the `<figure class="l-body-outset">` HTML in the note and load scripts from `assets/js/garden/` with absolute paths (notes are not run through Liquid, so `{{ }}` stays literal, which keeps LaTeX safe).
+- **Footnotes** `[^1]` become Distill side notes; Obsidian callouts `> [!note] Title` become styled boxes; citations use `<d-cite key="...">` against `assets/bibliography/garden.bib`.
+- **Code**: `_plugins/garden.rb` (links, embeds, backlinks, last-tended dates from git, the graph layout and `/garden/graph.json`), `_layouts/garden.liquid`, `_includes/garden/`, `_sass/_garden.scss`, `_sass/_garden-js.scss`, `assets/js/garden/` (hover previews and the on-demand graph explorer).
+- **The map** under each note shows the note in colour (`--gd-accent`), its neighbours at 40% saturation and the rest of the garden grey and blurred. "Explore the garden" loads the interactive graph only when clicked.
+- **Menu**: `nav: false` and `sitemap: false` in `_pages/garden.md` until the first real note is in; then set `nav: true` and remove `sitemap: false`.
+
 ## Common Workflows
 
 ### Adding New Content

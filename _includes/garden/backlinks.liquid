@@ -1,0 +1,24 @@
+{% comment %}
+  Notes that link to this one, with the sentence each link sits in.
+  placement="side": beside the text on wide screens (hidden on narrow ones).
+  placement="end":  after the text on narrow screens (hidden on wide ones).
+{% endcomment %}
+{%- assign backlinks = page.garden_backlinks -%}
+{%- if backlinks.size > 0 -%}
+  <aside class="gd-backlinks gd-backlinks--{{ include.placement }}" aria-label="Notes that link here">
+    <span class="gd-label">Linked from</span>
+    <ul class="gd-backlinks-list">
+      {%- for bl in backlinks -%}
+        <li>
+          <a class="gd-backlink" href="{{ bl.url }}">
+            <b>{{ bl.title | escape }}</b>
+            <span>
+              {{- bl.before | escape -}}
+              <mark>{{ bl.label | escape }}</mark>{{ bl.after | escape -}}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </aside>
+{%- endif -%}
