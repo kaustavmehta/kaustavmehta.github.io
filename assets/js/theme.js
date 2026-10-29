@@ -81,7 +81,7 @@ let applyTheme = (options = {}) => {
     // Updates the background of medium-zoom overlay.
     if (typeof medium_zoom !== "undefined") {
       medium_zoom.update({
-        background: getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color") + "ee", // + 'ee' for trasparency.
+        background: "color-mix(in srgb, var(--global-bg-color) 93%, transparent)", // Works for hex and hsl() theme colours alike.
       });
     }
   };
